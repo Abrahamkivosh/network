@@ -222,6 +222,15 @@ $l['all']['PaymentAmount'] = "Amount";
 $l['all']['PaymentDate'] = "Date";
 $l['all']['PaymentType'] = "Payment Type";
 $l['all']['PaymentNotes'] = "Payment Notes";
+$l['all']['PaymentStatus'] = "Payment Status";
+
+$l['all']['userName'] = "UserName";
+$l['all']['amount'] = "Amount";
+$l['all']['date'] = "Date";
+$l['all']['paymentMethod'] = "Payment Method";
+$l['all']['status'] = "Status";
+
+
 
 
 /* **********************************************************************************
@@ -473,6 +482,7 @@ $l['button']['RemoveOperator'] = "Remove Operator";
 
 $l['button']['ProcessQuery'] = "Process Query";
 
+$l['button']['Payments'] = "Payments";
  
  
 /* ********************************************************************************** */
