@@ -1422,12 +1422,66 @@ for convenience reasons and daloRADIUS will translate it to %
 ";
 
 
-$l['helpPage']['mngradippool'] = "
-<h200><b>List IP Pools</b></h200> - List Configured IP Pools and their assigned IP Addresses <br/>
-<h200><b>New IP Pool</b></h200> - Add a new IP Address to a configured IP Pool <br/>
-<h200><b>Edit IP Pool</b></h200> - Edit an IP Address for a configured IP Pool <br/>
-<h200><b>Remove IP Pool</b></h200> - Remove an IP Address from a configured IP Pool <br/>
-";
+$l['helpPage']['mngradippool'] = '
+<div>
+    <h2>Information about the radippool Table</h2>
+
+    <p><strong>Purpose of the radippool Table:</strong></p>
+    <ol>
+        <li><strong>Dynamic IP Allocation:</strong> The <code>radippool</code> table is used to manage pools of IP addresses that can be dynamically assigned to users when they authenticate and establish a network session.</li>
+        <li><strong>Resource Management:</strong> IP address pools help in the efficient management of IP resources. They ensure that IP addresses are allocated to users on a temporary basis and are released back into the pool when the users session ends. This prevents IP address exhaustion and allows for the reuse of addresses.</li>
+        <li><strong>IP Address Assignment:</strong> The allocation of IP addresses is an essential part of providing network access to users, especially in scenarios where static IP address assignments are not feasible.</li>
+    </ol>
+
+    <p><strong>Sample Record and Its Purpose:</strong></p>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Pool Name</th>
+            <th>Framed IP Address</th>
+            <th>NAS IP Address</th>
+            <th>Expiry Time</th>
+            <th>Username</th>
+            <th>Pool Key</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>my_ip_pool</td>
+            <td>192.168.1.100</td>
+            <td>192.168.0.1</td>
+            <td>2023-09-30 23:59:59</td>
+            <td>user1</td>
+            <td>secret1</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>guest_ip_pool</td>
+            <td>192.168.2.100</td>
+            <td>192.168.0.2</td>
+            <td>2023-09-30 23:59:59</td>
+            <td>user2</td>
+            <td>secret2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>employee_ip_pool</td>
+            <td>192.168.3.100</td>
+            <td>192.168.0.3</td>
+            <td>2023-09-30 23:59:59</td>
+            <td>user3</td>
+            <td>secret3</td>
+        </tr>
+    </table>
+
+    <p><strong>Purpose of the Sample Record:</strong></p>
+    <ol>
+        <li><strong>"my_ip_pool":</strong> This record represents an IP address pool named "my_ip_pool." When a user with the username "user1" authenticates through the NAS with the IP address "192.168.0.1," they will be allocated the IP address "192.168.1.100" from this pool. The allocation is valid until the specified expiry time.</li>
+        <li><strong>"guest_ip_pool":</strong> This record represents a pool named "guest_ip_pool" intended for guest users. When a user with the username "user2" authenticates through the NAS with the IP address "192.168.0.2," they will be allocated the IP address "192.168.2.100" from this pool. The allocation is valid until the specified expiry time.</li>
+        <li><strong>"employee_ip_pool":</strong> This record represents an IP address pool named "employee_ip_pool." When a user with the username "user3" authenticates through the NAS with the IP address "192.168.0.3," they will be allocated the IP address "192.168.3.100" from this pool. The allocation is valid until the specified expiry time.</li>
+    </ol>
+</div>
+
+';
 $l['helpPage']['mngradippoollist'] = "<h200><b>List IP Pools</b></h200> - List Configured IP Pools and their assigned IP Addresses <br/>";
 $l['helpPage']['mngradippoolnew'] = "<h200><b>New IP Pool</b></h200> - Add a new IP Address to a configured IP Pool <br/>";
 $l['helpPage']['mngradippooledit'] = "<h200><b>Edit IP Pool</b></h200> - Edit an IP Address for a configured IP Pool <br/>";
