@@ -24,6 +24,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include('library/check_operator_perm.php');
+	include_once('lang/main.php');
 
 	isset($_GET['batch_id']) ? $batch_id = $_GET['batch_id'] : $batch_id = "";
 	isset($_GET['batch_name']) ? $batch_name = $_GET['batch_name'] : $batch_name = "";

@@ -80,11 +80,12 @@ function printqn($text) { print qq($text)."\n"; }
 
 
 // function taken from dialup_admin
-function time2str($time) {
+function time2str($time = null) {
 
 	$str = "";				// initialize variable
-	$time = floor($time);
-	if (!$time)
+	// to avoid errors with negative values or null values in floor function
+	$time = $time ? floor($time) : null;
+	if (!$time || $time == 0 || $time == "" || $time == null)
 		return "0 seconds";
 	$d = $time/86400;
 	$d = floor($d);

@@ -24,6 +24,7 @@
 	$operator = $_SESSION['operator_user'];
 	
 	include('library/check_operator_perm.php');
+	include_once("library/functions.php");
 
 	// declaring variables
 	$logAction = "";
@@ -214,6 +215,9 @@
 		$currDate = date('Y-m-d H:i:s');
 		$currBy = $_SESSION['operator_user'];
 
+		$bi_lastbill = $currDate;
+		$bi_nextbill = date('Y-m-d H:i:s', strtotime("+30 days"));
+
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				" WHERE username='".$dbSocket->escapeSimple($username)."'";
 		$res = $dbSocket->query($sql);
@@ -365,6 +369,8 @@
 
 	}
 
+	
+
 
 	if (isset($_POST['submit'])) {
 
@@ -374,6 +380,9 @@
 		global $authType;
 		global $password;
 		global $passwordtype;
+
+		// get date in this format 07 Sep 2023
+		$expiryDate = date('d M Y', strtotime("+30 days"));
 
 		switch($authType) {
 			case "userAuth":
@@ -445,11 +454,17 @@
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 					
+					
 					addGroups($dbSocket, $username, $groups);
 					addUserInfo($dbSocket, $username);
 					addUserBillInfo($dbSocket, $username);
-					addAttributes($dbSocket, $username);
+					addAttributes($dbSocket, $username); // 
 
+					// add user to radcheck  and radreply tables via addAttribute function (library/functions.php)
+					addAttribute($dbSocket, $username, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
+					addAttribute($dbSocket, $username, "Expiration", ":=", $expiryDate, "check"); // set expiration date for user account (30 days)
+					
+				
 					$successMsg = "Added to database new user: <b> $username </b>";
 					$logAction .= "Successfully added new user [$username] on page: ";
 

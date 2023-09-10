@@ -8,7 +8,10 @@
 ?>
                 <div id="contentnorightbar">
                     <h2 id="Intro"><a href="#"></a></h2>
-                    <p><?php include('library/exten-welcome_page.php'); ?></p>
+                    <p>
+                        <?php 
+                        include('library/exten-welcome_page.php'); 
+                        ?></p>
                 </div>
                         
                 <div id="footer">

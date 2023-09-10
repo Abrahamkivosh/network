@@ -22,6 +22,7 @@
 
 	include ("library/checklogin.php");
 	$operator = $_SESSION['operator_user'];
+	include_once('lang/main.php');
 
 	//include('library/check_operator_perm.php');
 

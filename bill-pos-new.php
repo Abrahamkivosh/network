@@ -26,6 +26,9 @@
     include_once("include/management/pages_common.php");
 
 	include('library/check_operator_perm.php');
+	include_once("library/functions.php");
+
+
 
 	isset($_POST['username']) ? $username = $_POST['username'] : $username = "";
 	isset($_POST['password']) ? $password = $_POST['password'] : $password = "";
@@ -302,7 +305,10 @@
 			$logDebugSQL .= $sql . "\n";
 			
 			$user_id = $dbSocket->getOne( "SELECT LAST_INSERT_ID() FROM `".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']."`" );
-			return $user_id;
+			return[
+				'user_id' => $user_id,
+				'nextBillDate' => $nextBillDate
+			];
 			
 		} //FIXME:
 		  //if the user already exist in userinfo then we should somehow alert the user
@@ -382,7 +388,13 @@
 				addGroups($dbSocket, $username, $profiles);
 				addPlanProfile($dbSocket, $username, $planName);
 				addUserInfo($dbSocket, $username);
-				$userbillinfo_id = addUserBillInfo($dbSocket, $username);
+				$userbillinfo = addUserBillInfo($dbSocket, $username);
+				$userbillinfo_id = $userbillinfo['user_id'];
+				$nextBillDate = $userbillinfo['nextBillDate'];
+				// change $nextBillDate to date time format
+				$nextBillDate = date('d M Y', strtotime($nextBillDate));
+
+				
 
 				// create any invoices if required (meaning, if a plan was chosen)
 				if ($planName) {
@@ -393,29 +405,46 @@
 						" WHERE planName='".$dbSocket->escapeSimple($planName)."' LIMIT 1";
 					$res = $dbSocket->query($sql);
 					$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
-
+				
 					// calculate tax (planTax is the numerical percentage amount) 
-					$calcTax = (float) ($row['planCost'] * (float)($row['planTax'] / 100) );
+					if (isset($row['planTax']) && ($row['planTax'] != '') )
+					{
+						$calcTax = (float) ($row['planCost'] * (float)($row['planTax'] / 100) );
+					}else {
+						$calcTax = 0;
+					}
+					
 					$invoiceItems[0]['plan_id'] = $row['id'];
 					$invoiceItems[0]['amount'] = $row['planCost'];
 					$invoiceItems[0]['tax'] = $calcTax;
 					$invoiceItems[0]['notes'] = 'charge for plan service';
 					
 					if (isset($row['planSetupCost']) && ($row['planSetupCost'] != '') ) {
-						$calcTax = (float) ($row['planSetupCost'] * (float)($row['planTax'] / 100) );
+						$calcTax= isset($row['planSetupCost']) ? $row['planSetupCost'] * $row['planTax'] / 100 : 0;
 						$invoiceItems[1]['plan_id'] = $row['id'];
 						$invoiceItems[1]['amount'] = $row['planSetupCost'];
 						$invoiceItems[1]['tax'] = $calcTax;
 						$invoiceItems[1]['notes'] = 'charge for plan setup fee (one time)';
 					}
+
+					
 										
 					userInvoiceAdd($userbillinfo_id, array(), $invoiceItems);
+
+					// add account expiration date
+					addAttribute ($dbSocket, $username, "Expiration", ":=", $nextBillDate, "check");
 					
 				}
+					// add user to radcheck  and radreply tables via addAttribute function (library/functions.php)
+					addAttribute($dbSocket, $username, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
+					addAttribute($dbSocket, $username, "User-Profile", ":=", $planName, "check"); // add user profile to radcheck table for 
+					
+				
+
 				
 				
 				if ($notificationWelcome == 1) {
-					include("include/common/notificationsWelcome.php");
+					// include("include/common/notificationsWelcome.php");
 					
 				}
 				
@@ -562,7 +591,7 @@
 
 		<li class='fieldset'>
 		<label for='userupdate' class='form'><?php echo t('all','SendWelcomeNotification')?></label>
-		<input type='checkbox' class='form' name='notificationWelcome' value='1' checked/>
+		<input type='checkbox' class='form' name='notificationWelcome' value='1' />
 	        <br/>
 		</li>
 

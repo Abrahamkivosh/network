@@ -918,6 +918,9 @@ $l['title']['AdvancedSettings'] = "Advanced Settings";
 $l['title']['Advanced'] = "Advanced";
 $l['title']['Optional'] = "Optional";
 
+$l['title']['Management'] = "User Management And Hostspot Management";
+$l['title']['UserManagement'] = "User Management";
+
 /* ********************************************************************************** */
 
 /* **********************************************************************************

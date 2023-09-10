@@ -24,6 +24,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include_once('library/config_read.php');
+	include_once('lang/main.php');
     $log = "visited page: ";
 
 ?>

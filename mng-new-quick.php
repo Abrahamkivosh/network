@@ -23,6 +23,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include('library/check_operator_perm.php');
+	include_once('lang/main.php');
 
 	$username = "";
 	$password = "";

@@ -539,11 +539,14 @@ function userConnectionStatus($username, $drawTable) {
 	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
 
 	$userUpload = toxbyte($row['AcctInputOctets']);
-	$userDownload = toxbyte($row['AcctOutputOctets']);
+	$userDownload = isset($row['AcctOutputOctets']) ? toxbyte($row['AcctOutputOctets']):  "unavailable";
 	$userLastConnected = $row['AcctStartTime'];
-	$userOnlineTime = time2str($row['AcctSessionTime']);
+	$userOnlineTime = isset($row['AcctSessionTime']) ?  time2str($row['AcctSessionTime']) :  "unavailable" ;
+	
+	$userOnlineTime =  isset($row['AcctSessionTime']) ? time2str($row['AcctSessionTime']) : "unavailable";
+	$userLastConnected = isset($row['AcctStartTime']) ? $row['AcctStartTime'] : "unavailable";
 
-        $nasIPAddress = $row['NASIPAddress'];
+        $nasIPAddress = isset ($row['NASIPAddress']) ? $row['NASIPAddress'] : "unavailable";
         $nasMacAddress = $row['CalledStationId'];
         $userIPAddress = $row['FramedIPAddress'];
         $userMacAddress = $row['CallingStationId'];
