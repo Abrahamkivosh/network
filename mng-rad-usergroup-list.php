@@ -22,6 +22,7 @@
 
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
+	include_once('lang/main.php');
 
 	include('library/check_operator_perm.php');
 
@@ -44,7 +45,10 @@
 <script src="library/javascript/pages_common.js" type="text/javascript"></script>
 <script src="library/javascript/rounded-corners.js" type="text/javascript"></script>
 <script src="library/javascript/form-field-tooltip.js" type="text/javascript"></script>
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title', 'mngUGList')
+?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="css/form-field-tooltip.css" type="text/css" media="screen,projection" />

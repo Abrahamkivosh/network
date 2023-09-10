@@ -23,7 +23,9 @@
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
 
+
 	include_once('library/config_read.php');
+	include_once('lang/main.php');
     $log = "visited page: ";
 
 
@@ -34,7 +36,9 @@
 
 <script src="library/javascript/pages_common.js" type="text/javascript"></script>
 
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title', 'mngUGList') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 

@@ -24,6 +24,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include('library/check_operator_perm.php');
+	include_once('lang/main.php');
 
 	//setting values for the order by and order type variables
 	isset($_REQUEST['orderBy']) ? $orderBy = $_REQUEST['orderBy'] : $orderBy = "id";
@@ -44,7 +45,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title','mngnewsearch') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="css/form-field-tooltip.css" type="text/css" media="screen,projection" />

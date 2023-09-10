@@ -50,7 +50,9 @@
 <script type="text/javascript" src="library/javascript/ajaxGeneric.js"></script>
 
 <title>
-<?php echo t('title','UserManagement');?>
+<?php
+		echo t('title','Management');
+		?>
 </title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
@@ -191,9 +193,39 @@
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Groupname&orderType=$orderType\">
 		".t('title','Groups')."</a>
 		</th>
+		<th scope='col'> 
+		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Groupname&orderType=$orderType\">
+		".t('title','Expire')."</a>
+		</th>
+		<th scope='col'>
+		Days Left
+		</th>
+
 		</tr> </thread>";
 
 	while($row = $res->fetchRow()) {
+		$userName = $row[0];
+		// SQL query to get the  Expiration date of the user from the radcheck table 
+		$sql = "SELECT value FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE username='$userName' AND attribute='Expiration'";
+		$res1 = $dbSocket->query($sql);
+		$row1 = $res1->fetchRow();
+		$expireDate = $row1[0];
+		// Convert the date to a more readable format
+		$expireDate = date("d-m-Y", strtotime($expireDate));
+		// Get the current date
+		$currentDate = date("d-m-Y");
+		// Calculate the number of days left for the user to expire
+		$dayLeft = (strtotime($expireDate) - strtotime($currentDate)) / (60 * 60 * 24);
+		// Round the number of days left to 0 decimal places
+		$dayLeft = round($dayLeft, 0);
+		// If the number of days left is less than 0, then set it to 0
+		if ($dayLeft < 0) {
+			$dayLeft = 0;
+		}
+
+		$dayLeft = number_format($dayLeft, 0, '.', ',');
+
+
 
 		printqn("
 			<td> <input type='checkbox' name='username[]' value='$row[0]'>$row[2]</td>
@@ -227,6 +259,8 @@
 		}
 		echo "
 			<td>$row[3]</td>
+			<td>$expireDate</td>
+			<td>$dayLeft</td>
 		</tr>";
 	}
 	

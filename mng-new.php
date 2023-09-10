@@ -25,6 +25,7 @@
 	
 	include('library/check_operator_perm.php');
 	include_once("library/functions.php");
+	include_once('lang/main.php');
 
 	// declaring variables
 	$logAction = "";
@@ -155,7 +156,7 @@
 			// insert user information table
 			$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
 				" (id, username, firstname, lastname, email, department, company, workphone, homephone, ".
-				" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby, updatedate, updateby) ".
+				" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby) ".
 				" VALUES (0, 
 				'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($firstname)."', '".
 				$dbSocket->escapeSimple($lastname)."', '".$dbSocket->escapeSimple($email)."', '".
@@ -167,7 +168,7 @@
 				$dbSocket->escapeSimple($ui_zip)."', '".$dbSocket->escapeSimple($notes)."', '".
 				$dbSocket->escapeSimple($ui_changeuserinfo)."', '".
 				$dbSocket->escapeSimple($ui_PortalLoginPassword)."', '".$dbSocket->escapeSimple($ui_enableUserPortalLogin).
-				"', '$currDate', '$currBy', NULL, NULL)";
+				"', '$currDate', '$currBy')";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 		} //FIXME:
@@ -232,7 +233,7 @@
 				" paymentmethod, cash, creditcardname, creditcardnumber, creditcardverification, creditcardtype, creditcardexp, ".
 				" notes, changeuserbillinfo, ".
                                 " `lead`, coupon, ordertaker, billstatus, lastbill, nextbill, nextinvoicedue, billdue, postalinvoice, faxinvoice, emailinvoice, ".
-				" creationdate, creationby, updatedate, updateby) ".
+				" creationdate, creationby) ".
 				" VALUES (0, 
 				'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($bi_contactperson)."', '".
 				$dbSocket->escapeSimple($bi_company)."', '".$dbSocket->escapeSimple($bi_email)."', '".
@@ -251,7 +252,7 @@
                 $dbSocket->escapeSimple($bi_nextinvoicedue)."', '".$dbSocket->escapeSimple($bi_billdue)."', '".
                 $dbSocket->escapeSimple($bi_postalinvoice)."', '".$dbSocket->escapeSimple($bi_faxinvoice)."', '".
                 $dbSocket->escapeSimple($bi_emailinvoice).
-				"', '$currDate', '$currBy', NULL, NULL)";
+				"', '$currDate', '$currBy')";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 		} //FIXME:
@@ -382,7 +383,8 @@
 		global $passwordtype;
 
 		// get date in this format 07 Sep 2023
-		$expiryDate = date('d M Y', strtotime("+30 days"));
+		$ctime= strtotime("+30 days") ;
+		$expiryDate = date("d M Y H:i:s",$ctime);
 
 		switch($authType) {
 			case "userAuth":
@@ -463,7 +465,7 @@
 					// add user to radcheck  and radreply tables via addAttribute function (library/functions.php)
 					addAttribute($dbSocket, $username, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
 					addAttribute($dbSocket, $username, "Expiration", ":=", $expiryDate, "check"); // set expiration date for user account (30 days)
-					
+
 				
 					$successMsg = "Added to database new user: <b> $username </b>";
 					$logAction .= "Successfully added new user [$username] on page: ";
@@ -543,7 +545,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title','UserManagement')
+?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" type="text/css" href="library/js_date/datechooser.css">

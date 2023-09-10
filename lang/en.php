@@ -920,6 +920,48 @@ $l['title']['Optional'] = "Optional";
 
 $l['title']['Management'] = "User Management And Hostspot Management";
 $l['title']['UserManagement'] = "User Management";
+$l['title']['Expire'] = "Expire";
+$l['title']['mngnewquick'] = "New User - Quick Add";
+$l['title']['mngnewsearch'] = "User - Search";
+$l['title']['mngnewbatch'] = "Batch Add Users";
+$l['title']['mngbatch'] = "Batch Users";
+
+$l['title']['mngHsList']  = "Hotspot List";
+$l['title']['mngHsNew']  = "New Hotspot";
+$l['title']['mngHsEdit']  = "Edit Hotspot";
+$l['title']['mngHsDel']  = "Delete Hotspot";
+
+$l['title']['mngNASList']  = "NAS List";
+$l['title']['mngNASNew']  = "New NAS";
+$l['title']['mngNASEdit']  = "Edit NAS";
+$l['title']['mngNASDel']  = "Delete NAS";
+
+$l['title']['mngHGList']  = "HuntGroup List";
+$l['title']['mngHGNew']  = "New HuntGroup";
+$l['title']['mngHGEdit']  = "Edit HuntGroup";
+$l['title']['mngHGDel']  = "Delete HuntGroup";
+
+$l['title']['mngUGList']  = "User-Group List";
+$l['title']['mngUGNew']  = "New User-Group";
+$l['title']['mngUGEdit']  = "Edit User-Group";
+$l['title']['mngUGDel']  = "Delete User-Group";
+
+$l['title']['mngProfileList']  = "Profile List";
+$l['title']['mngProfileNew']  = "New Profile";
+$l['title']['mngProfileEdit']  = "Edit Profile";
+$l['title']['mngProfileDel']  = "Delete Profile";
+
+$l['title']['mngGroupReplyList']  = "Group Reply List";
+$l['title']['mngGroupReplyNew']  = "New Group Reply";
+$l['title']['mngGroupReplyEdit']  = "Edit Group Reply";
+$l['title']['mngGroupReplyDel']  = "Delete Group Reply";
+
+$l['title']['mngGroupCheckList']  = "Group Check List";
+$l['title']['mngGroupCheckNew']  = "New Group Check";
+$l['title']['mngGroupCheckEdit']  = "Edit Group Check";
+$l['title']['mngGroupCheckDel']  = "Delete Group Check";
+
+
 
 /* ********************************************************************************** */
 
@@ -1413,8 +1455,39 @@ update request {
 
 
 $l['helpPage']['mngradhuntdel'] = "To remove a huntgroup entry from the database you must provide the ip/host and port id of the huntgroup";
-$l['helpPage']['mngradhuntnew'] = "";
-$l['helpPage']['mngradhuntlist'] = "";
+$l['helpPage']['mngradhuntnew'] = "
+<p><strong>'huntgroup' </strong> usually refers to a group of Network Access Servers (NAS) that work together to provide a particular service or function. The 'huntgroup' concept is not a standard RADIUS attribute but is often used in network configurations to specify a group of NAS devices that share a common configuration or purpose. </p>
+
+<p>The specific usage and configuration of huntgroups can vary depending on the RADIUS server software and network setup. Typically, huntgroups are used to distribute user authentication requests across a pool of NAS devices, providing redundancy and load balancing.</p>
+<div>
+<p>For example, if you have two NAS devices that are configured to provide the same service, you can create a huntgroup that includes both devices. When a user attempts to connect to the service, the RADIUS server will send the authentication request to the first NAS device in the huntgroup. If that device is unavailable, the request will be sent to the next device in the huntgroup. This process continues until the request is successfully processed or all devices in the huntgroup have been tried.</p>
+</div>
+<div>
+<h200><b> Input Parameters </b></h200>
+<ul>
+<li><strong>Group Name</strong> - The name of the huntgroup. This is not a standard RADIUS attribute and is used to identify the group of NAS devices that will be included in the huntgroup.</li>
+<li><strong>NAS IP Address</strong> - The IP address of the NAS device that will be included in the huntgroup.</li>
+<li><strong>NAS Port ID</strong> - The port ID of the NAS device that will be included in the huntgroup. Common Port 1812 for Authentication and 1813 for Accounting.</li>
+</ul>
+
+</div>
+
+";
+$l['helpPage']['mngradhuntlist'] = "
+<h200><b>List HuntGroup </b></h200> - List HuntGroup Mappings<br/>
+<p>
+The following table lists all huntgroups in the database. You may use the quick links to edit or delete a huntgroup from the database.
+</p>
+<h200> Importants Of HuntGroup </h200>
+<ul>
+<li> <strong>Load Balancing:</strong> One of the primary benefits of huntgroups is load balancing. In a network with multiple Network Access Servers (NAS), huntgroups help distribute authentication requests evenly among these servers. This ensures that no single NAS is overwhelmed with authentication requests, optimizing server performance and user experience.
+</li>
+<li> <strong>Redundancy:</strong> Huntgroups also provide redundancy. If one NAS device in a huntgroup is unavailable, the RADIUS server will send the authentication request to the next device in the huntgroup. This ensures that users can always connect to the network, even if one or more NAS devices are down.
+</li>
+</ul>
+
+
+";
 $l['helpPage']['mngradhuntedit'] = "";
 
 $l['helpPage']['mnghsdel'] = "To remove a hotspot from the database you must provide the hotspot's name<br/>";

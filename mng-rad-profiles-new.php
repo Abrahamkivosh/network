@@ -22,8 +22,11 @@
 
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
+	include_once('lang/main.php');
 
 	include('library/check_operator_perm.php');
+	include_once ("library/functions.php") ;
+	include 'library/opendb.php';
 
 	// declaring variables
 	//	isset($_GET['profile']) ? $group = $_GET['profile'] : $profile = "";
@@ -33,70 +36,101 @@
 
 	if (isset($_POST['submit'])) {
 	
+	
 		$profile = $_POST['profile'];
-		if ($profile != "") {
+		$netWorkLimit = $_POST['netWorkLimit'];
+		$profile = trim($profile);
+		$netWorkLimit = floatval($netWorkLimit);
 
-			include 'library/opendb.php';
+		// convert network limit to bits from Mbps
+		$netWorkLimit = $netWorkLimit * 1000000;
 
-			$attrCount = 0;					// counter for number of attributes
-			foreach($_POST as $element=>$field) { 
-				
-				switch ($element) {
-					case "submit":
-					case "profile":
-							$skipLoopFlag = 1; 
-							break;
-				}
+		// add Service-Type  := Framed-User to radgroupcheck
+		addRadGroupAttribute($dbSocket, $profile, 'Service-Type', ':=', 'Framed-User', 'check');
+		// add Framed-Protocol := PPP to radgroupcheck
+		addRadGroupAttribute($dbSocket, $profile, 'Framed-Protocol', ':=', 'PPP', 'check');
+		// add Framed-Compression := Van-Jacobson-TCP-IP to radgroupcheck  It is used to specify the compression protocol to be used for the user's calls. 
+		// Compression is negotiated between the NAS and the user's PPP server.
+		// Compression Help In 
+		addRadGroupAttribute($dbSocket, $profile, 'Framed-Compression', ':=', 'Van-Jacobson-TCP-IP', 'check');
 		
-				if ($skipLoopFlag == 1) {
-					$skipLoopFlag = 0;             
-					continue;
-				}
+		// add  Ascend-Data-Rate := 64000 to radgroupreply It is used to specify the maximum transmit rate for the user's calls In bits per second.
+		addRadGroupAttribute($dbSocket, $profile, 'Ascend-Data-Rate', ':=', $netWorkLimit, 'reply');
+		// add  Ascend-Xmit-Rate := 64000 to radgroupreply It is used to specify the maximum transmit rate for the user's calls In bits per second.
+		addRadGroupAttribute($dbSocket, $profile, 'Ascend-Xmit-Rate', ':=', $netWorkLimit, 'reply');
+		// add  Ascend-Data-Filter := "ip" to radgroupreply It is used to specify the type of data filtering to be performed on the user's calls.
+		// addRadGroupAttribute($dbSocket, $profile, 'Ascend-Data-Filter', ':=', 'ip', 'reply');
 
-				if (isset($field[0]))
-					$attribute = $field[0];
-				if (isset($field[1]))
-					$value = $field[1];
-				if (isset($field[2]))
-					$op = $field[2];
-				if (isset($field[3]))
-					$table = $field[3];
+		// add  Ascend-Call-Filter := "ip" to radgroupreply It is used to specify the type of call filtering to be performed on the user's calls.
+		// addRadGroupAttribute($dbSocket, $profile, 'Ascend-Call-Filter', ':=', 'ip', 'reply');
+		
+		// $skipLoopFlag = 0;				// flag to skip loop
+		// if ($profile != "") {
 
-				if ($table == 'check')
-					$table = $configValues['CONFIG_DB_TBL_RADGROUPCHECK'];
-				if ($table == 'reply')
-					$table = $configValues['CONFIG_DB_TBL_RADGROUPREPLY'];
+		// 	include 'library/opendb.php';
+			
+
+		// 	$attrCount = 0;					// counter for number of attributes
+		// 	foreach($_POST as $element=>$field) { 
+				
+		// 		switch ($element) {
+		// 			case "submit":
+		// 			case "profile":
+		// 					$skipLoopFlag = 1; 
+		// 					break;
+		// 		}
+		
+		// 		if ($skipLoopFlag == 1) {
+		// 			$skipLoopFlag = 0;             
+		// 			continue;
+		// 		}
+
+		// 		if (isset($field[0]))
+		// 			$attribute = $field[0];
+		// 		if (isset($field[1]))
+		// 			$value = $field[1];
+		// 		if (isset($field[2]))
+		// 			$op = $field[2];
+		// 		if (isset($field[3]))
+		// 			$table = $field[3];
+
+		// 		if ($table == 'check')
+		// 			$table = $configValues['CONFIG_DB_TBL_RADGROUPCHECK'];
+		// 		if ($table == 'reply')
+		// 			$table = $configValues['CONFIG_DB_TBL_RADGROUPREPLY'];
 
 
-				if (!($value) || $table == '')
-					continue;
+		// 		if (!($value) || $table == '')
+		// 			continue;
+		// 		print_r($field);
+		// 		exit;
 
-				$sql = "INSERT INTO $table (id,GroupName,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($profile)."', '".
-						$dbSocket->escapeSimple($attribute)."','".$dbSocket->escapeSimple($op)."', '".
-						$dbSocket->escapeSimple($value)."')  ";
-				$res = $dbSocket->query($sql);
-				$logDebugSQL .= $sql . "\n";
+		// 		$sql = "INSERT INTO $table (id,GroupName,Attribute,op,Value) ".
+		// 				" VALUES (0, '".$dbSocket->escapeSimple($profile)."', '".
+		// 				$dbSocket->escapeSimple($attribute)."','".$dbSocket->escapeSimple($op)."', '".
+		// 				$dbSocket->escapeSimple($value)."')  ";
+		// 		$res = $dbSocket->query($sql);
+		// 		$logDebugSQL .= $sql . "\n";
 
-				$attrCount++;				// increment attribute count
+		// 		$attrCount++;				// increment attribute count
 
-			}
+		// 	}
 
-			if ($attrCount == 0) {
-				$failureMsg = "Failed adding profile name [$profile] - no attributes where provided by user";
-				$logAction .= "Failed adding profile name [$profile] - no attributes where provided by user on page: ";
-			} else {
-				$successMsg = "Added to database new profile: <b> $profile </b>";
-				$logAction .= "Successfully added new profile [$profile] on page: ";
-			}
+		// 	if ($attrCount == 0) {
+		// 		$failureMsg = "Failed adding profile name [$profile] - no attributes where provided by user";
+		// 		$logAction .= "Failed adding profile name [$profile] - no attributes where provided by user on page: ";
+		// 	} else {
+		// 		$successMsg = "Added to database new profile: <b> $profile </b>";
+		// 		$logAction .= "Successfully added new profile [$profile] on page: ";
+		// 	}
 
-			include 'library/closedb.php';
+		// 	include 'library/closedb.php';
 
-		} else { // if $profile != ""
-			$failureMsg = "profile name is empty";
-			$logAction .= "Failed adding (possibly empty) profile name [$profile] on page: ";
-		}
-
+		// } else { // if $profile != ""
+		// 	$failureMsg = "profile name is empty";
+		// 	$logAction .= "Failed adding (possibly empty) profile name [$profile] on page: ";
+		// }
+		include 'library/closedb.php';
 	}
 	
 	include_once('library/config_read.php');
@@ -113,7 +147,9 @@
 <script type="text/javascript" src="library/javascript/ajax.js"></script>
 <script type="text/javascript" src="library/javascript/dynamic_attributes.js"></script>
 
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title','mngProfileNew') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 </head>
@@ -147,6 +183,10 @@
                 <input name='profile' type='text' id='profile' value='' tabindex=100 />
                 <br />
 
+				<label for='profile' class='form'>Network Limit (Mbps)</label>
+                <input name='netWorkLimit' min="0.5"  type='number' id='netWorkLimit' value='' tabindex=101 />
+                <br />
+
                 <br/><br/>
                 <hr><br/>
 
@@ -159,7 +199,7 @@
 
 
         <?php
-			include_once('include/management/attributes.php');
+			// include_once('include/management/attributes.php');
         ?>
 		
 	</form>

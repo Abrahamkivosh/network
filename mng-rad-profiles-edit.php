@@ -22,6 +22,7 @@
 
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
+        include_once('lang/main.php');
 
 	include('library/check_operator_perm.php');
 
@@ -141,7 +142,9 @@
 <script type="text/javascript" src="library/javascript/dynamic_attributes.js"></script>
 
 
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title','mngProfileEdit') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 </head>

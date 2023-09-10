@@ -48,6 +48,14 @@
 
 	$edit_hotspotname = $name; //feed the sidebar variables	
 
+	// id $name is not set, redirect to the list page with an error message and exit
+	if (trim($name) == "") {
+		$failureMsg = "no hotspot name was entered, please specify a hotspot name to edit";
+		header("Location: mng-hs-list.php?failureMsg=$failureMsg");
+		
+		exit;
+	}
+
 	$logAction = "";
 	$logDebugSQL = "";
 
@@ -140,7 +148,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>daloRADIUS</title>
+<title>
+	<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title', 'mngHsEdit') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 </head>

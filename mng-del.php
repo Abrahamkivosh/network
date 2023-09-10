@@ -24,6 +24,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include('library/check_operator_perm.php');
+	include_once('lang/main.php');
 
 	isset($_GET['username']) ? $username = $_GET['username'] : $username = "";
 	isset($_GET['attribute']) ? $attribute = $_GET['attribute'] : $attribute = "";

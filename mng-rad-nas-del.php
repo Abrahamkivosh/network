@@ -24,6 +24,7 @@
     $operator = $_SESSION['operator_user'];
 
 	include('library/check_operator_perm.php');
+	include_once('lang/main.php');
 
 
 	isset($_REQUEST['nashost']) ? $nashost = $_REQUEST['nashost'] : $nashost = "";
@@ -89,7 +90,9 @@
 <script src="library/javascript/pages_common.js" type="text/javascript"></script>
 
 
-<title>daloRADIUS</title>
+<title>
+<?php echo $configValues['SYSTEM_NAME'] ?> - <?php echo t('title', 'mngNASDel') ?>
+</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 

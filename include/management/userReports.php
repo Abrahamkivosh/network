@@ -384,8 +384,20 @@ function userPlanInformation($username, $drawTable) {
     $totalTrafficUp = $row[2];
 	
     $timeDiff = ($planTimeBank - $totalTimeUsed);
-    ($planTrafficDown != 0) ? $trafficDownDiff = ($planTrafficDown - $totalTrafficDown) : $trafficDownDiff = 0;
-    ($planTrafficUp != 0) ? $trafficUpDiff = ($planTrafficUp - $totalTrafficUp) : $trafficUpDiff = 0;
+	// equal to:
+	if ($planTrafficDown != 0) {
+		$trafficDownDiff = floatval($planTrafficDown) - floatval($totalTrafficDown);
+		
+	} else {
+		$trafficDownDiff = 0;
+	}
+
+	if ($planTrafficUp != 0)
+	{
+		$trafficUpDiff = floatval($planTrafficUp) - floatval($totalTrafficUp);
+	} else {
+		$trafficUpDiff = 0;
+	}
     
     
 	/*
