@@ -21,6 +21,7 @@
  *              Mon Mar 28 22:55:00 EDT 2011
  *********************************************************************************************************
  */
+$configValues["TIMEZONE"] = "Africa/Nairobi";
 $configValues['APP_URL'] = 'http://localhost/daloradius';
 $configValues['SYSTEM_NAME'] = 'NEXT SOLUTIONS';
 $configValues['DALORADIUS_VERSION'] = '1.2';
@@ -107,3 +108,7 @@ $configValues['CONFIG_MAINT_TEST_USER_RADIUSSECRET'] = 'testing123';
  $configValues['CONFIG_MPESA_LNM_URL'] = '';
  $configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
  $configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
+
+
+//  enable error reporting
+error_reporting(E_ALL);

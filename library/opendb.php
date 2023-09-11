@@ -96,3 +96,6 @@
 	$dbSocket->setErrorHandling(PEAR_ERROR_CALLBACK, 'errorHandler');	// setting errorHandler function for the dbSocket obj
 
   $dbSocket->query("SET SESSION sql_mode = '';");
+
+
+?>

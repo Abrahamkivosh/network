@@ -90,7 +90,7 @@ class MpesaService
         ];
 
         if (!$status) {
-            $result['ResultCode'] = C2B00012; // Invalid Acc No
+            $result['ResultCode'] = "C2B00012"; // Invalid Acc No
             $result['ResultDesc'] = 'Rejected';
         }
 

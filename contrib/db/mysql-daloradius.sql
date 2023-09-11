@@ -839,6 +839,7 @@ CREATE TABLE `userbillinfo` (
   `creationby` varchar(128) default NULL,
   `updatedate` datetime default '0000-00-00 00:00:00',
   `updateby` varchar(128) default NULL,
+  `balance` decimal(10,2) default '0.00',
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `planname` (`planName`)
