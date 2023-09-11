@@ -124,3 +124,24 @@ $configValues['CONFIG_LOCATIONS'] =                     array(
         )
 );
 */
+// Hostpinnacle SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
+$configValues['CONFIG_HOSTPINNACLE_USERNAME'] = '';
+$configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = '';
+$configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
+$configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
+
+// Africas Talking SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+$configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
+
+// Mpesa Gateway
+$configValues['CONFIG_MPESA_CONSUMER_KEY'] = '';
+$configValues['CONFIG_MPESA_CONSUMER_SECRET'] = '';
+$configValues['CONFIG_MPESA_SHORTCODE'] = '';
+$configValues['CONFIG_MPESA_CONFIRMATION_URL'] = '';
+$configValues['CONFIG_MPESA_VALIDATION_URL'] = '';
+$configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+$configValues['CONFIG_MPESA_LNM_URL'] = '';
+$configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
+$configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';

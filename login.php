@@ -25,7 +25,7 @@ dalo_session_start();
 
 if (array_key_exists('daloradius_logged_in', $_SESSION)
     && $_SESSION['daloradius_logged_in'] !== false) {
-    header('Location: index.php');
+    header('Location: admin.php');
     exit;
 }
 
@@ -52,17 +52,29 @@ $onlyDefaultLocation = !(array_key_exists('CONFIG_LOCATIONS', $configValues)
             media="screen,projection" />
         <link rel="stylesheet" href="css/style.css" type="text/css"
             media="screen,projection" />
+
+            <style>
+            .systemh1Tititle{
+                font-weight : bold;
+                font-size: 10px;
+            }
+
+            </style>
+
+      
+
     </head>
 
     <body onLoad="document.login.operator_user.focus()">
         <div id="wrapper">
             <div id="innerwrapper">
                 <div id="header">
-                    <h1>
+                    <h1  class="systemh1Tititle" >
                         <a href="index.php">
-                            <img src="images/daloradius_small.png" border="0" />
+                            <?= $configValues['SYSTEM_NAME'] ?>
+                            <!-- <img src="images/daloradius_small.png" border="0" /> -->
                         </a>
-                    </h1>
+                    </h1  >
                     <h2><?= t('all','copyright1') ?></h2>
                     <br/>
                 </div><!-- #header -->

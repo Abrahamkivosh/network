@@ -21,8 +21,8 @@
  *              Mon Mar 28 22:55:00 EDT 2011
  *********************************************************************************************************
  */
-
-
+$configValues['APP_URL'] = 'http://localhost/daloradius';
+$configValues['SYSTEM_NAME'] = 'NEXT SOLUTIONS';
 $configValues['DALORADIUS_VERSION'] = '1.2';
 $configValues['FREERADIUS_VERSION'] = '2';
 $configValues['CONFIG_DB_ENGINE'] = 'mysqli';
@@ -30,7 +30,7 @@ $configValues['CONFIG_DB_HOST'] = 'localhost';
 $configValues['CONFIG_DB_PORT'] = '3306';
 $configValues['CONFIG_DB_USER'] = 'root';
 $configValues['CONFIG_DB_PASS'] = 'fa';
-$configValues['CONFIG_DB_NAME'] = 'radius';
+$configValues['CONFIG_DB_NAME'] = 'freeradiusdb';
 $configValues['CONFIG_DB_TBL_RADCHECK'] = 'radcheck';
 $configValues['CONFIG_DB_TBL_RADREPLY'] = 'radreply';
 $configValues['CONFIG_DB_TBL_RADGROUPREPLY'] = 'radgroupreply';
@@ -85,4 +85,25 @@ $configValues['CONFIG_MAINT_TEST_USER_RADIUSPORT'] = '1812';
 $configValues['CONFIG_MAINT_TEST_USER_NASPORT'] = '0';
 $configValues['CONFIG_MAINT_TEST_USER_RADIUSSECRET'] = 'testing123';
 
-?>
+
+ // Hostpinnacle SMS Gateway
+ $configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
+ $configValues['CONFIG_HOSTPINNACLE_USERNAME'] = 'sportieznet';
+ $configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = 'g0UjvbJ7';
+ $configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
+ $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
+ 
+ // Africas Talking SMS Gateway
+ $configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+ $configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
+ 
+ // Mpesa Gateway
+ $configValues['CONFIG_MPESA_CONSUMER_KEY'] = '';
+ $configValues['CONFIG_MPESA_CONSUMER_SECRET'] = '';
+ $configValues['CONFIG_MPESA_SHORTCODE'] = '';
+ $configValues['CONFIG_MPESA_CONFIRMATION_URL'] = '';
+ $configValues['CONFIG_MPESA_VALIDATION_URL'] = '';
+ $configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+ $configValues['CONFIG_MPESA_LNM_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';

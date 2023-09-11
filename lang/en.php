@@ -22,11 +22,10 @@
  *********************************************************************************************************
  */
  
-$l['all']['daloRADIUS'] = "daloRADIUS " . $configValues['DALORADIUS_VERSION'];
+$l['all']['daloRADIUS'] =   $configValues['SYSTEM_NAME'] ." - " . $configValues['DALORADIUS_VERSION'];
 $l['all']['daloRADIUSVersion'] = "version " . $configValues['DALORADIUS_VERSION'];
-$l['all']['copyright1'] = "RADIUS Management, Reporting, Accounting and Billing by <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a>";
-$l['all']['copyright2'] = "daloRADIUS Copyright &copy; 2007-2019 by <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a> <br/>
-Template design by <a href=\"http://www.sixshootermedia.com\">Six Shooter Media</a>.";
+$l['all']['copyright1'] = $configValues['SYSTEM_NAME'];
+$l['all']['copyright2'] = $configValues['SYSTEM_NAME'];
 $l['all']['ID'] = "ID";
 $l['all']['PoolName'] = "Pool Name";
 $l['all']['CalledStationId'] = "CalledStationId";

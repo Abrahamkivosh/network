@@ -88,6 +88,6 @@ $res = $dbSocket->query($sql);
 // ~ close connection to db before redirecting
 include('library/closedb.php');
 
-header('Location: index.php');
+header('Location: admin.php');
 
 ?>
