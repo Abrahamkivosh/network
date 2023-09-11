@@ -34,6 +34,7 @@
 	isset($_POST['password']) ? $password = $_POST['password'] : $password = "";
 	isset($_POST['planName']) ? $planName = $_POST['planName'] : $planName = "";
 	isset($_POST['profiles']) ? $profiles = $_POST['profiles'] : $profiles = "";
+	
 	isset($_POST['passwordType']) ? $passwordtype = $_POST['passwordType'] : $passwordtype = "";
 	isset($_POST['notificationWelcome']) ? $notificationWelcome = $_POST['notificationWelcome'] : $notificationWelcome = "";
 	
@@ -179,7 +180,7 @@
 			// insert user information table
 			$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
 					" (id, username, firstname, lastname, email, department, company, workphone, homephone, ".
-					" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby, updatedate, updateby) ".
+					" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby) ".
 					" VALUES (0,
 					'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($firstname)."', '".
 					$dbSocket->escapeSimple($lastname)."', '".$dbSocket->escapeSimple($email)."', '".
@@ -191,7 +192,7 @@
 					$dbSocket->escapeSimple($ui_zip)."', '".$dbSocket->escapeSimple($notes)."', '".
 					$dbSocket->escapeSimple($ui_changeuserinfo)."', '".
 					$dbSocket->escapeSimple($ui_PortalLoginPassword)."', '".$dbSocket->escapeSimple($ui_enableUserPortalLogin).
-					"', '$currDate', '$currBy', NULL, NULL)";
+					"', '$currDate', '$currBy')";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 		} //FIXME:
@@ -281,7 +282,7 @@
 					" paymentmethod, cash, creditcardname, creditcardnumber, creditcardverification, creditcardtype, creditcardexp, ".
 					" notes, changeuserbillinfo, ".
 					" `lead`, coupon, ordertaker, billstatus, lastbill, nextbill, nextinvoicedue, billdue, postalinvoice, faxinvoice, emailinvoice, ".
-					" creationdate, creationby, updatedate, updateby) ".
+					" creationdate, creationby) ".
 					" VALUES (0, '".$dbSocket->escapeSimple($planName)."', 
 					'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($bi_contactperson)."', '".
 					$dbSocket->escapeSimple($bi_company)."', '".$dbSocket->escapeSimple($bi_email)."', '".
@@ -300,7 +301,7 @@
 					$dbSocket->escapeSimple($bi_nextinvoicedue)."', '".$dbSocket->escapeSimple($bi_billdue)."', '".
 					$dbSocket->escapeSimple($bi_postalinvoice)."', '".$dbSocket->escapeSimple($bi_faxinvoice)."', '".
 					$dbSocket->escapeSimple($bi_emailinvoice).
-									"', '$currDate', '$currBy', NULL, NULL)";
+									"', '$currDate', '$currBy')";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 			
@@ -327,6 +328,7 @@
 		global $username;
 		global $password;
 		global $passwordtype;
+
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE UserName='".
 						$dbSocket->escapeSimple($username)."'";

@@ -1342,7 +1342,53 @@ $l['helpPage']['mngimportusers'] = "";
 $l['helpPage']['msgerrorpermissions'] = "You do not have permissions to access the page. <br/>
 Please consult with your System Administrator. <br/>";
 
-$l['helpPage']['mngradusergroup'] = "";
+$l['helpPage']['mngradusergroup'] ='
+<body>
+    <h1>Information about the radusergroup Table</h1>
+
+    <p><strong>Purpose of the radusergroup Table:</strong></p>
+    <ol>
+        <li><strong>Group Membership:</strong> The <code>radusergroup</code> table associates users with specific groups or roles within the network. These groups can represent different categories of users, such as employees, guests, administrators, or other user roles.</li>
+        <li><strong>Access Control:</strong> Group membership allows administrators to apply different access control policies, permissions, and restrictions to users based on their group affiliation. For example, employees may have full network access, while guests may have limited access.</li>
+        <li><strong>Policy Enforcement:</strong> By assigning users to groups, administrators can enforce network policies, such as bandwidth limits, firewall rules, session timeouts, and other configuration settings, specific to each group.</li>
+    </ol>
+
+    <p><strong>Sample Record and Its Purpose:</strong></p>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Group Name</th>
+            <th>Priority</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>user1</td>
+            <td>employees</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>user2</td>
+            <td>guests</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>user3</td>
+            <td>employees</td>
+            <td>1</td>
+        </tr>
+    </table>
+
+    <p><strong>Purpose of the Sample Record:</strong></p>
+    <ol>
+        <li><strong>"user1" in "employees":</strong> This record indicates that "user1" belongs to the "employees" group with a priority of 1. As a member of the "employees" group, "user1" may be granted access to network resources and services tailored for employees, with specific policies applied.</li>
+        <li><strong>"user2" in "guests":</strong> This record indicates that "user2" belongs to the "guests" group with a priority of 2. As a member of the "guests" group, "user2" may have limited access to network resources, possibly with different policies from those applied to employees.</li>
+        <li><strong>"user3" in "employees":</strong> This record represents another user, "user3," who also belongs to the "employees" group with a priority of 1. Multiple users can belong to the same group, and their collective group membership allows administrators to apply consistent policies to all employees.</li>
+    </ol>
+</body>
+';
 $l['helpPage']['mngradusergroupdel'] = "To remove a user entry from the database you must provide the username of the account";
 $l['helpPage']['mngradusergroupnew'] = "";
 $l['helpPage']['mngradusergrouplist'] = "";
