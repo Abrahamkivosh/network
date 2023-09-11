@@ -35,7 +35,7 @@ class SMSService
             default:
                 die("Unknown SMS gateway: $smsGateway");
         }
-        echo $response;
+        
         return $response;
     }
 
@@ -235,17 +235,4 @@ class SMSService
         return true;
     }
 
-}
-
-// service to send SMS messages to users.
-$smsService = new SMSService();
-$message = "Test SMS message";
-$phone = "254707585566";
-
-try {
-    $errmsg = "";
-    $result = $smsService->testsendsms ($phone, $message, $errmsg);
-    print_r($result);
-} catch (Exception $e) {
-    echo "Error sending SMS: " . $e->getMessage();
 }

@@ -169,3 +169,50 @@ function addRadGroupAttribute($dbSocket, $groupname, $attribute, $op, $value, $t
 
 
 }
+
+/**
+ * This function is used to format user phone number
+ * @param $phoneNumber
+ * @return unknown_type
+ */
+function formatPhoneNumber($phoneNumber)
+{
+    $phoneNumber = str_replace(' ', '', $phoneNumber);
+    $phoneNumber = str_replace('-', '', $phoneNumber);
+    $phoneNumber = str_replace('(', '', $phoneNumber);
+    $phoneNumber = str_replace(')', '', $phoneNumber);
+    $phoneNumber = str_replace('+', '', $phoneNumber);
+
+    // if phone number starts with 254 return as is
+    if (substr($phoneNumber, 0, 3) == '254') {
+        return $phoneNumber;
+    }
+    // check if phone number starts with 0 and replace with 254
+    if (substr($phoneNumber, 0, 1) == '0') {
+        $phoneNumber = '254' . substr($phoneNumber, 1);
+    }
+    return $phoneNumber;
+    
+}
+
+/**
+ * This function is used to determine new date after adding a number of days
+ * @param $expiryDateTimestamp
+ * @param $timeBank
+ * @return unknown_type
+ */
+function getNewDate($expiryDateTimestamp, $timeBank)
+{
+    $timeNow = time();
+    if ($expiryDateTimestamp > $timeNow) {
+        $newDate = $expiryDateTimestamp + $timeBank;
+    }else {
+        $newDate = $expiryDateTimestamp + ($timeNow - $expiryDateTimestamp) + $timeBank;
+    }
+    // convert to date time
+    $date = new DateTime();
+    $date->setTimestamp($newDate);
+    // return 11 Sep 2023 00:00:00
+    $newDate = $date->format('d M Y H:i:s');
+    return $newDate;
+}

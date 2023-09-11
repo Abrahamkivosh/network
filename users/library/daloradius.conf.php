@@ -86,17 +86,19 @@ $configValues['CONFIG_MAINT_TEST_USER_RADIUSPORT'] = '1812';
 $configValues['CONFIG_MAINT_TEST_USER_NASPORT'] = '0';
 $configValues['CONFIG_MAINT_TEST_USER_RADIUSSECRET'] = 'testing123';
 
+$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking'; // hostpinnacle, africastalking
 
  // Hostpinnacle SMS Gateway
- $configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
+
  $configValues['CONFIG_HOSTPINNACLE_USERNAME'] = 'sportieznet';
  $configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = 'g0UjvbJ7';
  $configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
  $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
  
  // Africas Talking SMS Gateway
- $configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+
  $configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
+ $configValues['CONFIG_AFRICASTALKING_API_KEY'] = '5c4cd68a3a6967f207e9dac7215ad76983f673783d98f508ec0fe7e04cb645bf';
  
  // Mpesa Gateway
  $configValues['CONFIG_MPESA_CONSUMER_KEY'] = '';

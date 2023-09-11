@@ -53,6 +53,24 @@ class User {
         return $this->configValues;
     }
 
+    // Check if user exists
+    public function userExists()
+    {
+        $userInstance = $this->userInstance;
+        $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERINFO'];
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $query = "SELECT * FROM $table_userInfo WHERE username = '$userName'";
+
+        $result = $this->dbSocket->query($query);
+
+        if ($result->numRows()  > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 
     /*
@@ -203,7 +221,50 @@ class User {
             return false;
         }
     }
-    
+
+    /**
+     * Update user account expiration date
+     * @param $newDate
+     * @return mixed
+     */
+    public function updateUserAccountExpirationDate($newDate)
+    {
+        $userInstance = $this->userInstance;
+        $table_userRadCheck = $this->configValues['CONFIG_DB_TBL_RADCHECK'];
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+
+        $query = "UPDATE $table_userRadCheck SET value = '$newDate' WHERE username = '$userName' AND attribute = 'Expiration'";
+        $result = $this->dbSocket->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update user balance
+     * @param $newBalance
+     * @return mixed
+     */
+    public function updateUserBalance($newBalance)
+    {
+        $userInstance = $this->userInstance;
+        $table_userBillInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+
+        $query = "UPDATE $table_userBillInfo SET balance = '$newBalance' WHERE username = '$userName'";
+        $result = $this->dbSocket->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 
@@ -212,5 +273,6 @@ class User {
 // test the class
 $user = new User($dbSocket, $configValues);
 $user->setUserInstance('kivosh');
-print_r($user->getUserBillInfo());
+$billingInfo = $user->getUserBillInfo();
+
 

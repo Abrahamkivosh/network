@@ -913,3 +913,31 @@ INSERT IGNORE INTO `radgroupcheck` (Groupname,Attribute,Op,Value) VALUES ('daloR
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2011-05-25 19:22:59
+--
+
+--
+-- Table structure for table `transactions`
+-- To  be use to store all payments made by users via mobile money and other payment methods
+--
+
+DROP TABLE IF EXISTS `transactions`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `transactions` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `username` varchar(128) default NULL,
+  `reference_no` varchar(128) default NULL,
+  `transaction_id` varchar(128) default NULL,
+  `transaction_type` varchar(128) default NULL,
+  `transaction_code` varchar(128) default NULL,
+  `amount` varchar(128) default NULL,
+  `payment_method` varchar(128) default NULL,
+  `transaction_date` varchar(128) default NULL,
+  `status` INT default 0,
+  `status_message` varchar(128) default NULL,
+  `sender_number` varchar(128) default NULL,
+  `sender_name` varchar(128) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+  
