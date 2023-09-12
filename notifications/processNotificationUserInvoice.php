@@ -1,4 +1,10 @@
 <?php
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ini_set('memory_limit', '1024M');
+
 /*
  *********************************************************************************************************
  * daloRADIUS - RADIUS Web Platform
@@ -20,8 +26,14 @@
  *
  *********************************************************************************************************
  */
-	//include the dompdf class
-	require_once("dompdf/dompdf_config.inc.php");
+	//include autoloader from vendor directory if not already included
+	// if (!class_exists('AUTOLOADER_INCLUDED')) {
+	// 	require_once("../../vendor/autoload.php");
+	// 	define('AUTOLOADER_INCLUDED', true);
+	// }
+
+	// use
+	use Dompdf\Dompdf;
 
 	//include the Pear Mail classes for sending out emails
 	@require_once('Mail.php');
@@ -210,11 +222,19 @@
 		global $base;
 		
 		// instansiate the pdf document
-		$dompdf = new DOMPDF();
-		$dompdf->set_base_path("$base/templates/");
-		$dompdf->load_html($html);
-		$dompdf->render();
+		// $dompdf = new DOMPDF();
+		// $dompdf->set_base_path("$base/templates/");
+		// $dompdf->load_html($html);
+		// $dompdf->render();
 	
+		// $notification_pdf = $dompdf->output();
+		$dompdf = new Dompdf();
+		
+		$dompdf->set_base_path("$base/templates/");
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper('A4', 'portrait');
+		$dompdf->render();
+
 		$notification_pdf = $dompdf->output();
 		
 		return $notification_pdf;

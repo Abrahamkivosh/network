@@ -4,6 +4,12 @@ $pth = '../../vendor/autoload.php';
 
 if (file_exists($pth)) {
     require_once $pth;
+
+    if (!defined('VENDOR_AUTOLOAD_INCLUDED')) {
+        include_once $pth;
+        define('VENDOR_AUTOLOAD_INCLUDED', true);
+    }
+
 } else {
     die("Error: Autoload file not found");
 }

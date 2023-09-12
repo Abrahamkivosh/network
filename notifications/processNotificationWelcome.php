@@ -19,8 +19,9 @@
  *
  *********************************************************************************************************
  */
-	//include the dompdf class
-	require_once("dompdf/dompdf_config.inc.php");
+	//include the dompdf class from vendor directory
+	require_once("vendor/dompdf/dompdf_config.inc.php");
+	
 
 	//include the Pear Mail classes for sending out emails
 	@require_once('Mail.php');
