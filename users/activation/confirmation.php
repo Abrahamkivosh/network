@@ -22,7 +22,6 @@ if (!class_exists('MpesaService')) {
     define('MPESASERVICE_INCLUDED', true);
 }
 
-
 // include the User class if it has not been included
 if (!class_exists('user')) {
     include_once "../../library/user.php";
@@ -41,11 +40,8 @@ if (!class_exists('SMSTemplates')) {
 
 }
 
-
 // create an instance of the MpesaService class
 $mpesaService = new MpesaService();
-
-
 
 // create an instance of the User class
 $user = new user($dbSocket, $configValues);
@@ -62,14 +58,12 @@ if (empty($mpesaResponse)) {
     die("Mpesa response is empty");
 }
 
-
 $callbackData = $mpesaService->getTransactionDetails();
 
 // Check if the callbackData is empty
 if (empty($callbackData)) {
     die("Callback data is empty");
 }
-
 
 // get the BillRefNumber
 $billRefNumber = $callbackData['BillRefNumber'];
@@ -99,7 +93,6 @@ if ($user->userExists()) {
 
     //  Get user billing Plan
     $userBillingPlan = $user->getUserBillingPlan();
-    
 
     // Get  user phone number from userBillInfo array
     $userPhoneNumber = isset($userBillInfo['phone']) ? $userBillInfo['phone'] : null;
@@ -116,39 +109,90 @@ if ($user->userExists()) {
     //Get new date after adding planTimeBank to userAccountExpirationDate
     $newDate = getNewDate($userAccountExpirationDate['timestamp'], $userPlanTimeBank);
 
- 
+    $smsTemplates->setPhone($userPhoneNumber);
+    $smsTemplates->setUserInfo($userInfo);
 
-    // check if transaction amount is equal to planCost
-    if ($transactedAmount == $userPlanCost) {
-        // Update user balance
-        $balance = ($userBalance + $transactedAmount) - $userPlanCost;
-       
-        
-    } else if ($transactedAmount > $userPlanCost) {
-        // Update user balance
-        $balance = ($userBalance + $transactedAmount) - $userPlanCost;
-        
-    } else if ($transactedAmount < $userPlanCost) {
-       
-        // Update user balance
-        $new_amount = $userBalance + $transactedAmount;
-        if ($new_amount >= $userPlanCost) {
-            $balance = $new_amount - $userPlanCost;
-        } else if ($new_amount < $userPlanCost) {
-            $balance = $userPlanCost - $new_amount;
-        }else {
-            $balance = $userBalance;
+    // check if invoice not paid
+    $open_invoice = $user->getUserLatestInvoiceByStatus(['paid'], false);
+    $invoice_exists = $open_invoice ? true : false;
+
+    if ($invoice_exists) {
+        // create new payment for invoice
+        $payment_payload = [
+            'amount' => $transactedAmount,
+            'notes' => 'Payment for invoice',
+            'type_id' => 1,
+        ];
+        $user->createUserInvoicePayments($open_invoice['id'], $payment_payload);
+
+        // update invoice status
+        $invoice_balance = $open_invoice['balance'];
+        // check if invoice balance is not negative
+        if ($invoice_balance >= 0) {
+            $invoice_status = 'paid';
+        } else {
+            $invoice_status = 'partial';
         }
 
-    }else {
-        $balance = $userBalance;
-       
+        $user->updateUserInvoiceStatus($open_invoice['id'], $invoice_status);
+
+    } else {
+        // create invoice
+        $invoice_payload = [
+            'user_id' => $userBillInfo['id'],
+            "date" => date('Y-m-d H:i:s'),
+            "status_id" => 1,
+            "type_id" => 1,
+            "notes" => "Invoice for plan",
+            "creationdate" => date('Y-m-d H:i:s'),
+            "creationby" => $userBillInfo["username"],
+        ];
+        $invoice_id = $user->createUserInvoice($invoice_payload);
+        // create new payment for invoice
+        $payment_payload = [
+            'amount' => $transactedAmount,
+            'notes' => 'Payment for invoice',
+            'type_id' => 1,
+        ];
+        $user->createUserInvoicePayments($invoice_id, $payment_payload);
+
+        // update invoice status
+        $invoice_balance = $transactedAmount - $userPlanCost;
+        // check if invoice balance is not negative
+        if ($invoice_balance >= 0) {
+            $invoice_status = 'paid';
+        } else {
+            $invoice_status = 'partial';
+        }
+        $user->updateUserInvoiceStatus($invoice_id, $invoice_status);
     }
-    // Update user balance
+    // get
+
+    // Update user balance getUserBalance()
+    $balance = $user->getUserBalance();
     $user->updateUserBalance($balance);
 
-    // Update user account expiration date
-    $user->updateUserAccountExpirationDate($newDate);
+    // if balance is positive, update user expiry date
+    if ($balance >= 0) {
+        $user->updateUserAccountExpirationDate($newDate);
+        // Send SMS to user
+        $smsTemplates->sendAccountPlanRenewalSMS();
+    } else {
+        // Check if account is expired
+        $currentTimestamp = time();
+        $accountExpirationTimestamp = $userAccountExpirationDate['timestamp'];
+        if ($currentTimestamp > $accountExpirationTimestamp) { // Account is expired and payment is not enough to renew
+            // Get Remaining Amount to renew account
+            $remainingAmount = $userPlanCost - $balance;
+            // Send SMS to user
+            $smsTemplates->sendAccountSuspensionSMS($remainingAmount);
+            echo json_encode(['error' => 'Account is expired and payment is not enough to renew. ']);
+
+        } else { // Account is not expired and payment is not enough to renew
+            // Send SMS to user
+
+        }
+    }
 
     // userinfo
     $userInfo = [
@@ -159,11 +203,6 @@ if ($user->userExists()) {
     ];
 
     echo json_encode($userInfo);
-
-    // Send SMS to user
-    // $smsTemplates->setPhone($userPhoneNumber);
-    // $smsTemplates->setUserInfo($userInfo);
-    // $smsTemplates->sendAccountPlanRenewalSMS();
 
 } else {
     // Reject the transaction

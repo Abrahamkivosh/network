@@ -92,14 +92,14 @@ class SMSTemplates {
     /**
      * Send user account suspension SMS
      */
-    public function sendAccountSuspensionSMS()
+    public function sendAccountSuspensionSMS(float $amount  = 0)
     {
         $userName = $this->userInfo['username'] ;
         $systemName = $this->configValues['SYSTEM_NAME'] ;
         $plan = $this->userInfo['plan'] ;
         $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
         $account_number = $userName ;
-        $amount = $this->userInfo['amount'] ;
+        $amount = $amount == 0 ? $this->userInfo['amount'] : $amount ;
         $message = "Dear $userName, your account has been suspended. Please pay KES $amount to $paybillNumber A/C $account_number to reactivate your account. Thank you for using $systemName." ;
         return $this->smsService->sendSMSMessage($this->phone, $message);
 

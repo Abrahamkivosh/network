@@ -261,7 +261,8 @@
 			
 			
 			// initialize next bill date string (Y-m-d style)
-			$nextBillDate = "0000-00-00";
+			$nextBillDate = "0000-00-00 00:00:00";
+			
 			
 			// get next billing date
 			if ($planRecurring == "Yes") {
@@ -394,7 +395,7 @@
 				$userbillinfo_id = $userbillinfo['user_id'];
 				$nextBillDate = $userbillinfo['nextBillDate'];
 				// change $nextBillDate to date time format
-				$nextBillDate = date('d M Y', strtotime($nextBillDate));
+				$nextBillDate = date('d M Y H:i:s', strtotime($nextBillDate));
 
 				
 
