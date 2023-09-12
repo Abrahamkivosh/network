@@ -6,9 +6,14 @@ class MpesaService
 
     public function __construct()
     {
-        // Load configuration
-        include_once  "../config_read.php"; // "../config_read.php" is the path to the config file
-
+        
+       
+    }
+    /**
+     * set the config values
+     */
+    public function setConfigValues($configValues)
+    {
         $this->configValues = $configValues;
     }
 
@@ -105,21 +110,8 @@ class MpesaService
     {
         $callbackJSONData = file_get_contents('php://input');
         $callbackData = json_decode($callbackJSONData);
-
-        $transactionType = $callbackData->TransactionType;
-        $transID = $callbackData->TransID; // This is unique to every transaction
-        $transTime = $callbackData->TransTime; // Format is YYYYMMDDHHMMSS
-        $transAmount = $callbackData->TransAmount; // This is the amount that was transacted
-        $businessShortCode = $callbackData->BusinessShortCode; // This is the paybill number
-        $billRefNumber = $callbackData->BillRefNumber; // This is the account number
-        $invoiceNumber = $callbackData->InvoiceNumber; // This is the invoice number
-        $orgAccountBalance = $callbackData->OrgAccountBalance; // This is the organization's account balance
-        $thirdPartyTransID = $callbackData->ThirdPartyTransID; // This is the transaction ID from the third-party
-        // $MSISDN = $callbackData->MSISDN; // This is a masked mobile number of the customer making the payment.
-        $firstName = $callbackData->FirstName; // This is the first name of the customer making the payment.
-        $middleName = $callbackData->MiddleName; // This is the middle name of the customer making the payment.
-        $lastName = $callbackData->LastName; // This is the last name of the customer making the payment.
-
+        // convert $callbackData to array
+        $callbackData = (array) $callbackData;
         return $callbackData;
 
     }

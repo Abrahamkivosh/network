@@ -1,6 +1,18 @@
 <?php
-include "./opendb.php" ;
-include "./config_read.php" ;
+
+
+// Check if opendb.php has already been included
+if (!defined('OPENDB_INCLUDED')) {
+    require_once "./opendb.php";
+    define('OPENDB_INCLUDED', true);
+}
+
+// Check if config_read.php has already been included
+if (!defined('CONFIG_READ_INCLUDED')) {
+    require_once "./config_read.php";
+    define('CONFIG_READ_INCLUDED', true);
+}
+
 
 
 
@@ -193,7 +205,8 @@ class User {
             $remaining_days = $date->diff(new DateTime())->format('%a');
             return [
                 'expire_date' => $expire_date,
-                'remaining_days' => $remaining_days
+                'remaining_days' => $remaining_days,
+                'timestamp' => $date->getTimestamp(),
             ];
         } else {
             return false;

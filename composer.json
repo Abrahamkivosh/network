@@ -11,11 +11,8 @@
         }
     ],
     "require": {
-        "php": "^7.4"
-
-    },
-    "require-dev": {
-        
+        "php": "^7.4|^8.0|^8.1",
+        "africastalking/africastalking": "^3.0"
     },
     "autoload": {
     },

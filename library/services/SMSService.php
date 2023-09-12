@@ -1,7 +1,16 @@
 <?php
-// service to send SMS messages to users.
+// autoload vendor classes
+$pth = '../../vendor/autoload.php';
 
-// Path: app/services/SMSService.php
+if (file_exists($pth)) {
+    require_once $pth;
+} else {
+    die("Error: Autoload file not found");
+}
+
+// use classes
+use AfricasTalking\SDK\AfricasTalking;
+
 
 class SMSService
 {
@@ -9,10 +18,13 @@ class SMSService
 
     public function __construct()
     {
-        // Load configuration
-        include_once '../config_read.php';
+    }
+
+    public function setConfigValues($configValues)
+    {
         $this->configValues = $configValues;
     }
+
 
     public function sendSMS($phone, $message)
     {
@@ -96,6 +108,8 @@ class SMSService
         $username = $this->configValues['CONFIG_AFRICASTALKING_USERNAME'];
         $apikey = $this->configValues['CONFIG_AFRICASTALKING_API_KEY'];
 
+        
+
         // Initialize the SDK
         $AT = new AfricasTalking($username, $apikey);
 
@@ -110,7 +124,6 @@ class SMSService
 
         // Set your shortCode or senderId
         $from = $this->configValues['CONFIG_AFRICASTALKING_SHORTCODE'];
-
         try {
             // Thats it, hit send and we'll take care of the rest
             $result = $sms->send([
@@ -118,10 +131,12 @@ class SMSService
                 'message' => $message,
                 'from' => $from,
             ]);
+            header('Content-type: application/json');
+            return json_encode($result);
 
-            print_r($result);
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+            throw new Exception($e->getMessage());
         }
 
     }
@@ -162,77 +177,9 @@ class SMSService
         return $this->sendSMS($phone, $message);
     }
 
-    public function testsendsms($recp, $body, &$errmsg)
-    {
-        // enter your BulkSMS credentials here
-
-        $api_host = 'https://bulksms.hostpinnacle.co.ke'; // regional BulkSMS
-        $api_user = "sportieznet";
-        $api_password = "g0UjvbJ7";
-        $sender = "SPORTIEZNET";
-
-        // clean up HTML entities
-
-        $body = html_entity_decode($body, ENT_COMPAT, "UTF-8");
-
-        // uncomment the following lines to see the SMS details
-
-        //  print $recp . "<br>";
-        //  print $body . "<br>";
-        //  return true;
-
-        // implement your own SMS gateway here
-
-        $body = rawurlencode($body);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://$api_host/sendmessage.php?user=$api_user&password=$api_password&mobile=$recp&sender=$sender&message=$body&type=3");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $res = curl_exec($ch);
-
-        // uncomment the following line to see the result from the SMS gateway
-
-        //  print $res;
-        //  exit;
-
-        $curl_info = curl_getinfo($ch);
-
-        // detailed error logging (httpd error log)
-
-        if ($res == false) {
-            $errmsg = "sendsms cURL error: " . curl_error($ch);
-            syslog(LOG_INFO, "[radiusmanager] " . $errmsg);
-            return false;
-        } elseif ($curl_info['http_code'] != 200) {
-            $errmsg = "sendsms HTTP error code: " . $curl_info['http_code'];
-            syslog(LOG_INFO, "[radiusmanager] " . $errmsg);
-            return false;
-        } else {
-            $res = str_replace(str_split('{}"'), "", $res);
-            $tokens = explode(",", $res);
-            $errmsg = "ERR: " . $tokens[0] . ", " . $tokens[1];
-        }
-
-        curl_close($ch);
-
-        // log result
-
-        if ($tokens[0] == "status:failed") {
-            $res_str = $errmsg;
-        } else {
-            $res_str = "OK";
-        }
-
-        syslog(LOG_INFO, "[radiusmanager] Sending SMS to " . $recp . " (" . $res_str . ")");
-
-        // error has occured, return FALSE
-
-        if ($tokens[0] == "status:failed") {
-            return false;
-        }
-
-        // no error, return TRUE
-
-        return true;
-    }
 
 }
+
+?>
+
+<?php

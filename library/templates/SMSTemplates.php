@@ -1,6 +1,13 @@
 <?php
 
-include_once  "../services/SMSService.php";
+$path = "../../library/services/SMSService.php" ;
+if( !file_exists( $path ) ) {
+    die( "File not found" ) ;
+}
+if ( !class_exists( 'SMSService' ) ) {
+    include_once $path ;
+    define( 'SMSSERVICE_INCLUDED', true ) ;
+}
 
 
 class SMSTemplates {
@@ -27,7 +34,10 @@ class SMSTemplates {
     public function setConfigValues( $configValues )
     {
         $this->configValues = $configValues ;
+        $this->smsService->setConfigValues( $configValues ) ;
     }
+
+    
 
     /**
      * Send new user registration SMS
@@ -39,9 +49,14 @@ class SMSTemplates {
         $password = $this->userInfo['password'] ;
         $systemName = $this->configValues['SYSTEM_NAME'] ;
         $appUrl = $this->configValues['APP_URL'] ;
-        $message = "Welcome to $systemName. Your username is $userName and your password is $password. Login at $appUrl" ;
-        $this->smsService->sendSms($this->phone, $message);
+        $fullName = $this->userInfo['fullName'] ;
+        $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
+        $account_number = $userName ;
+        $message = "Dear $fullName, Welcome to $systemName. Your username is $userName and password is $password. Please login at $appUrl. For Paybill, use $paybillNumber and account number $account_number. Thank you for using $systemName." ;
+        return $this->smsService->sendSMSMessage($this->phone, $message);
     }
+
+    
 
     /**
      * Send user when they renew their account plan
@@ -54,18 +69,44 @@ class SMSTemplates {
         $userBalance = $this->userInfo['balance'] ;
         $systemName = $this->configValues['SYSTEM_NAME'] ;
         $message = "Dear $userName, your account has been renewed. Your account will expire on $userAccountExpirationDate. Your new balance is $userBalance KES. Thank you for using $systemName." ;
-        $this->smsService->sendSms($this->phone, $message);
+        return $this->smsService->sendSMSMessage($this->phone, $message);
     }
+
+    /**
+     * Send user reminder to renew their account plan
+     * Send when one has not renewed their account plan
+     */
+    public function sendAccountPlanRenewalReminderSMS()
+    {
+        $userName = $this->userInfo['username'] ;
+        $userAccountExpirationDate = $this->userInfo['accountExpirationDate'] ;
+        $systemName = $this->configValues['SYSTEM_NAME'] ;
+        $plan = $this->userInfo['plan'] ;
+        $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
+        $account_number = $userName ;
+        $amount = $this->userInfo['amount'] ;
+        $message = "Dear $userName, your account will be Due on $userAccountExpirationDate for the $plan plan. Paybill: $paybillNumber, A/C: $account_number Amount: $amount. Thank you for using $systemName." ;
+        return $this->smsService->sendSMSMessage($this->phone, $message);
+    }
+
+    /**
+     * Send user account suspension SMS
+     */
+    public function sendAccountSuspensionSMS()
+    {
+        $userName = $this->userInfo['username'] ;
+        $systemName = $this->configValues['SYSTEM_NAME'] ;
+        $plan = $this->userInfo['plan'] ;
+        $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
+        $account_number = $userName ;
+        $amount = $this->userInfo['amount'] ;
+        $message = "Dear $userName, your account has been suspended. Please pay KES $amount to $paybillNumber A/C $account_number to reactivate your account. Thank you for using $systemName." ;
+        return $this->smsService->sendSMSMessage($this->phone, $message);
+
+    }
+
+
 
 }
 
-?>
-<?php
-//  test the class
-$smsTemplates = new SMSTemplates(  ) ;
-$smsTemplates->setPhone( "+25407585566" ) ;
-$smsTemplates->setUserInfo( array( "username" => "testuser", "password" => "testpass", "accountExpirationDate" => "2019-12-12", "balance" => "1000" ) ) ;
-$smsTemplates->setConfigValues( array( "SYSTEM_NAME" => "Test System", "APP_URL" => "http://localhost" ) ) ;
-$smsTemplates->sendNewUserRegistrationSMS() ;
-$smsTemplates->sendAccountPlanRenewalSMS() ;
 ?>
