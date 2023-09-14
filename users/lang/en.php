@@ -20,11 +20,10 @@
  *********************************************************************************************************
  */
 
-$l['all']['daloRADIUS'] = "daloRADIUS " . $configValues['DALORADIUS_VERSION'];
+$l['all']['daloRADIUS'] = $configValues['DALORADIUS_VERSION'];
 $l['all']['daloRADIUSVersion'] = "version " . $configValues['DALORADIUS_VERSION'];
-$l['all']['copyright1'] = "Radius Reporting, Billing and Management by <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a>";
-$l['all']['copyright2'] = "daloRADIUS Copyright &copy; 2007-2019 by <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a> <br/>
-Template design by <a href=\"http://www.sixshootermedia.com\">Six Shooter Media</a>.";
+$l['all']['copyright1'] = $configValues['SYSTEM_NAME'];
+$l['all']['copyright2'] = $configValues['SYSTEM_NAME'];
 $l['all']['ID'] = "ID";
 
 /********************************************************************************/
@@ -760,7 +759,7 @@ Welcome to the Users Portal.<br/><br/>
 By logging-in with your account username and password you will be able to edit your contact settings
 as well as track your surfing habbits and view visual graphs.<br/><br/>
 Regards,<br/>
-daloRADIUS Staff.<br/><br/>";
+Network Staff.<br/><br/>";
 
 $l['helpPage']['mngradproxys'] = "";
 $l['helpPage']['mngradproxyslist'] = "";

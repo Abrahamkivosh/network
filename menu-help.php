@@ -20,9 +20,8 @@
 	<h3>Support</h3>
 
 	<p class="news">
-		daloRADIUS version svn-trnk
 		RADIUS Management 
-		<a href="https://github.com/lirantal/daloradius" class="more">Read More &raquo;</a>
+		<a href="https://lagaster.org" class="more">Read More &raquo;</a>
 	</p>
 
 </div>

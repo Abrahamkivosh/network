@@ -25,8 +25,8 @@
 $l['all']['daloRADIUS'] = "daloRADIUS " . $configValues['DALORADIUS_VERSION'];
 $l['all']['daloRADIUSVersion'] = "versi&oacute;n " . $configValues['DALORADIUS_VERSION'];
 $l['all']['copyright1'] = "Administraci&oacute;n RADIUS, Reportes, Conteo y Facturaci&oacute;n desarrollado por <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a>";
-$l['all']['copyright2'] = "daloRADIUS Copyright &copy; 2007-2019 by <a href=\"https://github.com/lirantal/daloradius\">Liran Tal</a> <br/>
-Template design by <a href=\"http://www.sixshootermedia.com\">Six Shooter Media</a>.";
+$l['all']['copyright1'] = $configValues['SYSTEM_NAME'];
+$l['all']['copyright2'] = $configValues['SYSTEM_NAME'];
 $l['all']['ID'] = "ID";
 $l['all']['PoolName'] = "Pool Name";
 $l['all']['CalledStationId'] = "CalledStationId";
@@ -536,7 +536,7 @@ $l['button']['History'] = "Historial";
 $l['button']['ServerStatus'] = "Estado del servidor";
 $l['button']['ServicesStatus'] = "Estado de los servicios";
 
-$l['button']['daloRADIUSLog'] = "Registro de daloRADIUS";
+$l['button']['daloRADIUSLog'] = "Registro de ";
 $l['button']['RadiusLog'] = "Registro de FreeRADIUS";
 $l['button']['SystemLog'] = "Registro del sistema";
 $l['button']['BootLog'] = "Registro de arranque";
