@@ -24,8 +24,8 @@
  
 $l['all']['daloRADIUS'] =   $configValues['SYSTEM_NAME'] ." - " . $configValues['DALORADIUS_VERSION'];
 $l['all']['daloRADIUSVersion'] = "version " . $configValues['DALORADIUS_VERSION'];
-$l['all']['copyright1'] = $configValues['SYSTEM_NAME'];
-$l['all']['copyright2'] = $configValues['SYSTEM_NAME'];
+$l['all']['copyright1'] = '<a href="https://lagaster.org">Lagaster MicroSystems</a>';
+$l['all']['copyright2'] = $l['all']['copyright1'] ;
 $l['all']['ID'] = "ID";
 $l['all']['PoolName'] = "Pool Name";
 $l['all']['CalledStationId'] = "CalledStationId";
