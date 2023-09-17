@@ -649,6 +649,42 @@ class User
         }
     }
 
+    /**
+     * Get user All Payments
+     * @return mixed
+     */
+    public function getUserAllPayments()
+    {
+        $userInstance = $this->userInstance;
+        $configValues = $this->configValues;
+        $orderBy = 'a.id';
+        $orderType = 'DESC';
+        $rowsPerPage = 10;
+        $offset = 0;
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $sql_WHERE = " WHERE username = '$userName' ";
+
+        $query = "SELECT * FROM " . $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] .
+          
+            $sql_WHERE
+            . " ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
+
+        $result = $this->dbSocket->query($query);
+
+        if ($result->numRows() > 0) {
+            // get all rows
+            $rows = [];
+            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+                $rows[] = $row;
+            }
+            return $rows;
+
+        } else {
+            return false;
+        }
+    }
+
 }
 
 // // test the class

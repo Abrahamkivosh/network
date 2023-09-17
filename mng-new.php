@@ -383,7 +383,8 @@
 		global $passwordtype;
 
 		// get date in this format 07 Sep 2023
-		$ctime= strtotime("+30 days") ;
+
+		$ctime= strtotime("+0 days") ;
 		$expiryDate = date("d M Y H:i:s",$ctime);
 
 		switch($authType) {
@@ -483,15 +484,24 @@
 				if (filter_var($macaddress, FILTER_VALIDATE_MAC)) {
 
 					// insert username/password
-					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($macaddress)."', 'Auth-Type', ':=', 'Accept')";
-					$res = $dbSocket->query($sql);
-					$logDebugSQL .= $sql . "\n";
-				
+
 					addGroups($dbSocket, $macaddress, $group_macaddress);
 					addUserInfo($dbSocket, $macaddress);
-                                	addUserBillInfo($dbSocket, $username);
+                    addUserBillInfo($dbSocket, $username);
 					addAttributes($dbSocket, $macaddress);
+
+					addAttribute($dbSocket, $macaddress, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
+					addAttribute($dbSocket, $macaddress, "Expiration", ":=", $expiryDate, "check"); // set expiration date for user account now
+					addAttribute($dbSocket, $macaddress, "Calling-Station-Id", ":=", $macaddress, "check"); // set mac address as calling station id
+					
+					addAttribute($dbSocket, $macaddress, "Framed-Protocol", ":=", "PPP", "reply"); // set reduce the number of packets sent over the link
+					addAttribute($dbSocket, $macaddress, "Framed-Compression", ":=", "Van-Jacobson-TCP-IP", "reply"); // set static ip netmask for user
+					addAttribute($dbSocket, $macaddress, "Framed-MTU", ":=", "1500", "reply"); // set the connection's maximum transfer unit (MTU) size 
+
+					addAttribute($dbSocket, $macaddress, "Auth-Type", ":=", "Accept", "ceck"); // set authentication type to accept
+					addAttribute($dbSocket, $macaddress, "Service-Type", ":=", "Framed-User", "reply"); // set service type to framed user
+
+
 
 					$successMsg = "Added to database new mac auth user: <b> $macaddress </b>";
 					$logAction .= "Successfully added new mac auth user [$macaddress] on page: ";
@@ -503,10 +513,13 @@
 		   } elseif ($authType == "pincodeAuth") {
 
 				// insert username/password
-				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($pincode)."', 'Auth-Type', ':=', 'Accept')";
-				$res = $dbSocket->query($sql);
-				$logDebugSQL .= $sql . "\n";
+				// $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
+				// 		" VALUES (0, '".$dbSocket->escapeSimple($pincode)."', 'Auth-Type', ':=', 'Accept')";
+				// $res = $dbSocket->query($sql);
+				// $logDebugSQL .= $sql . "\n";
+
+				addAttribute($dbSocket, $pincode, 'Auth-Type', ':=', 'Accept', "check"); // set authentication type to accept
+
 
 				addGroups($dbSocket, $pincode, $group_pincode);
 				addUserInfo($dbSocket, $pincode);
