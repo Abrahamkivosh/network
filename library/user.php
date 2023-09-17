@@ -7,9 +7,9 @@ if (!defined('OPENDB_INCLUDED')) {
 }
 
 // Check if config_read.php has already been included
-if (!defined('CONFIG_READ_INCLUDED')) {
+if (!defined('CONFIG_INCLUDED')) {
     require_once "./config_read.php";
-    define('CONFIG_READ_INCLUDED', true);
+    define('CONFIG_INCLUDED', true);
 }
 
 class User
@@ -290,17 +290,17 @@ class User
 
         $userName = $this->dbSocket->escapeSimple($userInstance);
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
-            " c.value AS status, COALESCE(e2.totalpayed, 0) as totalpayed, COALESCE(d2.totalbilled, 0) as totalbilled " .
+            " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed " .
             " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " AS b ON (a.user_id = b.id) " .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . " AS c ON (a.status_id = c.id) " .
             " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) " .
-            " as totalbilled, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
+            " as total_billed, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
             " GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) " .
-            " LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM " .
+            " LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM " .
             $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
             $sql_WHERE .
-            " GROUP BY a.id " .
+            " GROUP BY a.date " .
             " ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
         $result = $this->dbSocket->query($query);
 
@@ -337,14 +337,14 @@ class User
         $userName = $this->dbSocket->escapeSimple($userInstance);
 
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
-            " c.value AS status, COALESCE(e2.totalpayed, 0) as totalpayed, COALESCE(d2.totalbilled, 0) as totalbilled " .
+            " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed " .
             " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " AS b ON (a.user_id = b.id) " .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . " AS c ON (a.status_id = c.id) " .
             " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) " .
-            " as totalbilled, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
+            " as total_billed, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
             " GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) " .
-            " LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM " .
+            " LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM " .
             $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
             $sql_WHERE .
             " GROUP BY a.id " .
@@ -390,16 +390,16 @@ class User
         $userName = $this->dbSocket->escapeSimple($userInstance);
 
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
-            " c.value AS status, COALESCE(e2.totalpayed, 0) as totalpayed, COALESCE(d2.totalbilled, 0) as totalbilled, " .
-            " COALESCE(e2.totalpayed, 0) - COALESCE(d2.totalbilled, 0)  AS balance " .
+            " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed, " .
+            " COALESCE(e2.total_paid, 0) - COALESCE(d2.total_billed, 0)  AS balance " .
             " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " AS b ON (a.user_id = b.id) " .
             " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . " AS c ON (a.status_id = c.id) " .
-            " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) as totalbilled," .
+            " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) as total_billed," .
 
             " invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
             " GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) " .
-            " LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM " .
+            " LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM " .
             $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
             $sql_WHERE .
             " GROUP BY a.id " .
@@ -510,15 +510,15 @@ class User
         $sql_WHERE = " WHERE b.username = '$userInstance' ";
 
         $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
-			" c.value AS status, COALESCE(SUM(e2.totalpayed), 0) as totalpayed, COALESCE(SUM(d2.totalbilled), 0) as totalbilled, ".
+			" c.value AS status, COALESCE(SUM(e2.total_paid), 0) as total_paid, COALESCE(SUM(d2.total_billed), 0) as total_billed, ".
 			" SUM(a.status_id = 1) as openInvoices ".
 			" FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." AS a".
 			" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." AS b ON (a.user_id = b.id) ".
 			" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS']." AS c ON (a.status_id = c.id) ".
 			" LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) ".
-					" as totalbilled, invoice_id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS']." AS d ".
+					" as total_billed, invoice_id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS']." AS d ".
 			" GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) ".
-			" LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM ".
+			" LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM ".
 			$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) ".
 			" WHERE (a.user_id = $user_id)".
 			" GROUP BY b.id ";
@@ -527,7 +527,7 @@ class User
         if ($result->numRows() > 0) {
             // get all rows
             $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
-            $balance = $row['totalpayed'] - $row['totalbilled'];
+            $balance = $row['total_paid'] - $row['total_billed'];
            
             return $balance;
 
