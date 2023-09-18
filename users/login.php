@@ -1,24 +1,4 @@
-<?php
-/*
- *******************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *******************************************************************************
- *
- * Authors:	Liran Tal <liran@enginx.com>
- *
- *******************************************************************************
- */
+<?php 
 
 include_once("library/sessions.php");
 dalo_session_start();
@@ -31,80 +11,86 @@ if (array_key_exists('logged_in', $_SESSION)
 
 include("lang/main.php");
 ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css" />
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="<?= $langCode ?>" xml:lang="<?= $langCode ?>"
-    xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <script src="library/javascript/pages_common.js"
-            type="text/javascript"></script>
-        <title> <?php echo $configValues['SYSTEM_NAME'] ?>
-</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="../css/1.css" type="text/css"
-            media="screen,projection" />
-        <link rel="stylesheet" href="../css/style.css" type="text/css"
-            media="screen,projection" />
-    </head>
- 
-    <body onLoad="document.login.login_user.focus()">
-        <div id="wrapper">
-            <div id="innerwrapper">
-                <div id="header">
-                    <h1>
-                        <a href="index.php">
-                            <img src="__images/daloradius_small.png" border="0" />
-                        </a>
-                    </h1>
-                    <h2><?= t('all','copyright1') ?></h2>
-                    <br/>
-                </div><!-- #header -->
-                
-                <div id="main">
-                    <h2 class="form-header"><?= t('text','LoginRequired') ?></h2>
-                    <form class="form-box" name="login" action="dologin.php" method="post">
-                        <label for="login_user">Username</label>
-                        <input class="form-input" id="login_user"
-                            name="login_user" value=""
-                            type="text" tabindex="1" />
-                        
-                        <label for="login_pass">Password</label>
-                        <input class="form-input" id="login_pass"
-                            name="login_pass" value=""
-                            type="password" tabindex="2" />
-                            
-                        <input class="form-submit" type="submit"
-                            value="<?= t('text','LoginPlease') ?>" tabindex="3" />
-                    </form>
-                    
-                    <small class="form-caption"><?= t('all','daloRADIUS') ?></small>
-                    
-                    
-                    <div id="inner-box">
-                    <?php
-                        if (array_key_exists('login_error', $_SESSION)
-                            && $_SESSION['login_error'] !== false) {
-                    ?>
-                        <h3 class="text-title error-title">Error!</h3>
-                        <?= t('messages','loginerror') ?>
-                        <hr class="inner-separator">
-                        
-                    <?php
-                        }
-                    ?>
-                        
-                        <h3 class="text-title success-title">Welcome!</h3>
-                        <?= t('helpPage','loginUsersPortal') ?>
-                    
-                    </div><!-- #inner-box -->
-                    
-                </div><!-- #main -->
-                
-                <div id="footer">
-                    <?php include('page-footer.php'); ?>
-                </div><!-- #footer -->
-            </div><!-- #innerwrapper -->
-        </div><!-- #wrapper -->
-    </body>
+    <title>Login</title>
+    <style>
+        /* 
+        increase select option size
+         */
+        select {
+          height: 50px;
+          width: 100%;
+          padding: 10px;
+          font-size: 18px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        select option {
+          font-size: 18px;
+        }
+        </style>
+  </head>
+  <body class="vh-100" style="background-color: #508bfc;">
+
+  <section  >
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <h3 class="mb-4">Sign in</h3>
+            <form action="dologin.php" method="post">
+              <?php
+               include_once "includes/messages.php";
+              ?>
+
+            <div class="form-outline mb-4">
+              <input type="text" name="username" id="username" 
+                placeholder="Enter your username"
+              class="form-control form-control-lg" />
+              <label class="form-label visually-hidden" for="username">Username</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="password" id="password" name="password" 
+              placeholder="Enter your password"
+              class="form-control form-control-lg" />
+              <label class="form-label visually-hidden" for="password">Password</label>
+            </div>
+          
+
+            <div class=" mb-4 d-grid gap-2 col-12 mx-auto">
+                <button class="btn btn-primary btn-lg " type="submit">Login</button>
+            </div>
+            </form>
+
+              <!-- forgoten password -->
+              <div class="text-center">
+              <p>Forgot <a href="forgot-password.php" class="font-weight-bold">Password?</a></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- boostrap 4 cdn -->
+
+    
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="./js/bootstrap.bundle.min.js" ></script>
+
+  </body>
 </html>

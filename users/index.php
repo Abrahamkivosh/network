@@ -1,61 +1,66 @@
 <?php
-/*
- *******************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *******************************************************************************
- *
- * Authors:	Liran Tal <liran@enginx.com>
- *
- *******************************************************************************
- */
 
-include ("library/checklogin.php");
-$login = $_SESSION['login_user'];
-
-include ("menu-home.php");
-
-include_once('library/config_read.php');
-$log = "visited page: ";
-include('include/config/logging.php');
-
+ include_once "./authCheck.php";
 ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <title> Dashboard </title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <?php
+      include_once "../include/management/userReports.php";
+   
 
-<script src="library/javascript/pages_common.js" type="text/javascript"></script>
+    $getExpirationDate = $user->getUserAccountExpirationDate();
 
-                <div id="contentnorightbar">
-                    <h2 id="Intro"><a href="#"></a></h2>
-                    <p>
+    $getUserBillingPlan = $user->getUserBillingPlan();
+    $getUserBillInfo = $user->getUserBillInfo();
+   
+    $userConnectionStatus = userConnectionStatus($getUserBillInfo['username'], 0);
 
-<?php
-	include('library/exten-welcome_page.php');
-	include_once('include/management/userReports.php');
-	userPlanInformation($login, 1);
-    // userSubscriptionAnalysis with argument set to 1 for drawing the table
-	userSubscriptionAnalysis($login, 1);
-    // userConnectionStatus (same as above)
-	userConnectionStatus($login, 1);
-?>
-                    </p>
-                </div>
+  
+    
+    ?>
+   
 
 
-	
-                <div id="footer">
-                    <?php include('page-footer.php'); ?>
-                </div>
+  </head>
+  <body>
+    <!-- top navigation bar -->
+    <?php
+      include_once "./includes/top_navbar.php";
 
-            </div>
-        </div>
-    </body>
+    ?>
+  
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <?php
+      include_once "./includes/offcanvasAside.php";
+      ?>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+
+    <?php
+      include_once "./pages/dashboard.php";
+      ?>
+    
+    </main>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/pages/dashboard.js"></script>
+  </body>
 </html>

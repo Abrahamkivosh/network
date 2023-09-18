@@ -1,0 +1,92 @@
+
+
+.bg-blue{
+  background-color: rgb(33, 33, 146) ;
+}
+
+.bg-green{
+  background-color: rgb(79, 255, 79) ;
+}
+
+.bg-red{
+  background-color: rgb(255, 79, 79) ;
+}
+
+.bg-yellow{
+  background-color: rgb(116, 116, 1) ;
+}
+
+.bg-orange{
+  background-color: rgb(86, 41, 3) ;
+}
+
+.bg-purple{
+  background-color: rgb(159, 79, 255) ;
+}
+.outline-none{
+  outline: none !important;
+}
+a {
+  color: #050727;
+  text-decoration: none;
+}
+a:hover {
+  color: #050727;
+  text-decoration: none;
+}
+.is-required {
+  color: red;
+  width:  10px;
+  height: 10px;
+  background-color: red;
+  border: 1px solid red;
+  border-radius: 50%;
+  display: inline-block;
+  left:  0;
+  
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+body,
+button {
+  font-family: "Inter", sans-serif;
+}
+:root {
+  --offcanvas-width: 270px;
+  --topNavbarHeight: 56px;
+}
+.sidebar-nav {
+  width: var(--offcanvas-width);
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+}
+.sidebar-link .right-icon {
+  display: inline-flex;
+}
+.sidebar-link[aria-expanded="true"] .right-icon {
+  transform: rotate(180deg);
+}
+@media (min-width: 992px) {
+  body {
+    overflow: auto !important;
+  }
+  main {
+    margin-left: var(--offcanvas-width);
+  }
+  /* this is to remove the backdrop */
+  .offcanvas-backdrop::before {
+    display: none;
+  }
+  .sidebar-nav {
+    -webkit-transform: none;
+    transform: none;
+    visibility: visible !important;
+    height: calc(100% - var(--topNavbarHeight));
+    top: var(--topNavbarHeight);
+  }
+}
+
+
