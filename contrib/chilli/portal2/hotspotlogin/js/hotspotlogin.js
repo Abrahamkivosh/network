@@ -1,11 +1,10 @@
-<?php
 
-echo "
 
 var blur = 0;
 var starttime = new Date();
 var startclock = starttime.getTime();
 var mytimeleft = 0;
+
 
 function doTime() {
 	window.setTimeout( \"doTime()\", 1000 );
