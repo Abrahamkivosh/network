@@ -31,6 +31,7 @@
 	isset($_POST['payment_date']) ? $payment_date = $_POST['payment_date'] : $payment_date = "";
 	isset($_POST['payment_type_id']) ? $payment_type_id = $_POST['payment_type_id'] : $payment_type_id = "";
 	isset($_POST['payment_notes']) ? $paymentnotes = $_POST['payment_notes'] : $payment_notes = "";
+	isset($_POST['payment_status_id']) ? $payment_status_id = $_POST['payment_status_id'] : $payment_status_id = "";
 
 	$logAction = "";
 	$logDebugSQL = "";
@@ -41,6 +42,7 @@
 		$payment_date = $_POST['payment_date'];
 		$payment_type_id = $_POST['payment_type_id'];
 		$payment_notes = $_POST['payment_notes'];
+		$payment_status_id = $_POST['payment_status_id'];
 		
 		include 'library/opendb.php';
 
@@ -53,12 +55,16 @@
 
 				$currDate = date('Y-m-d H:i:s');
 				$currBy = $_SESSION['operator_user'];
+
+				$referenceNo = createReferenceNumber() ;
 				
 				// insert apyment type info
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].
-					" (id, invoice_id, amount,date,type_id, notes, ".
+					" (id,reference_no,status, invoice_id, amount,date,type_id, notes, ".
 					"  creationdate, creationby, updatedate, updateby) ".
-					" VALUES (0, ".$dbSocket->escapeSimple($payment_invoice_id).", ".
+					" VALUES (0, ". $referenceNo .", ".
+					"".$dbSocket->escapeSimple($payment_status_id).", ".
+					$dbSocket->escapeSimple($payment_invoice_id).", ".
 					"".$dbSocket->escapeSimple($payment_amount).", ".
 					"'".$dbSocket->escapeSimple($payment_date)."', ".
 					"'".$dbSocket->escapeSimple($payment_type_id)."', ".
@@ -87,6 +93,14 @@
 
 	isset($_GET['payment_invoice_id']) ? $invoice_id = $_GET['payment_invoice_id'] : $invoice_id = "";
 	isset($_GET['payment_date']) ? $payment_date = $_GET['payment_date'] : $payment_date = date('Y-m-d H:i:s');
+
+	// if $invoice_id is not set redirect to invoice list page with error message
+	if ($invoice_id == "") {
+		$failureMsg = "You must provide an invoice id to add a payment to";
+		header("Location: bill-invoice-list.php?failureMsg=$failureMsg");
+		exit;
+	}
+
 	
 
 	include_once('library/config_read.php');
@@ -151,7 +165,9 @@
 
 		<li class='fieldset'>
 		<label for='name' class='form'><?php echo t('all','PaymentInvoiceID') ?></label>
-		<input name='payment_invoice_id' type='text' id='payment_invoice_id' value='<?php echo $invoice_id ?>' tabindex=100 />
+		<input name='payment_invoice_id' type='text' id='payment_invoice_id' 
+		disabled
+		value='<?php echo $invoice_id ?>' tabindex=100 />
 		<img src='images/icons/comment.png' alt='Tip' border='0' onClick="javascript:toggleShowDiv('paymentInvoiceTooltip')" /> 
 		
 		<div id='paymentInvoiceTooltip'  style='display:none;visibility:visible' class='ToolTip'>
@@ -177,6 +193,20 @@
    		<input value='<?php echo $payment_date ?>' id='payment_date' name='payment_date'  tabindex=108 />
    		<img src="library/js_date/calendar.gif" onclick="showChooser(this, 'payment_date', 'chooserSpan', 1950, <?php echo date('Y', time());?>, 'Y-m-d H:i:s', true);">
 		<br/>
+
+		<li class='fieldset'>
+   		<label for='payment_status' class='form'><?php echo t('all','PaymentStatus')?></label>
+   		<?php
+   		        include_once('include/management/populate_selectbox.php');
+   		        populate_payment_status_id("Select Payment Status", "payment_status_id");
+   		?>
+   		<img src='images/icons/comment.png' alt='Tip' border='0' onClick="javascript:toggleShowDiv('paymentStatusTooltip')" />
+   		<div id='paymentStatusTooltip'  style='display:none;visibility:visible' class='ToolTip'>
+   			<img src='images/icons/comment.png' alt='Tip' border='0' />
+   			<?php echo t('Tooltip','paymentStatusTooltip') ?>
+   		</div>
+   		</li>
+
 
    		<li class='fieldset'>
    		<label for='payment_type_id' class='form'><?php echo t('all','PaymentType')?></label>

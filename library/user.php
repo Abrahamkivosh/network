@@ -103,6 +103,34 @@ class User
     }
 
     /**
+     * Update user userbillinfo
+     * @param $contactperson
+     * @param $company
+     * @param $email
+     * @param $phone
+     * @param $address
+     * @param $city
+     * @param $state
+     */
+    public function updateUserBillInfo($contactperson, $company, $email, $phone, $address, $city, $state)
+    {
+        $userInstance = $this->userInstance;
+        $table_userBillingInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+
+        $query = "UPDATE $table_userBillingInfo SET contactperson = '$contactperson', company = '$company', email = '$email', phone = '$phone', address = '$address', city = '$city', state = '$state' WHERE username = '$userName'";
+        $result = $this->dbSocket->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
      * Get user userinfo
      * @return mixed
      */
@@ -123,6 +151,35 @@ class User
             return false;
         }
     }
+    /**
+     * Update user userinfo
+     * @param $firstname
+     * @param $lastname
+     * @param $email
+     * @param $workphone
+     * @param $mobilephone
+     * @param $company
+     * @param $city
+     * @param $state
+     * @return mixed
+     */
+    public function updateUserInfo($firstname, $lastname, $email, $workphone, $mobilephone, $company, $city, $state)
+    {
+        $userInstance = $this->userInstance;
+        $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERINFO'];
+
+        $userName = $this->dbSocket->escapeSimple($userInstance);
+
+        $query = "UPDATE $table_userInfo SET firstname = '$firstname', lastname = '$lastname', email = '$email', workphone = '$workphone', mobilephone = '$mobilephone', company = '$company', city = '$city', state = '$state' WHERE username = '$userName'";
+        $result = $this->dbSocket->query($query);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Get user radius group
@@ -498,6 +555,42 @@ class User
     }
 
     /**
+     * Get user all payments
+     * @return mixed
+     */
+    public function getUserPayments()
+    {
+        $invoices = $this->getUserInvoices();
+        $invoice_ids = array_column($invoices, 'id');
+        $invoice_ids = implode(',', $invoice_ids);
+        // sql to get all payments with invoice id in $invoice_ids
+        $sql = "SELECT a.id, a.invoice_id, a.amount, a.type_id, 
+        a.reference_no, a.transaction_id, a.transaction_code, a.status,
+        a.status_message, a.sender_number, a.sender_name,
+        a.date, a.notes," .
+            "b.value as type" .
+            " FROM " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS a" .
+            " LEFT JOIN " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'] . " AS b ON (a.type_id = b.id) " .
+            " WHERE a.invoice_id IN ($invoice_ids) " .
+            " ORDER BY a.id DESC";
+
+        $result = $this->dbSocket->query($sql);
+
+        if ($result->numRows() > 0) {
+            // get all rows
+            $rows = [];
+            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+                $rows[] = $row;
+            }
+            return $rows;
+
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
      * Get user balance from invoices payments
      * Deduct invoice items amount to get balance
      */
@@ -649,42 +742,7 @@ class User
         }
     }
 
-    /**
-     * Get user All Payments
-     * @return mixed
-     */
-    public function getUserAllPayments()
-    {
-        $userInstance = $this->userInstance;
-        $configValues = $this->configValues;
-        $orderBy = 'a.id';
-        $orderType = 'DESC';
-        $rowsPerPage = 10;
-        $offset = 0;
-
-        $userName = $this->dbSocket->escapeSimple($userInstance);
-        $sql_WHERE = " WHERE username = '$userName' ";
-
-        $query = "SELECT * FROM " . $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] .
-          
-            $sql_WHERE
-            . " ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
-
-        $result = $this->dbSocket->query($query);
-
-        if ($result->numRows() > 0) {
-            // get all rows
-            $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
-                $rows[] = $row;
-            }
-            return $rows;
-
-        } else {
-            return false;
-        }
-    }
-
+   
 }
 
 // // test the class

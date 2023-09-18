@@ -55,6 +55,43 @@ function populate_payment_type_id($defaultOption = "Select Payment Type", $eleme
         echo "</select>";
 }
 
+/*
+ * populate_payment_status_id
+ * creates a select box and populates it with possible payment status_id options
+ *
+ * $defaultOption - title for the first/default option in select box
+ * $elementName   - the string used for the select element's name='' value
+ * $cssClass      - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
+ *
+ */
+function populate_payment_status_id($defaultOption = "Select Payment Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+
+       $paymentStatus = [
+                '0' => 'Pending',
+                '1' => 'Paid',
+                '2' => 'Failed',
+                '3' => 'Cancelled',
+                '4' => 'Refunded',
+                '5' => 'Partially Refunded',
+                ];
+        
+                echo "<select onChange=\"javascript:setStringText(this.id,'populate_payment_status_id')\" id='populate_payment_status_id' $mode
+                                name='$elementName' class='$cssClass' />
+                                <option value='$defaultOptionValue'>$defaultOption</option>
+                                <option value=''></option>";
+        
+                foreach ($paymentStatus as $key => $value) {
+                        echo "
+                                <option value='".$key."'>".$value."</option>
+                                ";
+        
+                }
+        
+                echo "</select>";
+        
+}
+
+
 
 
 /*

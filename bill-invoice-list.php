@@ -80,6 +80,8 @@
 	include 'library/opendb.php';
 	include 'include/management/pages_common.php';
 	include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
+	
+	include_once('include/management/actionMessages.php');
 
 
 	// if provided username, we'll need to turn that into the userbillinfo user id

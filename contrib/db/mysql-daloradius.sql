@@ -680,6 +680,16 @@ CREATE TABLE `payment` (
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `type_id` int(10) NOT NULL default '1' COMMENT 'the type of the payment from payment_type',
   `notes` varchar(128) NOT NULL COMMENT 'general notes/description',
+
+  `reference_no` varchar(128) default NULL,
+  `transaction_id` varchar(128) default NULL,
+  `transaction_code` varchar(128) default NULL,
+  `status` INT default 0,
+  `status_message` varchar(128) default NULL,
+  `sender_number` varchar(128) default NULL,
+  `sender_name` varchar(128) default NULL,
+
+
   `creationdate` datetime default '0000-00-00 00:00:00',
   `creationby` varchar(128) default NULL,
   `updatedate` datetime default '0000-00-00 00:00:00',
@@ -916,28 +926,6 @@ INSERT IGNORE INTO `radgroupcheck` (Groupname,Attribute,Op,Value) VALUES ('daloR
 --
 
 --
--- Table structure for table `transactions`
--- To  be use to store all payments made by users via mobile money and other payment methods
---
 
-DROP TABLE IF EXISTS `transactions`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `transactions` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `username` varchar(128) default NULL,
-  `reference_no` varchar(128) default NULL,
-  `transaction_id` varchar(128) default NULL,
-  `transaction_type` varchar(128) default NULL,
-  `transaction_code` varchar(128) default NULL,
-  `amount` varchar(128) default NULL,
-  `payment_method` varchar(128) default NULL,
-  `transaction_date` varchar(128) default NULL,
-  `status` INT default 0,
-  `status_message` varchar(128) default NULL,
-  `sender_number` varchar(128) default NULL,
-  `sender_name` varchar(128) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
   

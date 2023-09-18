@@ -1,4 +1,4 @@
-loginerror<?php
+<?php
 /*
  *********************************************************************************************************
  * daloRADIUS - RADIUS Web Platform
@@ -393,6 +393,7 @@ $l['all']['PaymentAmount'] = "Amount";
 $l['all']['PaymentDate'] = "Date";
 $l['all']['PaymentType'] = "Payment Type";
 $l['all']['PaymentNotes'] = "Payment Notes";
+$l['all']['PaymentStatus'] = "Payment Status";
 
 
 
@@ -643,6 +644,7 @@ $l['Tooltip']['geocodeTooltip'] = "Example: -1.002,-2.201<br/>&nbsp;&nbsp;&nbsp;
 $l['Tooltip']['reassignplanprofiles'] = "If toggled on, when applying user information <br/>
 					the Profiles listed in the Profiles tab will be ignored and <br/>
 					profiles will be re-assigned based on the Plans profile association";
+$l['Tooltip']['paymentStatusTooltip'] = "The payment status of the user";
 
 /* ********************************************************************************** */
 
