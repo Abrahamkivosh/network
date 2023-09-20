@@ -565,7 +565,7 @@ class User
         $invoice_ids = implode(',', $invoice_ids);
         // sql to get all payments with invoice id in $invoice_ids
         $sql = "SELECT a.id, a.invoice_id, a.amount, a.type_id, 
-        a.reference_no, a.transaction_id, a.transaction_code, a.status,
+        a.reference_no, a.transaction_id, a.status,
         a.status_message, a.sender_number, a.sender_name,
         a.date, a.notes," .
             "b.value as type" .
@@ -728,12 +728,19 @@ class User
         $type_id = $data['type_id'];
         $date = isset($data['date']) ? $data['date'] : date('Y-m-d H:i:s');
         $notes = isset($data['notes']) ? $data['notes'] : '';
+        $reference_no = isset($data['reference_no']) ? $data['reference_no'] : '';
+        $transaction_id = isset($data['transaction_id']) ? $data['transaction_id'] : '';
+        $status = isset($data['status']) ? $data['status'] : 0;
+        $status_message = isset($data['status_message']) ? $data['status_message'] : '';
+        $sender_number = isset($data['sender_number']) ? $data['sender_number'] : '';
+        $sender_name = isset($data['sender_name']) ? $data['sender_name'] : '';
+
 
         $configValues = $this->configValues;
         $table_invoice_payments = $configValues['CONFIG_DB_TBL_DALOPAYMENTS'];
 
-        $sql = "INSERT INTO $table_invoice_payments (invoice_id, amount, type_id, date, notes) VALUES " .
-            "('$invoice_id', '$amount', '$type_id', '$date', '$notes')";
+        $sql = "INSERT INTO $table_invoice_payments (invoice_id, amount, type_id, date, notes, reference_no, transaction_id, status , status_message, sender_number , sender_name) VALUES " .
+            "('$invoice_id', '$amount', '$type_id', '$date', '$notes', '$reference_no', '$transaction_id', '$status', '$status_message', '$sender_number', '$sender_name')";
         $result = $this->dbSocket->query($sql);
         if ($result) {
             return true;

@@ -122,6 +122,15 @@ if ($user->userExists()) {
             'amount' => $transactedAmount,
             'notes' => 'Payment for invoice',
             'type_id' => 1,
+            'reference_no' => $callbackData['TransID'],
+            'date' => date('Y-m-d H:i:s'),
+            'transaction_id' => $callbackData['TransID'],
+            'sender_name' => $callbackData['FirstName'] . ' ' . $callbackData['MiddleName'] . ' ' . $callbackData['LastName'],
+            'status' => 1,
+            'status_message' => 'Paid Via Mpesa',
+            'sender_number' => $callbackData['MSISDN'],
+
+
         ];
         $user->createUserInvoicePayments($open_invoice['id'], $payment_payload);
 

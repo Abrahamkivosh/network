@@ -683,13 +683,10 @@ CREATE TABLE `payment` (
 
   `reference_no` varchar(128) default NULL,
   `transaction_id` varchar(128) default NULL,
-  `transaction_code` varchar(128) default NULL,
   `status` INT default 0,
   `status_message` varchar(128) default NULL,
   `sender_number` varchar(128) default NULL,
   `sender_name` varchar(128) default NULL,
-
-
   `creationdate` datetime default '0000-00-00 00:00:00',
   `creationby` varchar(128) default NULL,
   `updatedate` datetime default '0000-00-00 00:00:00',
