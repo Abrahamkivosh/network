@@ -105,8 +105,39 @@ class SMSTemplates {
 
     }
 
+    /**
+     * Send user paid amount is not enough to renew account plan
+     */
+    public function sendAccountPlanRenewalAmountNotEnoughSMS()
+    {
+        $userName = $this->userInfo['username'] ;
+        $systemName = $this->configValues['SYSTEM_NAME'] ;
+        $plan = $this->userInfo['plan'] ;
+        $planCost = $this->userInfo['planCost'] ;
+        $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
+        $account_number = $userName ;
+        $remainingAmount = $this->userInfo['remainingAmount'] ;
+        $message = "Dear $userName, paid amount is not enough to renew your account. Please pay KES $remainingAmount to $paybillNumber A/C $account_number to renew your account. Thank you for using $systemName." ;
+        return $this->smsService->sendSMSMessage($this->phone, $message);
+    }
+
+    /**
+     * Send user account is not expired and payment is not enough  extend account plan expiry date
+     */
+    public function sendAccountPlanRenewalAmountNotEnoughToExtendExpiryDateSMS()
+    {
+        $userName = $this->userInfo['username'] ;
+        $systemName = $this->configValues['SYSTEM_NAME'] ;
+        
+        $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
+        $account_number = $userName ;
+        $remainingAmount = $this->userInfo['remainingAmount'] ;
+        $message = "Dear $userName, paid amount is not enough to extend your account expiry date. Please pay KES $remainingAmount to $paybillNumber A/C $account_number to extend your account expiry date. Thank you for using $systemName." ;
+        return $this->smsService->sendSMSMessage($this->phone, $message);
+    }
 
 
 }
 
 ?>
+

@@ -41,6 +41,7 @@ session_start();                                                // we keep a ses
 
                                 include('library/opendb.php');
                                 include('include/common/common.php');
+                                include_once('../../../../library/functions.php');
 
 
                                 $firstname = $dbSocket->escapeSimple($firstname);
@@ -64,6 +65,33 @@ session_start();                                                // we keep a ses
                                 $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']." (username, firstname, lastname, email) ".
                                         " VALUES ('$username', '$firstname', '$lastname', '$email')";
                                 $res = $dbSocket->query($sql);
+
+                                /* adding the user to the radreply table */
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Redirection-URL', ':=', 'http://10.42.0.1/network/contrib/chilli/portal2/signup-free/')";
+                                $res = $dbSocket->query($sql);
+
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Logoff-URL-Redirect', ':=', 'http://10.42.0.1/network/contrib/chilli/portal2/signup-free/logout.php')";
+                                $res = $dbSocket->query($sql);
+
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Session-Terminate-Time', ':=', '120')";
+                                $res = $dbSocket->query($sql);
+
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Bandwidth-Max-Down', ':=', '100000')";
+                                $res = $dbSocket->query($sql);
+
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Bandwidth-Max-Up', ':=', '100000')";
+                                $res = $dbSocket->query($sql);
+
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'WISPr-Session-Terminate-Time', ':=', '120')";
+                                $res = $dbSocket->query($sql);
+
+
 
 
                                 /* adding the user to the default group defined */

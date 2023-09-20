@@ -28,25 +28,25 @@ $uamsecret = "ht2eb8ej6s4et3rg1ulp";
 
 # Uncomment the following line if you want to use ordinary user-password
 # for radius authentication. Must be used together with $uamsecret.
-$userpassword=1;
+$userpassword = 1;
 
 # Our own path
 $loginpath = $_SERVER['PHP_SELF'];
 
-$ChilliSpot="ChilliSpot";
-$title="$ChilliSpot Login";
-$centerUsername="Username";
-$centerPassword="Password";
-$centerLogin="Login";
-$centerPleasewait="Please wait.......";
-$centerLogout="Logout";
-$h1Login="$ChilliSpot Login";
-$h1Failed="$ChilliSpot Login Failed";
-$h1Loggedin="Logged in to $ChilliSpot";
-$h1Loggingin="Logging in to $ChilliSpot";
-$h1Loggedout="Logged out from $ChilliSpot";
-$centerdaemon="Login must be performed through $ChilliSpot daemon";
-$centerencrypted="Login must use encrypted connection";
+$ChilliSpot = "ChilliSpot";
+$title = "$ChilliSpot Login";
+$centerUsername = "Username";
+$centerPassword = "Password";
+$centerLogin = "Login";
+$centerPleasewait = "Please wait.......";
+$centerLogout = "Logout";
+$h1Login = "$ChilliSpot Login";
+$h1Failed = "$ChilliSpot Login Failed";
+$h1Loggedin = "Logged in to $ChilliSpot";
+$h1Loggingin = "Logging in to $ChilliSpot";
+$h1Loggedout = "Logged out from $ChilliSpot";
+$centerdaemon = "Login must be performed through $ChilliSpot daemon";
+$centerencrypted = "Login must use encrypted connection";
 
 
 # Make sure that the form parameters are clean
@@ -61,11 +61,11 @@ $centerencrypted="Login must use encrypted connection";
 #s/[^$OK_CHARS]/_/go;
 #$query = $_;
 
-
+/*
 # If she did not use https tell her that it was wrong.
 if (!($_ENV['HTTPS'] == 'on')) {
-#    echo "Content-type: text/html\n\n";
-echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
+  #    echo "Content-type: text/html\n\n";
+  echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
 <html>
 <head>
   <title>$title</title>
@@ -92,9 +92,9 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
 -->
 </html>
 ";
-    exit(0);
+  exit(0);
 }
-
+*/
 
 # Read form parameters which we care about
 if (isset($_POST['UserName']))    $username    = $_POST['UserName'];
@@ -137,17 +137,17 @@ $redirurldecode = $redirurl;
 
 # If attempt to login
 if ($button == 'Login') {
-  $hexchal = pack ("H32", $challenge);
+  $hexchal = pack("H32", $challenge);
   if ($uamsecret) {
-    $newchal = pack ("H*", md5($hexchal . $uamsecret));
+    $newchal = pack("H*", md5($hexchal . $uamsecret));
   } else {
     $newchal = $hexchal;
   }
   $response = md5("\0" . $password . $newchal);
   $newpwd = pack("a32", $password);
-  $pappassword = implode ("", unpack("H32", ($newpwd ^ $newchal)));
-# sleep 5;
-# echo 'Content-type: text/html\n\n';
+  $pappassword = implode("", unpack("H32", ($newpwd ^ $newchal)));
+  # sleep 5;
+  # echo 'Content-type: text/html\n\n';
   echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
 <html>
 <head>
@@ -185,27 +185,46 @@ if ($button == 'Login') {
 -->
 </html>
 ";
-    exit(0);
+  exit(0);
 }
 
-switch($res) {
-  case 'success':     $result =  1; break; // If login successful
-  case 'failed':      $result =  2; break; // If login failed
-  case 'logoff':      $result =  3; break; // If logout successful
-  case 'already':     $result =  4; break; // If tried to login while already logged in
-  case 'notyet':      $result =  5; break; // If not logged in yet
-  case 'smartclient': $result =  6; break; // If login from smart client
-  case 'popup1':      $result = 11; break; // If requested a logging in pop up window
-  case 'popup2':      $result = 12; break; // If requested a success pop up window
-  case 'popup3':      $result = 13; break; // If requested a logout pop up window
-  default: $result = 0; // Default: It was not a form request
+switch ($res) {
+  case 'success':
+    $result =  1;
+    break; // If login successful
+  case 'failed':
+    $result =  2;
+    break; // If login failed
+  case 'logoff':
+    $result =  3;
+    break; // If logout successful
+  case 'already':
+    $result =  4;
+    break; // If tried to login while already logged in
+  case 'notyet':
+    $result =  5;
+    break; // If not logged in yet
+  case 'smartclient':
+    $result =  6;
+    break; // If login from smart client
+  case 'popup1':
+    $result = 11;
+    break; // If requested a logging in pop up window
+  case 'popup2':
+    $result = 12;
+    break; // If requested a success pop up window
+  case 'popup3':
+    $result = 13;
+    break; // If requested a logout pop up window
+  default:
+    $result = 0; // Default: It was not a form request
 }
 
 # Otherwise it was not a form request
 # Send out an error message
 if ($result == 0) {
-#    echo "Content-type: text/html\n\n";
-    echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
+  #    echo "Content-type: text/html\n\n";
+  echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
 <html>
 <head>
   <title>$title</title>
@@ -220,7 +239,7 @@ if ($result == 0) {
 </body>
 </html>
 ";
-    exit(0);
+  exit(0);
 }
 
 # Generate the output
@@ -331,15 +350,15 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">
 # end debugging
 */
 if ($result == 2) {
-    echo "
+  echo "
   <h1 style=\"text-align: center;\">$h1Failed</h1>";
-    if ($reply) {
+  if ($reply) {
     echo "<center> $reply </BR></BR></center>";
-    }
+  }
 }
 
 if ($result == 5) {
-    echo "
+  echo "
   <h1 style=\"text-align: center;\">$h1Login</h1>";
 }
 
@@ -376,8 +395,8 @@ if ($result == 1) {
   echo "
   <h1 style=\"text-align: center;\">$h1Loggedin</h1>";
 
-  if ($reply) { 
-      echo "<center> $reply </br></br></center>";
+  if ($reply) {
+    echo "<center> $reply </br></br></center>";
   }
 
   echo "
@@ -421,4 +440,3 @@ if (($result == 3) || ($result == 13)) {
 }
 
 exit(0);
-?>

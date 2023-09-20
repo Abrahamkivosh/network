@@ -636,33 +636,33 @@ class User
      */
     public function createUserInvoice(array $data)
     {
-        $userInstance = $this->userInstance;
         $configValues = $this->configValues;
         $table_invoice = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'];
-        $table_invoice_items = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'];
-        $table_invoice_status = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'];
-        $table_invoice_type = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE'];
-        $table_userBillInfo = $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
         $userBillInfo = $this->getUserBillInfo();
         $userId = $userBillInfo['id'];
 
-        $invoice_type = $data['invoice_type'];
-        $invoice_status = $data['invoice_status'];
+        $invoice_type = $data['type_id'];
+        $invoice_status = $data['status_id'];
         $invoice_date = $data['invoice_date'];
-        $invoice_notes = $data['invoice_notes'];
-        $invoice_plan_id = $data['invoice_plan_id'];
+        $invoice_notes = $data['notes'];
+        $creationby = $data['creationby'];
 
         // create invoice
-        $sql = "INSERT INTO $table_invoice (user_id, date, status_id, type_id, notes) VALUES " .
-            "('$userId', '$invoice_date', '$invoice_status', '$invoice_type', '$invoice_notes')";
+        $sql = "INSERT INTO $table_invoice (user_id, date, status_id, type_id, notes, creationby ) VALUES " .
+            "('$userId', '$invoice_date', '$invoice_status', '$invoice_type', '$invoice_notes', '$creationby')";
         $result = $this->dbSocket->query($sql);
         if ($result) {
-            // get invoice id
-            $invoice_id = $this->dbSocket->lastInsertID();
-            // return $invoice_id;
-            return $invoice_id;
+        //    Get last inserted id where user_id = $userId
+            $query = "SELECT id FROM $table_invoice WHERE user_id = '$userId' ORDER BY id DESC LIMIT 1";
+            $result = $this->dbSocket->query($query);
+            if ($result->numRows() > 0) {
+                $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+                return $row['id'];
+            } else {
+                return false;
+            }
+        
 
         } else {
             return false;
@@ -757,8 +757,8 @@ class User
 // $user->setConfigValues($configValues);
 // $user->setUserInstance('kivosh');
 // $userExists = $user->userExists();
-// $getUserBalance = $user->getUserBalance();
+// $invoice = $user->getUserInvoices();
 
 // echo '<pre>';
-// print_r($getUserBalance);
+// print_r($invoice);
 // echo '</pre>';

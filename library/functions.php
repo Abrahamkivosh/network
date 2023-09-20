@@ -216,3 +216,20 @@ function getNewDate($expiryDateTimestamp, $timeBank)
     $newDate = $date->format('d M Y H:i:s');
     return $newDate;
 }
+
+/**
+ * This function is used to get invoice type id
+ * @param string $invoiceType
+ * @return int | null
+ */
+function getInvoiceTypeId($dbSocket, string $invoiceType)
+{
+    global $configValues;
+    $query = "SELECT id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE'] . " WHERE value = '" . $invoiceType . "' ";
+    $res = $dbSocket->query($query);
+    if ($res->numRows() > 0) {
+        $row = $res->fetchRow();
+        return $row['id'];
+    }
+    return null;
+}
