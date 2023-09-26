@@ -61,6 +61,8 @@ session_start();                                                // we keep a ses
                                         " VALUES (0, '$username', 'User-Password', '==', '$password')";
                                 $res = $dbSocket->query($sql);
 
+                            
+
                                 /* adding user information to the userinfo table */
                                 $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']." (username, firstname, lastname, email) ".
                                         " VALUES ('$username', '$firstname', '$lastname', '$email')";
@@ -90,6 +92,17 @@ session_start();                                                // we keep a ses
                                 $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id, Username, Attribute, op, Value) ".
                                         " VALUES (0, '$username', 'WISPr-Session-Terminate-Time', ':=', '120')";
                                 $res = $dbSocket->query($sql);
+
+                                $ctime= strtotime("+0 days") ;
+		                $expiryDate = date("d M Y H:i:s",$ctime);
+                                // add expiry date to radcheck
+                                $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id, Username, Attribute, op, Value) ".
+                                        " VALUES (0, '$username', 'Expiration', ':=', '$expiryDate')";
+                                $res = $dbSocket->query($sql);
+
+
+                                
+
 
 
 

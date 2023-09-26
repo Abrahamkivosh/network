@@ -134,23 +134,25 @@ function get_system_load() {
 // Get Memory System MemTotal|MemFree
 // @return array Memory System MemTotal|MemFree
 function get_memory() {
-	$file_name = "/proc/meminfo";
-	$mem_array = array();
+    $file_name = "/proc/meminfo";
+    $mem_array = array();
 
-	$buffer = file($file_name);
+    $buffer = file($file_name);
 
-	while (list($key, $value) = each($buffer)) {
-		if (strpos($value, ':') !== false) {
-			$match_line = explode(':', $value);
-			$match_value = explode(' ', trim($match_line[1]));
-			if (is_numeric($match_value[0])) {
-				$mem_array[trim($match_line[0])] = trim($match_value[0]);
-			}
-		}
-	}
+    for ($i = 0; $i < count($buffer); $i++) {
+        $value = $buffer[$i];
+        if (strpos($value, ':') !== false) {
+            $match_line = explode(':', $value);
+            $match_value = explode(' ', trim($match_line[1]));
+            if (is_numeric($match_value[0])) {
+                $mem_array[trim($match_line[0])] = trim($match_value[0]);
+            }
+        }
+    }
 
-	return $mem_array;
+    return $mem_array;
 }
+
 
 
 //Get FreeDiskSpace
@@ -173,19 +175,15 @@ function convert_ToMB($value) {
 // @return array Get list network name interfaces
 function get_interface_list() {
 	$devices = array();
-	$file_name = "/proc/net/dev";
+	// Run the ip link show command and store the output in a variable
+	$output = shell_exec('ip link show');
 
-	if ($fopen_file = fopen($file_name, 'r')) {
-		while ($buffer = fgets($fopen_file, 4096)) {
-			if (preg_match("/eth[0-9][0-9]*/i", trim($buffer), $match)) {
-				$devices[] = $match[0];
-			}
-		}
-		$devices = array_unique($devices);
-		sort($devices);
-		fclose ($fopen_file);
-	}
-	return $devices;
+	// Match the pattern and store the results in an array
+	preg_match_all('/\d: ([a-z0-9]+)/i', $output, $devices);
+
+	// Return the devices array
+	return $devices[1];
+
 }
 
 
@@ -194,42 +192,61 @@ function get_interface_list() {
 // @param string $ifname
 // @return string Ip address or (none)
 function get_ip_addr($ifname) {
-	$command_name = "/sbin/ifconfig $ifname";
-	$ifip = "";
+	// Run the ip addr show command for the specified device name and store the output
+    $output = shell_exec("ip addr show $ifname");
 
-	exec($command_name , $command_result);
-
-	$ifip = implode($command_result, "\n");
-	if (preg_match("/inet addr:[0-9\.]*/i", $ifip, $match)) {
-		$match = explode(":", $match[0]);
-		return $match[1];
-	} elseif (preg_match("/inet [0-9\.]*/i", $ifip, $match)) {
-		$match = explode(" ", $match[0]);
-		return $match[1];
-	} else {
+    // Initialize an array to store the IP addresses
+    $ipAddresses = [];
+	if ($output == "") {
 		return "(none)";
 	}
+
+    // Split the output into lines
+    $lines = explode("\n", $output);
+
+    // Iterate through each line of the output
+    foreach ($lines as $line) {
+        // Use a regular expression to extract IPv4 and IPv6 addresses
+        if (preg_match('/inet (\d+\.\d+\.\d+\.\d+)/', $line, $matches)) {
+            $ipv4Address = $matches[1];
+            $ipAddresses['IPv4'] = $ipv4Address;
+        } elseif (preg_match('/inet6 ([0-9a-fA-F:]+)/', $line, $matches)) {
+            $ipv6Address = $matches[1];
+            $ipAddresses['IPv6'] = $ipv6Address;
+        }
+    }
+
+    // Return the IP addresses as strings
+	return implode(' ', $ipAddresses);
 }
 
 // Get mac address
 // @param string $ifname
 // @return string Mac address or (none)
 function get_mac_addr($ifname) {
-	$command_name = "/sbin/ifconfig $ifname";
-	$ifip = "";
+	// Run the ip addr show command for the specified device name and store the output
+	$output = shell_exec("ip addr show $ifname");
 
-	exec($command_name , $command_result);
+	// Initialize a variable to store the MAC address
+	$macAddress = null;
 
-	$ifmac = implode($command_result, "\n");
-	if (preg_match("/hwaddr [0-9A-F:]*/i", $ifmac, $match)) {
-		$match = explode(" ", $match[0]);
-		return $match[1];
-	} elseif (preg_match("/ether [0-9A-F:]*/i", $ifmac, $match)) {
-		$match = explode(" ", $match[0]);
-		return $match[1];
-	} else {
+	if ($output == "") {
 		return "(none)";
 	}
+
+	// Split the output into lines
+	$lines = explode("\n", $output);
+
+	// Iterate through each line of the output
+	foreach ($lines as $line) {
+		// Use a regular expression to extract the MAC address
+		if (preg_match('/link\/ether ([0-9a-fA-F:]+)/', $line, $matches)) {
+			$macAddress = $matches[1];
+			break; // Stop processing after the first MAC address is found
+		}
+	}
+
+	return $macAddress;
 }
 
 
@@ -237,22 +254,31 @@ function get_mac_addr($ifname) {
 // @param string $ifname
 // @return string Netmask address or (none)
 function get_mask_addr($ifname) {
-	$command_name = "/sbin/ifconfig $ifname";
-	$ifmask = "";
 
-	exec($command_name , $command_result);
+	// Run the ip addr show command for the specified device name and store the output
+    $output = shell_exec("ip addr show $ifname");
 
-	$ifmask = implode($command_result, "\n");
-	if (preg_match("/mask:[0-9\.]*/i", $ifmask, $match)) {
-		$match = explode(":", $match[0]);
-		return $match[1];
-	} elseif (preg_match("/netmask [0-9\.]*/i", $ifmask, $match)) {
-		$match = explode(" ", $match[0]);
-		return $match[1];
-	} else {
+    // Initialize a variable to store the IPv4 netmask
+    $ipv4Netmask = null;
+	if ($output == "") {
 		return "(none)";
 	}
+
+    // Split the output into lines
+    $lines = explode("\n", $output);
+
+    // Iterate through each line of the output
+    foreach ($lines as $line) {
+        // Use a regular expression to extract the IPv4 address and netmask
+        if (preg_match('/inet (\d+\.\d+\.\d+\.\d+)\/(\d+)/', $line, $matches)) {
+            $ipv4Netmask = $matches[2];
+            break; // Stop processing after the first IPv4 address is found
+        }
+    }
+
+    return $ipv4Netmask;
 }
+
 
 ?>
 
