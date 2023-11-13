@@ -15,6 +15,26 @@
     <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
+
+
+    <?php
+
+include_once "./authCheck.php";
+
+// get invoice id from url
+$id = $_GET['id'] ;
+
+// decrypt id
+$id = decryptId($id) ;
+
+
+$invoice = (object)$user->getUserInvoiceById($id) ;
+
+$invoiceItems = (object)$user->getUserInvoiceItems($id) ;
+
+
+
+?>
    
 
 

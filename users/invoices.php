@@ -64,6 +64,7 @@ include_once "./includes/offcanvasAside.php";
 
         <?php
 include_once "./pages/invoiceIndex.php";
+
 ?>
 
 <?php

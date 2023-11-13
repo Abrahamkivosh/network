@@ -86,9 +86,11 @@
                 
                 foreach ($invoices as $key => $invoice)
                 {
+                    $id = encryptId($invoice['id']);
                     echo "<tr>";
                     echo "<td>";
-                    echo "<a class='text-primary outline-none' title='View Invoice' href='./invoiceShow.php'>{$invoice['id']}</a>";
+                    echo "<a class='text-primary outline-none' title='View Invoice' href='./invoiceShow.php?id={$id}'
+                    >{$invoice['id']}</a>";
                     echo "</td>";
                     echo "<td>{$invoice['date']}</td>";
                     echo "<td>{$invoice['status']}</td>";

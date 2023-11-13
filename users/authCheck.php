@@ -38,6 +38,14 @@ if (!defined('USER_INCLUDED')) {
     include_once ("../library/user.php");
     define('USER_INCLUDED', true);
 }
+
+// include\management\helper.php
+if (!defined('HELPER_INCLUDED')) {
+    include_once ("../include/management/helper.php");
+    define('HELPER_INCLUDED', true);
+}
+
+
 $login = $_SESSION['login_user'];
 
 

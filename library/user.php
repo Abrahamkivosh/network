@@ -414,7 +414,9 @@ class User
             while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
                 $rows[] = $row;
             }
-            return $rows;
+            // get first row
+            $row = $rows[0];
+            return $row;
 
         } else {
             return false;
