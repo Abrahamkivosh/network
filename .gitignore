@@ -3,6 +3,5 @@
 *.db
 invoice_preview.html
 .DS_Store
-library/daloradius.conf.php
 vendor/
 .env
