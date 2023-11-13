@@ -75,7 +75,7 @@ function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()
 	$myinvoiceInfo['date'] = $currDate;
 	$myinvoiceInfo['status_id'] = 1;			 // defaults to invoice status of 'open'
 	$myinvoiceInfo['type_id'] = 1;			 // defaults to invoice type of 'Plans'
-	$myinvoiceInfo['notes'] = 'provisioned new user from daloRADIUS platform';
+	$myinvoiceInfo['notes'] = 'Plans Invoice';	 // defaults to invoice notes of 'Plans Invoice'
 	$invoiceInfo = array_merge($myinvoiceInfo, $invoiceInfo);
 
 

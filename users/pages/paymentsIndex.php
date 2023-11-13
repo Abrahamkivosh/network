@@ -75,7 +75,7 @@
                 } else {
                     ?>
                     <tr>
-                    <td colspan="5">No payments found</td>
+                    <td colspan="6">No payments found</td>
                     </tr>
                     <?php
                 }

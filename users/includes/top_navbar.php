@@ -13,7 +13,9 @@
         <a
           class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold"
           href="#"
-          >Frontendfunn</a
+          >
+          <?php echo getenv('SYSTEM_NAME') ; ?>
+          </a
         >
         <button
           class="navbar-toggler"

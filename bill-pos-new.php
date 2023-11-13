@@ -260,8 +260,8 @@
 			$planRecurringBillingSchedule = $row['planRecurringBillingSchedule'];
 			
 			
-			// initialize next bill date string (Y-m-d style)
-			$nextBillDate = "0000-00-00 00:00:00";
+			// initialize next bill date string (Y-m-d style) 000-00-00 00:00:00 of today
+			$nextBillDate = date('Y-m-d H:i:s');
 			
 			
 			// get next billing date
@@ -272,7 +272,10 @@
 		
 			// if $bi_nextbill was not set to anything (empty)
 			if (empty($bi_nextbill))
+			{
 				$bi_nextbill = $nextBillDate;
+			}
+				
 					
 			
 			

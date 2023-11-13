@@ -47,7 +47,7 @@
     <div class="card bg-orange text-white h-100">
     <div class="card-body pt-2">Account Balance:</div>
         <div class="card-body pt-2">
-            KES   <?php echo  number_format($getUserBillInfo['balance']) ; ?>
+            KES   <?php echo  number_format($getUserBillInfo['balance'] ) ; ?>
         </div>
 
     </div>
