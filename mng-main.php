@@ -74,7 +74,6 @@ include("menu-mng-users.php");
 
 	let url = "<?php echo $url; ?>";
 	fetch(url).then(response => response.json()).then(data => {
-		console.log(data);
 		let myChart = new Chart(ctx, {
 			type: 'bar',
 			data: {

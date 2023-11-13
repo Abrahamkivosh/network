@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "feca6d74c35b1026f6a97d057935ecc9",
+    "content-hash": "9226fd6077c55e177f653b56b8f078ea",
     "packages": [
         {
             "name": "africastalking/africastalking",
@@ -386,56 +386,6 @@
                 }
             ],
             "time": "2023-08-27T10:13:57+00:00"
-        },
-        {
-            "name": "libchart/libchart",
-            "version": "v1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/astehlik/libchart.git",
-                "reference": "c76348d65d796c2b0b3fb3632c9da772e02947d9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/astehlik/libchart/zipball/c76348d65d796c2b0b3fb3632c9da772e02947d9",
-                "reference": "c76348d65d796c2b0b3fb3632c9da772e02947d9",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Libchart\\": "libchart/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Jean-Marc Trémeaux",
-                    "homepage": "http://naku.dohcrew.com/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Alexander Stehlik",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Simple PHP chart drawing library",
-            "homepage": "http://naku.dohcrew.com/libchart/pages/introduction/",
-            "keywords": [
-                "bar charts",
-                "chart",
-                "charts",
-                "line charts",
-                "pie charts"
-            ],
-            "support": {
-                "issues": "https://github.com/astehlik/libchart/issues",
-                "source": "https://github.com/astehlik/libchart/tree/master"
-            },
-            "time": "2019-09-25T19:16:42+00:00"
         },
         {
             "name": "psr/http-client",
