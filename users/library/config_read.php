@@ -23,8 +23,16 @@
  */
  
 $_configFile = dirname(__FILE__).'/daloradius.conf.php';
-include($_configFile);
 
+if (!file_exists($_configFile)) {
+	$failureMsg = "Could not find the configuration file:<b> $_configFile </b>
+	<br/>Check file permissions. The file should be readable by the webserver's user/group";
+}
+
+include ($_configFile);
+
+// var_dump($configValues);
+// exit ;
 /*
 ****************************************************************************************************
 * deprecated for handling the configuration variables as a PHP page for the sake of security

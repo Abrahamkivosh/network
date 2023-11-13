@@ -8,13 +8,25 @@ error_reporting(E_ALL);
 
 
 // Path: library/daloradius.conf.php
-require_once __DIR__ . '/../vendor/autoload.php';
+// autoload vendor classes if not already included
+if (!defined('VENDOR_AUTOLOAD_INCLUDED')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+    define('VENDOR_AUTOLOAD_INCLUDED', true);
+}
+// read
+if (!defined('READ_ENV_FILE_INCLUDED')) {
+    require_once __DIR__ . '/../read_env_file.php';
+    define('READ_ENV_FILE_INCLUDED', true);
+}
 
-include_once (dirname(__FILE__).'/../read_env_file.php') ;
-
-include (dirname(__FILE__).'/version.php');
+if (!defined('VERSION_INCLUDED')) {
+    require_once __DIR__ . '/version.php';
+    define('VERSION_INCLUDED', true);
+}
 
 $configValues['SYSTEM_NAME'] = getenv ('SYSTEM_NAME');
+$configValues['TIMEZONE'] = 'Africa/Nairobi';
+$configValues['APP_URL'] = getenv ('BASE_URL');
 $configValues['FREERADIUS_VERSION'] = '2';
 $configValues['CONFIG_DB_ENGINE'] = getenv ('CONFIG_DB_ENGINE');
 $configValues['CONFIG_DB_HOST'] = getenv ('CONFIG_DB_HOST');
@@ -100,15 +112,38 @@ $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/s
 $configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
 $configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
 
-// Mpesa Gateway
-$configValues['CONFIG_MPESA_CONSUMER_KEY'] = '';
-$configValues['CONFIG_MPESA_CONSUMER_SECRET'] = '';
-$configValues['CONFIG_MPESA_SHORTCODE'] = '';
-$configValues['CONFIG_MPESA_CONFIRMATION_URL'] = '';
-$configValues['CONFIG_MPESA_VALIDATION_URL'] = '';
-$configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
-$configValues['CONFIG_MPESA_LNM_URL'] = '';
-$configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
-$configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
+
 
 $configValues['PEAR_PATH'] = getenv('PEAR_PATH');
+
+
+ // Mpesa Gateway
+ $configValues['CONFIG_MPESA_CONSUMER_KEY'] = 'EcRoSKtOdBHfEPzo6gwPLyHhp6etgOjz';
+ $configValues['CONFIG_MPESA_CONSUMER_SECRET'] = 'bb4nKUEYIAtxMVeK';
+ $configValues['CONFIG_MPESA_SHORTCODE'] = '600995';
+ $configValues['CONFIG_MPESA_CONFIRMATION_URL'] = $configValues['APP_URL'] . '/users/activation/confirmation.php';
+ $configValues['CONFIG_MPESA_VALIDATION_URL'] = $configValues['APP_URL'] . '/users/activation/validation.php';
+ $configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+ $configValues['CONFIG_MPESA_LNM_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
+$configValues['PAYBILL_NUMBER'] =  $configValues['CONFIG_MPESA_SHORTCODE'] ;
+
+
+
+
+ini_set('error_log', $configValues['CONFIG_LOG_FILE']);
+ini_set('log_errors', '1') ;
+
+//  set timezone
+date_default_timezone_set($configValues['TIMEZONE']);
+
+//  set locale
+setlocale(LC_ALL, $configValues['CONFIG_LANG']);
+
+//  set debug mode
+if ($configValues['CONFIG_DEBUG_SQL'] == 'yes') {
+    $debug = true;
+} else {
+    $debug = false;
+}

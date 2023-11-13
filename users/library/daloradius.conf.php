@@ -1,62 +1,39 @@
 <?php
-/*
- *********************************************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *********************************************************************************************************
- * Description:
- *              daloRADIUS Configuration File
- *
- * Modification Date:
- *              Mon Mar 28 22:55:00 EDT 2011
- *********************************************************************************************************
- */
 
- /*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
-*/
-//  enable error reporting
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// ini_set('memory_limit', '1024M');
+// display errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+
+
+// Path: library/daloradius.conf.php
 // autoload vendor classes if not already included
 if (!defined('VENDOR_AUTOLOAD_INCLUDED')) {
-    require_once(dirname(__FILE__) . '/../../vendor/autoload.php');
+    require_once __DIR__ . '/../../vendor/autoload.php';
     define('VENDOR_AUTOLOAD_INCLUDED', true);
 }
+// read
+if (!defined('READ_ENV_FILE_INCLUDED')) {
+    require_once __DIR__ . '/../../read_env_file.php';
+    define('READ_ENV_FILE_INCLUDED', true);
+}
 
+if (!defined('VERSION_INCLUDED')) {
+    require_once __DIR__ . '/../../library/version.php';
+    define('VERSION_INCLUDED', true);
+}
 
-include (dirname(__FILE__).'/../../library/version.php');
-
-$configValues['APP_URL'] = 'http://1localhost/network';
-$configValues['SYSTEM_NAME'] = 'NEXT SOLUTIONS';
+$configValues['SYSTEM_NAME'] = getenv ('SYSTEM_NAME');
 $configValues['TIMEZONE'] = 'Africa/Nairobi';
+$configValues['APP_URL'] = getenv ('BASE_URL');
 $configValues['FREERADIUS_VERSION'] = '2';
-$configValues['CONFIG_DB_ENGINE'] = 'mysqli';
-$configValues['CONFIG_DB_HOST'] = 'localhost';
-$configValues['CONFIG_DB_PORT'] = '3306';
-$configValues['CONFIG_DB_USER'] = 'root';
-$configValues['CONFIG_DB_PASS'] = 'fa';
-$configValues['CONFIG_DB_NAME'] = 'freeradiusdb';
+$configValues['CONFIG_DB_ENGINE'] = getenv ('CONFIG_DB_ENGINE');
+$configValues['CONFIG_DB_HOST'] = getenv ('CONFIG_DB_HOST');
+$configValues['CONFIG_DB_PORT'] = getenv ('CONFIG_DB_PORT');
+$configValues['CONFIG_DB_USER'] = getenv ('CONFIG_DB_USER');
+$configValues['CONFIG_DB_PASS'] = getenv ('CONFIG_DB_PASS');
+$configValues['CONFIG_DB_NAME'] = getenv ('CONFIG_DB_NAME');
 $configValues['CONFIG_DB_TBL_RADCHECK'] = 'radcheck';
 $configValues['CONFIG_DB_TBL_RADREPLY'] = 'radreply';
 $configValues['CONFIG_DB_TBL_RADGROUPREPLY'] = 'radgroupreply';
@@ -124,24 +101,22 @@ $configValues['CONFIG_DASHBOARD_DALO_DELAYHARD'] = '15';
 $configValues['CONFIG_INVOICE_TEMPLATE'] = 'invoice_template.html';
 $configValues['CONFIG_INVOICE_ITEM_TEMPLATE'] = 'invoice_item_template.html';
 
+// Hostpinnacle SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
+$configValues['CONFIG_HOSTPINNACLE_USERNAME'] = '';
+$configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = '';
+$configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
+$configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
+
+// Africas Talking SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+$configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
 
 
 
+$configValues['PEAR_PATH'] = getenv('PEAR_PATH');
 
-$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking'; // hostpinnacle, africastalking
 
- // Hostpinnacle SMS Gateway
-
- $configValues['CONFIG_HOSTPINNACLE_USERNAME'] = 'sportieznet';
- $configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = 'g0UjvbJ7';
- $configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
- $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
- 
- // Africas Talking SMS Gateway
-
- $configValues['CONFIG_AFRICASTALKING_USERNAME'] = "sandbox";
- $configValues['CONFIG_AFRICASTALKING_API_KEY'] = 'c667dabbdcbe7185cedb8c27b1c6fa8f7c5d8ecaf4c7c420c6dd18bf67ac36b7';
- $configValues['CONFIG_AFRICASTALKING_SHORTCODE'] = 'Sandbox';
  // Mpesa Gateway
  $configValues['CONFIG_MPESA_CONSUMER_KEY'] = 'EcRoSKtOdBHfEPzo6gwPLyHhp6etgOjz';
  $configValues['CONFIG_MPESA_CONSUMER_SECRET'] = 'bb4nKUEYIAtxMVeK';
