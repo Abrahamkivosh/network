@@ -98,32 +98,6 @@ $configValues['CONFIG_DASHBOARD_DALO_DELAYHARD'] = '15';
 $configValues['CONFIG_INVOICE_TEMPLATE'] = 'invoice_template.html';
 $configValues['CONFIG_INVOICE_ITEM_TEMPLATE'] = 'invoice_item_template.html';
 
-/*
-// Locations Configuration directives
-// Locations directives are support for accessing different databases from the daloRADIUS Login console
-// adjust the locations below for databases you are running (if you are running more than one).
-// You could configure invoice templates for each location - optional.
-$configValues['CONFIG_LOCATIONS'] =                     array(
-
-        "Location Example 1" =>                 array(
-                "Engine"   => "mysql",
-                "Username" => "root",
-                "Password" => "",
-                "Database" => "radius",
-                "Hostname" => "127.0.0.1",
-				"CONFIG_INVOICE_TEMPLATE" => "invoice_template_location_1.html",
-				"CONFIG_INVOICE_ITEM_TEMPLATE" => "invoice_item_template_location_1.html"
-        ),
-
-        "Location Example 2" =>                 array(
-                "Engine"   => "mysql",
-                "Username" => "db_usertest",
-                "Password" => "db_passtest",
-                "Database" => "test_db1",
-                "Hostname" => "localhost"
-        )
-);
-*/
 // Hostpinnacle SMS Gateway
 $configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
 $configValues['CONFIG_HOSTPINNACLE_USERNAME'] = '';
@@ -145,3 +119,7 @@ $configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mp
 $configValues['CONFIG_MPESA_LNM_URL'] = '';
 $configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
 $configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
+$configValues['SYSTEM_NAME']
+
+
+$configValues['PEAR_PATH'] =

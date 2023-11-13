@@ -80,7 +80,11 @@
 	// we introduced support for php's database abstraction layer which simplifies database connections
 	// to different technologies like mysql, oracle, postgresql, etc...
 	// until everything is completely migrated we will leave these commented out
-
+if ( ! empty($configValues['PEAR_PATH'])  ) {
+	# code...
+	set_include_path( $configValues['PEAR_PATH'] );
+}
+	
 	include_once ('DB.php');
 
 	$dbSocket = DB::connect($dbConnectString);

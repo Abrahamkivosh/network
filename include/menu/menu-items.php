@@ -22,7 +22,8 @@
 									&nbsp;
 								</span>
 
-                                <h1><a href="index.php"> <img src="images/daloradius_small.png" border=0/></a></h1>
+                                <h1><a href="<?php echo getenv('ADMIN_BASE_URL'); ?>"> <img src="images\daloradius_logo.jpg" style="width: 100px;height: 50px;margin-top: -10px;
+									margin-left: -10px;object-fit: contain;" width="100" height="50" border=0/></a></h1>
 
                                 <h2>
 									<?php echo t('all','copyright1'); ?>

@@ -15,6 +15,9 @@
         "africastalking/africastalking": "^3.0"
     },
     "autoload": {
+       "files": [
+        "read_env_file.php"
+       ]
     },
     "autoload-dev": {
     },
