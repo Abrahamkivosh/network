@@ -11,7 +11,7 @@
         <div class="card-body pt-2">Open Invoices</div>
         <h2 class="card-body pt-1"> 
         <?php
-        echo $invoiceStatus['open'];
+        echo $invoiceStatus['open'] ?? 0;
         ?>
         </h2>
         

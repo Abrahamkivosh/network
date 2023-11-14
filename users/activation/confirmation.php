@@ -197,7 +197,10 @@ if ($user->userExists()) {
 
     // if balance is positive, update user expiry date
     if ($newBalance >= 0) {
-        $user->updateUserAccountExpirationDate($newDate);
+        // Update user account expiration date if $newBalance is equal to or greater than $userPlanCost
+        if ($newBalance >= $userPlanCost) {
+            $user->updateUserAccountExpirationDate($newDate);
+        }
         // Send SMS to user
         $smsTemplates->sendAccountPlanRenewalSMS();
     } else {

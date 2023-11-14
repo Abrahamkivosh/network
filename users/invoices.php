@@ -20,7 +20,6 @@ if ($result->numRows() > 0) {
     }
     // flatten the array
     $invoiceStatus = array_column($invoiceStatus, 'invoice_count', 'status_name');
-
     
 }else {
     echo "No invoices found";
