@@ -9,13 +9,14 @@
     <div 
     <?php 
     if( $getExpirationDate['remaining_days'] <= 0){
-        echo "class='card bg-danger text-white h-100'";
+        echo "class='card bg-danger text-white h-100'>";
+        echo "<div class='card-body pt-2'>Account Is Expired</div>";
     }else{
-        echo "class='card bg-success text-white h-100'";
+        echo "class='card bg-success text-white h-100'>";
+        echo "<div class='card-body pt-2'>Account Is Active</div>";
     }
     ?>
-     >
-        <div class="card-body pt-2">Account Is Active</div>
+     
         <div class="card-body pt-2">Days Remaing : <?php echo $getExpirationDate['remaining_days'] ?> </div>
 
     </div>
@@ -54,7 +55,16 @@
     </div>
 
     <div class="col-md-3 mb-3">
-    <div class="card bg-green text-white h-100">
+    <div 
+    <?php 
+    if( $getExpirationDate['remaining_days'] <= 0){
+        echo "class='card bg-danger text-white h-100'";
+    }else 
+    {
+        echo "class='card bg-success text-white h-100'";
+    }
+    ?>
+    >
     <div class="card-body pt-2">Expiry Date:</div>
         <div class="card-body pt-2"> <?php echo $getExpirationDate['expire_date']; ?></div>
 
@@ -74,7 +84,7 @@
     </div>
     <div class="col-md-3 mb-3">
     <div class="card bg-yellow text-white h-100">
-    <div class="card-body pt-2">Last Connectione:</div>
+    <div class="card-body pt-2">Last Connection:</div>
         <div class="card-body pt-2"> 
             <?php
             echo $userConnectionStatus['userLastConnected'];
@@ -106,13 +116,19 @@
                         <p class="card-text custom-card-text">The approximate number of days during which services will be provided based on the amount on the account balance</p>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="custom-card-title">Top up account balance to extend your service</h5>
+                        <form action="" method="post">
+                        <h5 class="custom-card-title bg-success">Top up account balance to extend your service</h5>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Enter amount">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">Top Up</button>
-                            </div>
+                        <input type="text" class="form-control" name="amount" placeholder="Enter amount">
                         </div>
+                        <div class="input-group">
+                        <input type="text" class="form-control" name="phone" placeholder="Enter Phone">
+                        </div>
+                        <div class="input-group d-grid gap-2">
+                        
+                            <button class="btn btn-primary btn-success  " type="submit">Top Up</button>
+                        </div>
+                        </form>
                     </div>
 
                 </div>

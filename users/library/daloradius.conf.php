@@ -110,7 +110,8 @@ $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/s
 
 // Africas Talking SMS Gateway
 $configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
-$configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
+$configValues['CONFIG_AFRICASTALKING_USERNAME'] = getenv('CONFIG_AFRICASTALKING_USERNAME');
+$configValues['CONFIG_AFRICASTALKING_API_KEY'] = getenv('CONFIG_AFRICASTALKING_API_KEY');
 
 
 

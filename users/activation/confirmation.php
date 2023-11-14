@@ -4,6 +4,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 ini_set('memory_limit', '1024M');
 
+// add headers to allow cross origin resource sharing (CORS) and content type
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
+header('Access-Control-Allow-Methods: POST, GET');
+header('Accept: application/json');
+
+
 // path: users/activation/confirmation.php
 
 // Check if config_read.php has already been included
@@ -57,14 +64,16 @@ $mpesaResponse = file_get_contents('php://input');
 
 // Check if the mpesaResponse is empty
 if (empty($mpesaResponse)) {
-    die("Mpesa response is empty");
+    echo json_encode(['error' => 'Mpesa response is empty']);
+    die();
 }
 
 $callbackData = $mpesaService->getTransactionDetails();
 
 // Check if the callbackData is empty
 if (empty($callbackData)) {
-    die("Callback data is empty");
+    echo json_encode(['error' => 'Callback data is empty']);
+    die();
 }
 
 // get the BillRefNumber
@@ -199,14 +208,10 @@ if ($user->userExists()) {
             // Get Remaining Amount to renew account
             $remainingAmount = $userPlanCost - $newBalance;
             $smsTemplates->setUserInfo([
-                'username' => $userInfo['username'],
-                'plan' => $userBillingPlan['plan'],
-                'planCost' => $userBillingPlan['planCost'],
-                'remainingAmount' => $remainingAmount,
-            
+                'username' => $userInfo['username'], 'plan' => $userBillingPlan['planName'],
+                'planCost' => $userBillingPlan['planCost'],'remainingAmount' => $remainingAmount,
             ]);
             // Send SMS to user
-
             $smsTemplates->sendAccountSuspensionSMS($remainingAmount);
             echo json_encode(['error' => 'Account is expired and payment is not enough to renew. ']);
 
@@ -216,7 +221,7 @@ if ($user->userExists()) {
             $remainingAmount = $userPlanCost - $newBalance;
             $smsTemplates->setUserInfo([
                 'username' => $userInfo['username'],
-                'plan' => $userBillingPlan['plan'],
+                'plan' => $userBillingPlan['planName'],
                 'planCost' => $userBillingPlan['planCost'],
                 'remainingAmount' => $remainingAmount,
             
@@ -234,7 +239,9 @@ if ($user->userExists()) {
         'balance' => $newBalance,
     ];
 
-    echo json_encode($userInfo);
+
+    // echo json_encode($userInfo);
+    $mpesaService->validateTransaction(true);
 
 } else {
     // Reject the transaction
