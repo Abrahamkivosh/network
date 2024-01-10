@@ -53,7 +53,7 @@ function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()
 		$sql = 'SELECT id FROM '.$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				' WHERE username="'.$username.'"';
 		$res = $dbSocket->query($sql);
-		$logDebugSQL .= $sql . "\n";
+		$logDebugSQL = $sql . "\n";
 
 		$row = $res->fetchRow();
 		$user_id = $row[0];
