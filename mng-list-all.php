@@ -172,7 +172,7 @@
 	echo "<thread> <tr>
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=id&orderType=$orderType\">
-		".t('all','ID')."</a>
+		".t('title','accountNumber')."</a>
 		</th>
 
 		<th scope='col'> 
@@ -226,9 +226,15 @@
 		$dayLeft = number_format($dayLeft, 0, '.', ',');
 
 
+		$sql3 =  "SELECT id as account_number FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE username='$userName'";
+		$res3 = $dbSocket->query($sql3);
+		$row3 = $res3->fetchRow();
+		$accNo = $row3[0];
+
+
 
 		printqn("
-			<td> <input type='checkbox' name='username[]' value='$row[0]'>$row[2]</td>
+			<td style='text-align:right; display:flex; justify-content:space-around;' > <input type='checkbox' name='username[]' value='$row[0]' > <span> $accNo </span></td>
 			<td>$row[5] $row[6]</td>
 			<td> 
 		");

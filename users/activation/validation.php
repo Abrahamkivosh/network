@@ -28,11 +28,8 @@ $billRefNumber = $callbackData['BillRefNumber'];
 
 
 
-// set the user instance
-$user->setUserInstance($billRefNumber);
-
-// confirm if the user exists
-if ($user->userExists()) {
+// confirm if the user exists and set username
+if ($user->setUserNameFromAccountNumber($billRefNumber)) {
     // Confirm the transaction
     $mpesaService->validateTransaction(true);
 } else {

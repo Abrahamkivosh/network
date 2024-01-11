@@ -15,7 +15,7 @@ if (!defined('CONFIG_INCLUDED')) {
 class User
 {
     public $configValues;
-    public $userInstance;
+    public $userName;
     public $dbSocket;
 
     public function __construct($dbSocket, $configValues)
@@ -26,14 +26,16 @@ class User
 
     /**
      * Set user instance
-     * @param string $userInstance  // username
+     * @param string $userName  // username
      *
      * @return mixed
      */
-    public function setUserInstance(string $userInstance)
+    public function setUserName(string $userName)
     {
-        $this->userInstance = $userInstance;
+        $this->userName = $userName;
     }
+
+
 
     /**
      * set config values
@@ -48,10 +50,11 @@ class User
      * Get user instance
      * @return mixed
      */
-    public function getUserInstance()
+    public function getUserName()
     {
-        return $this->userInstance;
+        return $this->userName;
     }
+
 
     /**
      * Get config values
@@ -61,13 +64,34 @@ class User
         return $this->configValues;
     }
 
+    public function setUserNameFromAccountNumber($accountNumber)
+    {
+        if (is_numeric($accountNumber)) {
+            $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
+
+            $accountNumber = $this->dbSocket->escapeSimple(intval($accountNumber));
+            $query = "SELECT * FROM $table_userInfo WHERE id= '$accountNumber'";
+
+            $result = $this->dbSocket->query($query);
+            if ($result->numRows() > 0) {
+                // set Username
+                $this->setUserName($result['username']);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     // Check if user exists
     public function userExists()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT * FROM $table_userInfo WHERE username = '$userName'";
 
         $result = $this->dbSocket->query($query);
@@ -85,10 +109,10 @@ class User
      */
     public function getUserBillInfo()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userBillingInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT * FROM $table_userBillingInfo WHERE username = '$userName'";
 
         $result = $this->dbSocket->query($query);
@@ -99,7 +123,16 @@ class User
         } else {
             return false;
         }
+    }
 
+    /**
+     * Get User Account Number
+     * 
+     */
+    public function getUserAccountNumber()
+    {
+        $userBillInfo = $this->getUserBillInfo();
+        return intval($userBillInfo['id']);
     }
 
     /**
@@ -114,10 +147,10 @@ class User
      */
     public function updateUserBillInfo($contactperson, $company, $email, $phone, $address, $city, $state)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userBillingInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "UPDATE $table_userBillingInfo SET contactperson = '$contactperson', company = '$company', email = '$email', phone = '$phone', address = '$address', city = '$city', state = '$state' WHERE username = '$userName'";
         $result = $this->dbSocket->query($query);
@@ -136,10 +169,10 @@ class User
      */
     public function getUserInfo()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT * FROM $table_userInfo WHERE username = '$userName'";
 
         $result = $this->dbSocket->query($query);
@@ -165,10 +198,10 @@ class User
      */
     public function updateUserInfo($firstname, $lastname, $email, $workphone, $mobilephone, $company, $city, $state)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "UPDATE $table_userInfo SET firstname = '$firstname', lastname = '$lastname', email = '$email', workphone = '$workphone', mobilephone = '$mobilephone', company = '$company', city = '$city', state = '$state' WHERE username = '$userName'";
         $result = $this->dbSocket->query($query);
@@ -187,10 +220,10 @@ class User
      */
     public function getUserRadiusGroup()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userGroup = $this->configValues['CONFIG_DB_TBL_RADUSERGROUP'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT * FROM $table_userGroup WHERE username = '$userName'";
 
         $result = $this->dbSocket->query($query);
@@ -209,10 +242,10 @@ class User
      */
     public function getUserRadCheck()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userRadCheck = $this->configValues['CONFIG_DB_TBL_RADCHECK'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT * FROM $table_userRadCheck WHERE username = '$userName'";
 
         $result = $this->dbSocket->query($query);
@@ -224,7 +257,6 @@ class User
                 $rows[] = $row;
             }
             return $rows;
-
         } else {
             return false;
         }
@@ -236,10 +268,10 @@ class User
      */
     public function getUserAccountExpirationDate()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userRadCheck = $this->configValues['CONFIG_DB_TBL_RADCHECK'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "SELECT value FROM $table_userRadCheck WHERE username = '$userName' AND attribute = 'Expiration'";
         $result = $this->dbSocket->query($query);
@@ -247,22 +279,29 @@ class User
         if ($result->numRows() > 0) {
             $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
             $expire_date = $row['value'];
-            // convert to date time
 
-            $date = new DateTime($expire_date);
-            // return 11 Sep 2023 00:00:00
-            $expire_date = $date->format('d M Y H:i:s');
-            $remaining_days = $date->diff(new DateTime())->format('%a');
+            // Convert to DateTime
+            $expireDateTime = new DateTime($expire_date);
+
+            // Get current date and time
+            $currentDateTime = new DateTime();
+
+            // Calculate remaining days
+            $remaining_days = $currentDateTime->diff($expireDateTime)->format('%r%a');
+
+            // Format the expiration date
+            $formattedExpireDate = $expireDateTime->format('d M Y H:i:s');
+
             return [
-                'expire_date' => $expire_date,
+                'expire_date' => $formattedExpireDate,
                 'remaining_days' => $remaining_days,
-                'timestamp' => $date->getTimestamp(),
+                'timestamp' => $expireDateTime->getTimestamp(),
             ];
         } else {
             return false;
         }
-
     }
+
 
     /**
      * Get user billing Plan
@@ -270,7 +309,7 @@ class User
      */
     public function getUserBillingPlan()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $userBillInfo = $this->getUserBillInfo();
         $plan = $userBillInfo['planName'];
         $table_billingPlan = $this->configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'];
@@ -292,10 +331,10 @@ class User
      */
     public function updateUserAccountExpirationDate($newDate)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userRadCheck = $this->configValues['CONFIG_DB_TBL_RADCHECK'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "UPDATE $table_userRadCheck SET value = '$newDate' WHERE username = '$userName' AND attribute = 'Expiration'";
         $result = $this->dbSocket->query($query);
@@ -314,10 +353,10 @@ class User
      */
     public function updateUserBalance($newBalance)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $table_userBillInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "UPDATE $table_userBillInfo SET balance = '$newBalance' WHERE username = '$userName'";
         $result = $this->dbSocket->query($query);
@@ -336,16 +375,16 @@ class User
     public function getUserInvoices()
     {
 
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $orderBy = 'a.id';
         $orderType = 'DESC';
         $rowsPerPage = 10;
         $offset = 0;
 
-        $sql_WHERE = " WHERE b.username = '$userInstance' ";
+        $sql_WHERE = " WHERE b.username = '$userName' ";
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
             " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed " .
             " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
@@ -368,11 +407,9 @@ class User
                 $rows[] = $row;
             }
             return $rows;
-
         } else {
             return false;
         }
-
     }
 
     /**
@@ -382,16 +419,16 @@ class User
      */
     public function getUserInvoiceById($invoiceId)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $orderBy = 'a.id';
         $orderType = 'DESC';
         $rowsPerPage = 10;
         $offset = 0;
 
-        $sql_WHERE = " WHERE b.username = '$userInstance' AND a.id = '$invoiceId' ";
+        $sql_WHERE = " WHERE b.username = '$userName' AND a.id = '$invoiceId' ";
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
             " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed " .
@@ -417,11 +454,9 @@ class User
             // get first row
             $row = $rows[0];
             return $row;
-
         } else {
             return false;
         }
-
     }
 
     /**
@@ -430,23 +465,21 @@ class User
      */
     public function getUserLatestInvoiceByStatus(array  $status, $whereIn = true)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $orderBy = 'a.id';
         $orderType = 'DESC';
         $rowsPerPage = 10;
         $offset = 0;
 
-        if ($whereIn)
-        {
-            $sql_WHERE = " WHERE b.username = '$userInstance' AND c.value IN ('" . implode("','", $status) . "') ";
-        }else 
-        {
-            $sql_WHERE = " WHERE b.username = '$userInstance' AND c.value NOT IN ('" . implode("','", $status) . "') ";
+        if ($whereIn) {
+            $sql_WHERE = " WHERE b.username = '$userName' AND c.value IN ('" . implode("','", $status) . "') ";
+        } else {
+            $sql_WHERE = " WHERE b.username = '$userName' AND c.value NOT IN ('" . implode("','", $status) . "') ";
         }
-        
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
             " c.value AS status, COALESCE(e2.total_paid, 0) as total_paid, COALESCE(d2.total_billed, 0) as total_billed, " .
@@ -470,11 +503,9 @@ class User
             // get first row
             $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
             return $row;
-
         } else {
             return false;
         }
-
     }
 
     /**
@@ -484,7 +515,7 @@ class User
      */
     public function getUserInvoiceItems($invoiceId)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $orderBy = 'a.id';
         $orderType = 'DESC';
@@ -493,7 +524,7 @@ class User
 
         $sql_WHERE = " WHERE  a.invoice_id = '$invoiceId' ";
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "SELECT a.id, a.invoice_id, a.amount, a.tax_amount, a.notes, a.plan_id, " .
             " b.planName, b.planCost, b.planTimeBank " .
@@ -510,11 +541,9 @@ class User
                 $rows[] = $row;
             }
             return $rows;
-
         } else {
             return false;
         }
-
     }
 
     /**
@@ -523,7 +552,7 @@ class User
      */
     public function getUserInvoicePayments($invoiceId)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $orderBy = 'a.id';
         $orderType = 'DESC';
@@ -532,7 +561,7 @@ class User
 
         $sql_WHERE = " WHERE  a.invoice_id = '$invoiceId' ";
 
-        $userName = $this->dbSocket->escapeSimple($userInstance);
+        $userName = $this->dbSocket->escapeSimple($userName);
 
         $query = "SELECT a.id, a.invoice_id, a.amount, a.type_id, a.date, a.notes," .
             "b.value as type" .
@@ -550,7 +579,6 @@ class User
                 $rows[] = $row;
             }
             return $rows;
-
         } else {
             return false;
         }
@@ -585,7 +613,6 @@ class User
                 $rows[] = $row;
             }
             return $rows;
-
         } else {
             return false;
         }
@@ -598,38 +625,36 @@ class User
      */
     public function getUserBalance()
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $user_id = $this->getUserBillInfo()['id'];
 
-        $sql_WHERE = " WHERE b.username = '$userInstance' ";
+        $sql_WHERE = " WHERE b.username = '$userName' ";
 
-        $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
-			" c.value AS status, COALESCE(SUM(e2.total_paid), 0) as total_paid, COALESCE(SUM(d2.total_billed), 0) as total_billed, ".
-			" SUM(a.status_id = 1) as openInvoices ".
-			" FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." AS a".
-			" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." AS b ON (a.user_id = b.id) ".
-			" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS']." AS c ON (a.status_id = c.id) ".
-			" LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) ".
-					" as total_billed, invoice_id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS']." AS d ".
-			" GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) ".
-			" LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM ".
-			$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) ".
-			" WHERE (a.user_id = $user_id)".
-			" GROUP BY b.id ";
+        $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
+            " c.value AS status, COALESCE(SUM(e2.total_paid), 0) as total_paid, COALESCE(SUM(d2.total_billed), 0) as total_billed, " .
+            " SUM(a.status_id = 1) as openInvoices " .
+            " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
+            " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " AS b ON (a.user_id = b.id) " .
+            " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . " AS c ON (a.status_id = c.id) " .
+            " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) " .
+            " as total_billed, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
+            " GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) " .
+            " LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM " .
+            $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
+            " WHERE (a.user_id = $user_id)" .
+            " GROUP BY b.id ";
         $result = $this->dbSocket->query($sql);
 
         if ($result->numRows() > 0) {
             // get all rows
             $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
             $balance = $row['total_paid'] - $row['total_billed'];
-           
-            return $balance;
 
+            return $balance;
         } else {
             return false;
         }
-
     }
 
     /**
@@ -655,7 +680,7 @@ class User
             "('$userId', '$invoice_date', '$invoice_status', '$invoice_type', '$invoice_notes', '$creationby')";
         $result = $this->dbSocket->query($sql);
         if ($result) {
-        //    Get last inserted id where user_id = $userId
+            //    Get last inserted id where user_id = $userId
             $query = "SELECT id FROM $table_invoice WHERE user_id = '$userId' ORDER BY id DESC LIMIT 1";
             $result = $this->dbSocket->query($query);
             if ($result->numRows() > 0) {
@@ -664,12 +689,9 @@ class User
             } else {
                 return false;
             }
-        
-
         } else {
             return false;
         }
-
     }
 
     /**
@@ -677,7 +699,7 @@ class User
      */
     public function updateUserInvoiceStatus(int $invoice_id, string $status)
     {
-        $userInstance = $this->userInstance;
+        $userName = $this->userName;
         $configValues = $this->configValues;
         $table_invoice = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'];
         $table_invoice_status = $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'];
@@ -716,7 +738,6 @@ class User
         } else {
             return false;
         }
-
     }
 
     /**
@@ -750,17 +771,13 @@ class User
             return false;
         }
     }
-
-   
 }
 
 // // test the class
-// $user = new User($dbSocket, $configValues);
-// $user->setConfigValues($configValues);
-// $user->setUserInstance('kivosh');
-// $userExists = $user->userExists();
-// $invoice = $user->getUserInvoices();
-
-// echo '<pre>';
-// print_r($invoice);
-// echo '</pre>';
+$user = new User($dbSocket, $configValues);
+$user->setConfigValues($configValues);
+$user->setUserName('kivosh');
+$accN = $user->getUserAccountNumber();
+echo '<pre>';
+print_r($accN);
+echo '</pre>';

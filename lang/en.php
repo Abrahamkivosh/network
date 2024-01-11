@@ -922,6 +922,7 @@ $l['title']['Optional'] = "Optional";
 $l['title']['Management'] = "User Management And Hostspot Management";
 $l['title']['UserManagement'] = "User Management";
 $l['title']['Expire'] = "Expire";
+$l['title']['accountNumber'] = "Account Number";
 $l['title']['mngnewquick'] = "New User - Quick Add";
 $l['title']['mngnewsearch'] = "User - Search";
 $l['title']['mngnewbatch'] = "Batch Add Users";

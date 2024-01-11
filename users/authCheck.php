@@ -54,4 +54,4 @@ $login = $_SESSION['login_user'];
 // create user instance
 $user = new User($dbSocket, $configValues);
 
-$user->setUserInstance($login);
+$user->setUserName($login);

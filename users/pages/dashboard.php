@@ -37,7 +37,7 @@
     <div class="card-body pt-2">Account No:</div>
         <div class="card-body pt-2">
         <?php
-        echo $user->getUserInstance() ;
+        echo $user->getUserName() ;
         ?>
         </div>
 
