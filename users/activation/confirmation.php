@@ -118,6 +118,9 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
     //Get new date after adding planTimeBank to userAccountExpirationDate
     $newDate = getNewDate($userAccountExpirationDate['timestamp'], $userPlanTimeBank);
 
+
+    $current_time = time();
+
     $smsTemplates->setPhone($userPhoneNumber);
 
     // Get user balance before adding transacted amount
@@ -195,12 +198,12 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
 
     // if balance is positive, update user expiry date
     if ($newBalance >= 0) {
-        // Update user account expiration date if $newBalance is equal to or greater than $userPlanCost
-        if ($newBalance >= $userPlanCost) {
+        if ( $userAccountExpirationDate['timestamp'] < $current_time ) {
             $user->updateUserAccountExpirationDate($newDate);
+            // Send SMS to user
+            $smsTemplates->sendAccountPlanRenewalSMS();
         }
-        // Send SMS to user
-        $smsTemplates->sendAccountPlanRenewalSMS();
+        
     } else {
         // Check if account is expired
         $currentTimestamp = time();
@@ -238,6 +241,7 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
         'phone' => $userBillInfo['phone'],
         'accountExpirationDate' => $newDate,
         'balance' => $newBalance,
+        'planCost' => $userPlanCost
     ];
 
 
