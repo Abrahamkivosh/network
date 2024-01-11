@@ -1,5 +1,5 @@
 <?php
-
+include_once ('DB.php');
 // Check if opendb.php has already been included
 if (!defined('OPENDB_INCLUDED')) {
     require_once "./opendb.php";
@@ -70,12 +70,12 @@ class User
             $table_userInfo = $this->configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'];
 
             $accountNumber = $this->dbSocket->escapeSimple(intval($accountNumber));
-            $query = "SELECT * FROM $table_userInfo WHERE id= '$accountNumber'";
+            $query = "SELECT * FROM $table_userInfo WHERE id= $accountNumber";
 
             $result = $this->dbSocket->query($query);
             if ($result->numRows() > 0) {
-                // set Username
-                $this->setUserName($result['username']);
+                $row = $result->fetchRow(PDO::FETCH_ASSOC) ;
+                $this->setUserName(trim($row['username']));
                 return true;
             } else {
                 return false;
@@ -118,7 +118,7 @@ class User
         $result = $this->dbSocket->query($query);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow( PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -178,7 +178,7 @@ class User
         $result = $this->dbSocket->query($query);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -774,10 +774,15 @@ class User
 }
 
 // // test the class
-$user = new User($dbSocket, $configValues);
-$user->setConfigValues($configValues);
-$user->setUserName('kivosh');
-$accN = $user->getUserAccountNumber();
-echo '<pre>';
-print_r($accN);
-echo '</pre>';
+// $user = new User($dbSocket, $configValues);
+// $user->setConfigValues($configValues);
+// $user->setUserName('kivosh');
+// $accN = $user->setUserNameFromAccountNumber(2);
+// echo '<pre>';
+// print_r($accN);
+// echo '</pre>';
+
+
+// echo '<pre>';
+// print_r($user->getUserRadiusGroup());
+// echo '</pre>';
