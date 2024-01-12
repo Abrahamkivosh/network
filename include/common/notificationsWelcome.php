@@ -1,24 +1,4 @@
 <?php
-/*
- *********************************************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *********************************************************************************************************
- *
- * Authors:	Liran Tal <liran@enginx.com>
- *
- *********************************************************************************************************
- */
 
 	require_once(dirname(__FILE__)."/../../notifications/processNotificationWelcome.php");
 	
@@ -64,11 +44,17 @@
 	$customerInfo['customer_email'] = $invoice_email;
 	$customerInfo['service_plan_name'] = $planName;
 	
-	$smtpInfo['host'] = $configValues['CONFIG_MAIL_SMTPADDR'];
-	$smtpInfo['port'] = $configValues['CONFIG_MAIL_SMTPPORT'];
-	$smtpInfo['auth'] = $configValues['CONFIG_MAIL_SMTPAUTH'];
-	$from = $configValues['CONFIG_MAIL_SMTPFROM'];
+
+// Create the SMTP connection parameters
+$smtpParams = array(
+    'host' => $configValues['CONFIG_MAIL_SMTPADDR'],
+    'port' => $configValues['CONFIG_MAIL_SMTPPORT'],
+    'auth' =>  $configValues['CONFIG_MAIL_SMTPAUTH'],
+    'username' => $configValues['CONFIG_MAIL_SMTPUSERNAME'],
+    'password' => $configValues['CONFIG_MAIL_SMTPPASSWORD'],
+    'tls' => $configValues['CONFIG_MAIL_SMTPtls']
+);
 	
-	@sendWelcomeNotification($customerInfo, $smtpInfo, $from);
+	@sendWelcomeNotification($customerInfo, $smtpParams, $from);
 
 ?>

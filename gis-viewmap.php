@@ -39,7 +39,7 @@
 <script type="text/javascript">
 
 function load() {
-	var map = L.map('map').setView([51.505, -0.09], 13);
+	var map = L.map('map').setView([-1.266672, 37.318410], 13);
 	var group = L.featureGroup().addTo(map);
 
 	L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {

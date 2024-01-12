@@ -39,6 +39,7 @@
  */
 function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()) {
 
+	$logDebugSQL = "" ;
 	include(dirname(__FILE__).'/../../library/opendb.php');
 
 	$user_id = false;

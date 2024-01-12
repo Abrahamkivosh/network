@@ -24,11 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $errorMessage = '';
 
+    // validate location
+    $location_name = (!empty($_POST['location'])) ? $_POST['location'] : "default";
+
+    $_SESSION['location_name'] = (array_key_exists('CONFIG_LOCATIONS', $configValues)
+        && is_array($configValues['CONFIG_LOCATIONS'])
+        && count($configValues['CONFIG_LOCATIONS']) > 0
+        && in_array($location_name, $configValues['CONFIG_LOCATIONS'])) ?
+        $location_name : "default";
+
     $operator_user = isset($_POST["username"]) ? sanitize_input($_POST["username"]) : null;
     $operator_pass = isset($_POST["password"]) ? sanitize_input($_POST["password"]) : null;
 
-echo $operator_user ;
-echo $operator_pass;
+    echo $operator_user;
+    echo $operator_pass;
     $sqlFormat = "select * from %s where username='%s' and password='%s'";
     $sql = sprintf(
         $sqlFormat,
@@ -80,7 +89,7 @@ header('Content-Type: application/json');
 echo json_encode($response);
 if ($response['status']) {
     # code...
-    header('Location: admin.php?message='. $response['message']);
-}else{
-    header('Location: login.php?message='. $response['message']);
+    header('Location: admin.php?message=' . $response['message']);
+} else {
+    header('Location: login.php?message=' . $response['message']);
 }
