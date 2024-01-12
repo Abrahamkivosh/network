@@ -1,40 +1,38 @@
 <?php
-/*
- *********************************************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *********************************************************************************************************
- * Description:
- *              daloRADIUS Configuration File
- *
- * Modification Date:
- *              Fri Jan 12 18:26:55 EAT 2024
- *********************************************************************************************************
- */
 
+// display errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$configValues['DALORADIUS_VERSION'] = '1.3';
-$configValues['DALORADIUS_DATE'] = '04 Nov 2021';
-$configValues['SYSTEM_NAME'] = 'Instandnet';
+// Path: library/daloradius.conf.php
+// autoload vendor classes if not already included
+if (!defined('VENDOR_AUTOLOAD_INCLUDED')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+    define('VENDOR_AUTOLOAD_INCLUDED', true);
+}
+
+// read
+if (!defined('READ_ENV_FILE_INCLUDED')) {
+    require_once __DIR__ . '/../read_env_file.php';
+    define('READ_ENV_FILE_INCLUDED', true);
+}
+
+if (!defined('VERSION_INCLUDED')) {
+    require_once __DIR__ . '/../library/version.php';
+    define('VERSION_INCLUDED', true);
+}
+
+$configValues['SYSTEM_NAME'] = getenv ('SYSTEM_NAME');
 $configValues['TIMEZONE'] = 'Africa/Nairobi';
-$configValues['APP_URL'] = 'http://localhost/network';
+$configValues['APP_URL'] = getenv ('BASE_URL');
 $configValues['FREERADIUS_VERSION'] = '2';
-$configValues['CONFIG_DB_ENGINE'] = 'mysqli';
-$configValues['CONFIG_DB_HOST'] = 'localhost';
-$configValues['CONFIG_DB_PORT'] = '3306';
-$configValues['CONFIG_DB_USER'] = 'root';
-$configValues['CONFIG_DB_PASS'] = '';
-$configValues['CONFIG_DB_NAME'] = 'radius';
+$configValues['CONFIG_DB_ENGINE'] = getenv ('CONFIG_DB_ENGINE');
+$configValues['CONFIG_DB_HOST'] = getenv ('CONFIG_DB_HOST');
+$configValues['CONFIG_DB_PORT'] = getenv ('CONFIG_DB_PORT');
+$configValues['CONFIG_DB_USER'] = getenv ('CONFIG_DB_USER');
+$configValues['CONFIG_DB_PASS'] = getenv ('CONFIG_DB_PASS');
+$configValues['CONFIG_DB_NAME'] = getenv ('CONFIG_DB_NAME');
 $configValues['CONFIG_DB_TBL_RADCHECK'] = 'radcheck';
 $configValues['CONFIG_DB_TBL_RADREPLY'] = 'radreply';
 $configValues['CONFIG_DB_TBL_RADGROUPREPLY'] = 'radgroupreply';
@@ -89,37 +87,63 @@ $configValues['CONFIG_MAINT_TEST_USER_RADIUSPORT'] = '1812';
 $configValues['CONFIG_MAINT_TEST_USER_NASPORT'] = '0';
 $configValues['CONFIG_MAINT_TEST_USER_RADIUSSECRET'] = 'testing123';
 $configValues['CONFIG_USER_ALLOWEDRANDOMCHARS'] = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
-$configValues['CONFIG_MAIL_SMTPADDR'] = 'sandbox.smtp.mailtrap.io';
-$configValues['CONFIG_MAIL_SMTPPORT'] = '2525';
-$configValues['CONFIG_MAIL_SMTPUSERNAME'] = 'ca3a9fcd45f4be';
-$configValues['CONFIG_MAIL_SMTPPASSWORD'] = 'a77d49abc478bf';
+$configValues['CONFIG_MAIL_SMTPADDR'] = '127.0.0.1';
+$configValues['CONFIG_MAIL_SMTPPORT'] = '25';
+$configValues['CONFIG_MAIL_SMTPAUTH'] = '';
 $configValues['CONFIG_MAIL_SMTPFROM'] = 'root@daloradius.xdsl.by';
-$configValues['CONFIG_MAIL_SMTPAUTH'] = '1';
-$configValues['CONFIG_MAIL_SMTPtls'] = '1';
 $configValues['CONFIG_DASHBOARD_DALO_SECRETKEY'] = 'sillykey';
 $configValues['CONFIG_DASHBOARD_DALO_DEBUG'] = '1';
 $configValues['CONFIG_DASHBOARD_DALO_DELAYSOFT'] = '5';
 $configValues['CONFIG_DASHBOARD_DALO_DELAYHARD'] = '15';
+
+// invoice templates - optional
 $configValues['CONFIG_INVOICE_TEMPLATE'] = 'invoice_template.html';
 $configValues['CONFIG_INVOICE_ITEM_TEMPLATE'] = 'invoice_item_template.html';
-$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+
+// Hostpinnacle SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'hostpinnacle';
 $configValues['CONFIG_HOSTPINNACLE_USERNAME'] = '';
 $configValues['CONFIG_HOSTPINNACLE_PASSWORD'] = '';
 $configValues['CONFIG_HOSTPINNACLE_SENDER'] = 'SPORTIEZNET';
 $configValues['CONFIG_HOSTPINNACLE_URL'] = 'https://bulksms.hostpinnacle.co.ke/sendmessage.php';
-$configValues['CONFIG_AFRICASTALKING_USERNAME'] = 'sandbox';
-$configValues['CONFIG_AFRICASTALKING_API_KEY'] = '537a7b01a770883b4dd040b3f5fdb6d74acd4cb5282e547bbf49cd33440bd3ce';
-$configValues['PEAR_PATH'] = 'C:\Users\AbrahamKivondo\go\pear';
-$configValues['CONFIG_MPESA_CONSUMER_KEY'] = 'EcRoSKtOdBHfEPzo6gwPLyHhp6etgOjz';
-$configValues['CONFIG_MPESA_CONSUMER_SECRET'] = 'bb4nKUEYIAtxMVeK';
-$configValues['CONFIG_MPESA_SHORTCODE'] = '600995';
-$configValues['CONFIG_MPESA_CONFIRMATION_URL'] = 'http://localhost/network/users/activation/confirmation.php';
-$configValues['CONFIG_MPESA_VALIDATION_URL'] = 'http://localhost/network/users/activation/validation.php';
-$configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
-$configValues['CONFIG_MPESA_LNM_URL'] = '';
-$configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
-$configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
-$configValues['PAYBILL_NUMBER'] = '600995';
+
+// Africas Talking SMS Gateway
+$configValues['CONFIG_SMS_GATEWAY'] = 'africastalking';
+$configValues['CONFIG_AFRICASTALKING_USERNAME'] = getenv('CONFIG_AFRICASTALKING_USERNAME');
+$configValues['CONFIG_AFRICASTALKING_API_KEY'] = getenv('CONFIG_AFRICASTALKING_API_KEY');
 
 
-?>
+
+$configValues['PEAR_PATH'] = getenv('PEAR_PATH');
+
+
+ // Mpesa Gateway
+ $configValues['CONFIG_MPESA_CONSUMER_KEY'] = 'EcRoSKtOdBHfEPzo6gwPLyHhp6etgOjz';
+ $configValues['CONFIG_MPESA_CONSUMER_SECRET'] = 'bb4nKUEYIAtxMVeK';
+ $configValues['CONFIG_MPESA_SHORTCODE'] = '600995';
+ $configValues['CONFIG_MPESA_CONFIRMATION_URL'] = $configValues['APP_URL'] . '/users/activation/confirmation.php';
+ $configValues['CONFIG_MPESA_VALIDATION_URL'] = $configValues['APP_URL'] . '/users/activation/validation.php';
+ $configValues['CONFIG_MPESA_REGISTER_URL'] = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+ $configValues['CONFIG_MPESA_LNM_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_CALLBACK_URL'] = '';
+ $configValues['CONFIG_MPESA_LNM_PASSKEY'] = '';
+$configValues['PAYBILL_NUMBER'] =  $configValues['CONFIG_MPESA_SHORTCODE'] ;
+
+
+
+
+ini_set('error_log', $configValues['CONFIG_LOG_FILE']);
+ini_set('log_errors', '1') ;
+
+//  set timezone
+date_default_timezone_set($configValues['TIMEZONE']);
+
+//  set locale
+setlocale(LC_ALL, $configValues['CONFIG_LANG']);
+
+//  set debug mode
+if ($configValues['CONFIG_DEBUG_SQL'] == 'yes') {
+    $debug = true;
+} else {
+    $debug = false;
+}
