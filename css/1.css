@@ -23,7 +23,7 @@ body {
 
 * html #wrapper
 {
-	w\idth: expression(document.documentElement.clientWidth > 1200 ? "1200px" : "auto");
+	width: expression(document.documentElement.clientWidth > 1200 ? "1200px" : "auto");
 }
 
 #innerwrapper {

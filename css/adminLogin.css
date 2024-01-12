@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f2f2f2;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px; /* Added maximum width for larger screens */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    max-width: 300px;
+}
+
+h2 {
+    text-align: center;
+    color: #333333;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #666666;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+ /* Custom alert styling */
+ .alert {
+    display: block;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #763c3c;
+    background-color: #f0dcd8;
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.alert .message{
+    display: block;
+}
+
+.alert button {
+    display: block;
+    font-weight: bold;
+    color: #fff1f4;
+    text-align: center;
+    font-weight: bold;
+    border: none;
+    background: #8f3142;
+    cursor: pointer;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    /* padding: 20px; */
+    border-radius: 10%;
+    width: 20px;
+    height: 20px;
+}
+
+.alert button:hover{
+    background: red;
+    border: 1px solid black;
+    color: white;
+}
+
+/* Media queries for responsiveness */
+@media screen and (min-width: 600px) {
+    .container {
+        max-width: 600px;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .container {
+        max-width: 800px;
+    }
+}
+
+

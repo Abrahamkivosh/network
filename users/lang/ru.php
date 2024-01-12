@@ -1010,11 +1010,7 @@ $l['messages']['gismain2'] = "error: could not open the file for writing:";
 $l['messages']['gismain3'] = "Check file permissions. The file should be writable by the webserver's user/group";
 $l['messages']['gisviewwelcome'] = "Welcome to Enginx Visual Maps";
 
-$l['messages']['loginerror'] = "<br/><br/>either of the following:<br/>
-1. bad username/password<br/>
-2. an administrator is already logged-in (only one instance is allowed) <br/>
-3. there appears to be more than one 'administrator' user in the database <br/>
-";
+$l['messages']['loginerror'] = "Wrong Username and Password Combination!";
 
 $l['buttons']['savesettings'] = "Save Settings";
 $l['buttons']['apply'] = "Apply";
