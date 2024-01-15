@@ -40,6 +40,7 @@
 				<li><a href="gis-main.php" <?php echo ($m_active == "Gis") ? "class=\"active\"" : ""?>><?php echo t('menu','Gis'); ?></a></li>
 				<li><a href="graph-main.php" <?php echo ($m_active == "Graphs") ? "class=\"active\"" : ""?>><?php echo t('menu','Graphs'); ?></li>
 				<li><a href="config-main.php" <?php echo ($m_active == "Config") ? "class=\"active\"" : ""?>><?php echo t('menu','Config'); ?></li>
+				<li><a href="sms-main.php" <?php echo ($m_active == "SMS") ? "class=\"active\"" : ""?>><?php echo t('menu','Sms'); ?></li>
 
                                 </ul>
 

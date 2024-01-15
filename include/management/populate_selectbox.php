@@ -31,7 +31,8 @@
  * $cssClass      - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_payment_type_id($defaultOption = "Select Payment Type", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_payment_type_id($defaultOption = "Select Payment Type", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
         echo "<select onChange=\"javascript:setStringText(this.id,'populate_payment_type_id')\" id='populate_payment_type_id' $mode
                         name='$elementName' class='$cssClass' />
@@ -40,14 +41,13 @@ function populate_payment_type_id($defaultOption = "Select Payment Type", $eleme
 
         include 'library/opendb.php';
 
-        $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].")";
+        $sql = "(SELECT id, value FROM " . $configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'] . ")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 echo "
-                        <option value='".$row['id']."'>".$row['value']."</option>
+                        <option value='" . $row['id'] . "'>" . $row['value'] . "</option>
                         ";
-
         }
 
         include 'library/closedb.php';
@@ -64,31 +64,30 @@ function populate_payment_type_id($defaultOption = "Select Payment Type", $eleme
  * $cssClass      - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_payment_status_id($defaultOption = "Select Payment Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_payment_status_id($defaultOption = "Select Payment Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-       $paymentStatus = [
+        $paymentStatus = [
                 '0' => 'Pending',
                 '1' => 'Paid',
                 '2' => 'Failed',
                 '3' => 'Cancelled',
                 '4' => 'Refunded',
                 '5' => 'Partially Refunded',
-                ];
-        
-                echo "<select onChange=\"javascript:setStringText(this.id,'populate_payment_status_id')\" id='populate_payment_status_id' $mode
+        ];
+
+        echo "<select onChange=\"javascript:setStringText(this.id,'populate_payment_status_id')\" id='populate_payment_status_id' $mode
                                 name='$elementName' class='$cssClass' />
                                 <option value='$defaultOptionValue'>$defaultOption</option>
                                 <option value=''></option>";
-        
-                foreach ($paymentStatus as $key => $value) {
-                        echo "
-                                <option value='".$key."'>".$value."</option>
+
+        foreach ($paymentStatus as $key => $value) {
+                echo "
+                                <option value='" . $key . "'>" . $value . "</option>
                                 ";
-        
-                }
-        
-                echo "</select>";
-        
+        }
+
+        echo "</select>";
 }
 
 
@@ -103,28 +102,28 @@ function populate_payment_status_id($defaultOption = "Select Payment Status", $e
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_customer_id($defaultOption = "Select Customer", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_customer_id($defaultOption = "Select Customer", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'customer_id')\" id='customer_id' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'customer_id')\" id='customer_id' $mode
 			name='$elementName' class='$cssClass' />
 			<option value='$defaultOptionValue'>$defaultOption</option>
 			<option value=''></option>";
 
         include 'library/opendb.php';
 
-        $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'].")";
+        $sql = "(SELECT id, value FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . ")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 echo "  
-                        <option value='".$row['id']."'>".$row['value']."</option>
+                        <option value='" . $row['id'] . "'>" . $row['value'] . "</option>
                         ";
-
         }
 
         include 'library/closedb.php';
 
-	echo "</select>";
+        echo "</select>";
 }
 
 
@@ -139,28 +138,28 @@ function populate_customer_id($defaultOption = "Select Customer", $elementName =
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_invoice_status_id($defaultOption = "Select Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_invoice_status_id($defaultOption = "Select Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'invoice_status_id')\" id='invoice_status_id' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'invoice_status_id')\" id='invoice_status_id' $mode
 			name='$elementName' class='$cssClass' />
 			<option value='$defaultOptionValue'>$defaultOption</option>
 			<option value=''></option>";
 
         include 'library/opendb.php';
 
-        $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'].")";
+        $sql = "(SELECT id, value FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . ")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 echo "  
-                        <option value='".$row['id']."'>".$row['value']."</option>
+                        <option value='" . $row['id'] . "'>" . $row['value'] . "</option>
                         ";
-
         }
 
         include 'library/closedb.php';
 
-	echo "</select>";
+        echo "</select>";
 }
 
 
@@ -177,28 +176,28 @@ function populate_invoice_status_id($defaultOption = "Select Status", $elementNa
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_invoice_type_id($defaultOption = "Select Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_invoice_type_id($defaultOption = "Select Status", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'populate_invoice_type_id')\" id='populate_invoice_type_id' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'populate_invoice_type_id')\" id='populate_invoice_type_id' $mode
 			name='$elementName' class='$cssClass' />
 			<option value='$defaultOptionValue'>$defaultOption</option>
 			<option value=''></option>";
 
         include 'library/opendb.php';
 
-        $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE'].")";
+        $sql = "(SELECT id, value FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE'] . ")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 echo "  
-                        <option value='".$row['id']."'>".$row['value']."</option>
+                        <option value='" . $row['id'] . "'>" . $row['value'] . "</option>
                         ";
-
         }
 
         include 'library/closedb.php';
 
-	echo "</select>";
+        echo "</select>";
 }
 
 
@@ -214,9 +213,10 @@ function populate_invoice_type_id($defaultOption = "Select Status", $elementName
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_hotspots($defaultOption = "Select Hotspot", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_hotspots($defaultOption = "Select Hotspot", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'hotspot')\" id='hotspot' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'hotspot')\" id='hotspot' $mode
 			name='$elementName' class='$cssClass' />
 			<option value='$defaultOptionValue'>$defaultOption</option>
 			<option value=''></option>";
@@ -225,51 +225,50 @@ function populate_hotspots($defaultOption = "Select Hotspot", $elementName = "",
 
         // Grabing the group lists from usergroup table
 
-        $sql = "(SELECT distinct(id), name FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].")";
+        $sql = "(SELECT distinct(id), name FROM " . $configValues['CONFIG_DB_TBL_DALOHOTSPOTS'] . ")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 echo "  
-                        <option value='".$row['id']."'>".$row['name']."</option>
+                        <option value='" . $row['id'] . "'>" . $row['name'] . "</option>
                         ";
-
         }
 
         include 'library/closedb.php';
 
-	echo "</select>";
+        echo "</select>";
 }
 
 /*
  * populate_plans()
  *
  */
-function populate_plans($defaultOption = "Select Plan", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "", $valueIsId = false) {
+function populate_plans($defaultOption = "Select Plan", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "", $valueIsId = false)
+{
 
-	echo "<select $mode name='$elementName' class='$cssClass' tabindex=105 />".
-			"<option value='$defaultOptionValue'>$defaultOption</option>".
-			"<option value=''></option>";
+        echo "<select $mode name='$elementName' class='$cssClass' tabindex=105 />" .
+                "<option value='$defaultOptionValue'>$defaultOption</option>" .
+                "<option value=''></option>";
 
         include 'library/opendb.php';
 
         // Grabing the group lists from usergroup table
 
-		$sql = "SELECT distinct(planName), id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." WHERE planActive = 'yes' ORDER BY planName ASC;";
+        $sql = "SELECT distinct(planName), id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'] . " WHERE planActive = 'yes' ORDER BY planName ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
-			
+        while ($row = $res->fetchRow()) {
 
-        	if ($valueIsId === true)
-        		$value = $row[1];
-        	else
-        		$value = $row[0];
-        		        	
-            echo "<option value='$value'> $row[0] </option> ";
 
+                if ($valueIsId === true)
+                        $value = $row[1];
+                else
+                        $value = $row[0];
+
+                echo "<option value='$value'> $row[0] </option> ";
         }
 
-		echo "</select>";
+        echo "</select>";
 
         include 'library/closedb.php';
 }
@@ -285,9 +284,10 @@ function populate_plans($defaultOption = "Select Plan", $elementName = "", $cssC
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_groups($defaultOption = "Select Group", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "") {
+function populate_groups($defaultOption = "Select Group", $elementName = "", $cssClass = "form", $mode = "", $defaultOptionValue = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'usergroup')\" id='usergroup' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'usergroup')\" id='usergroup' $mode
 			name='$elementName' class='$cssClass' tabindex=105 />
 			<option value='$defaultOptionValue'>$defaultOption</option>
 			<option value=''></option>";
@@ -296,20 +296,19 @@ function populate_groups($defaultOption = "Select Group", $elementName = "", $cs
 
         // Grabing the group lists from usergroup table
 
-        $sql = "(SELECT distinct(GroupName) FROM ".$configValues['CONFIG_DB_TBL_RADGROUPREPLY'].")".
-			"UNION (SELECT distinct(GroupName) FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].");";
+        $sql = "(SELECT distinct(GroupName) FROM " . $configValues['CONFIG_DB_TBL_RADGROUPREPLY'] . ")" .
+                "UNION (SELECT distinct(GroupName) FROM " . $configValues['CONFIG_DB_TBL_RADGROUPCHECK'] . ");";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while ($row = $res->fetchRow()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
-
         }
 
         include 'library/closedb.php';
 
-	echo "</select>";
+        echo "</select>";
 }
 
 
@@ -322,9 +321,10 @@ function populate_groups($defaultOption = "Select Group", $elementName = "", $cs
  * the populate vendors function returns all the vendors found in the dictionary table in an ascending 
  * alphabetical order
  */
-function populate_vendors($defaultOption = "Select Vendor",$elementName = "", $cssClass = "form", $mode = "") {
+function populate_vendors($defaultOption = "Select Vendor", $elementName = "", $cssClass = "form", $mode = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'group')\" id='usergroup' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'group')\" id='usergroup' $mode
 			name='$elementName' class='$cssClass' tabindex=105 />
 			<option value=''>$defaultOption</option>
 			<option value=''></option>";
@@ -333,17 +333,16 @@ function populate_vendors($defaultOption = "Select Vendor",$elementName = "", $c
 
         // Grabing the group lists from usergroup table
 
-        $sql = "SELECT distinct(Vendor) as Vendor FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." ORDER BY Vendor ASC;";
+        $sql = "SELECT distinct(Vendor) as Vendor FROM " . $configValues['CONFIG_DB_TBL_DALODICTIONARY'] . " ORDER BY Vendor ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while ($row = $res->fetchRow()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
-
         }
 
-	echo "</select>";
+        echo "</select>";
 
         include 'library/closedb.php';
 }
@@ -358,9 +357,10 @@ function populate_vendors($defaultOption = "Select Vendor",$elementName = "", $c
  * the populate realms function returns all the realms found in the realms table in ascending
  * alphabetical order
  */
-function populate_realms($defaultOption = "Select Realm",$elementName = "", $cssClass = "form", $mode = "") {
+function populate_realms($defaultOption = "Select Realm", $elementName = "", $cssClass = "form", $mode = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'realm')\" id='realmlist' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'realm')\" id='realmlist' $mode
 			name='$elementName' class='$cssClass' tabindex=105 />
 			<option value=''>$defaultOption</option>
 			<option value=''></option>";
@@ -369,22 +369,20 @@ function populate_realms($defaultOption = "Select Realm",$elementName = "", $css
 
         // Grabing the group lists from usergroup table
 
-	$configValues['CONFIG_DB_TBL_DALOREALMS'] = "realms";
+        $configValues['CONFIG_DB_TBL_DALOREALMS'] = "realms";
 
-        $sql = "SELECT distinct(RealmName) as Realm FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS']." ORDER BY Realm ASC;";
+        $sql = "SELECT distinct(RealmName) as Realm FROM " . $configValues['CONFIG_DB_TBL_DALOREALMS'] . " ORDER BY Realm ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while ($row = $res->fetchRow()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
-
         }
 
-	echo "</select>";
+        echo "</select>";
 
         include 'library/closedb.php';
-
 }
 
 
@@ -399,9 +397,10 @@ function populate_realms($defaultOption = "Select Realm",$elementName = "", $css
  * the populate realms function returns all the realms found in the realms table in ascending
  * alphabetical order
  */
-function populate_proxys($defaultOption = "Select Proxy",$elementName = "", $cssClass = "form", $mode = "") {
+function populate_proxys($defaultOption = "Select Proxy", $elementName = "", $cssClass = "form", $mode = "")
+{
 
-	echo "<select onChange=\"javascript:setStringText(this.id,'proxy')\" id='proxylist' $mode
+        echo "<select onChange=\"javascript:setStringText(this.id,'proxy')\" id='proxylist' $mode
 			name='$elementName' class='$cssClass' tabindex=105 />
 			<option value=''>$defaultOption</option>
 			<option value=''></option>";
@@ -410,22 +409,20 @@ function populate_proxys($defaultOption = "Select Proxy",$elementName = "", $css
 
         // Grabing the group lists from usergroup table
 
-	$configValues['CONFIG_DB_TBL_DALOPROXYS'] = "proxys";
+        $configValues['CONFIG_DB_TBL_DALOPROXYS'] = "proxys";
 
-        $sql = "SELECT distinct(ProxyName) as Proxy FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS']." ORDER BY Proxy ASC;";
+        $sql = "SELECT distinct(ProxyName) as Proxy FROM " . $configValues['CONFIG_DB_TBL_DALOPROXYS'] . " ORDER BY Proxy ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while ($row = $res->fetchRow()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
-
         }
 
-	echo "</select>";
+        echo "</select>";
 
         include 'library/closedb.php';
-
 }
 
 /*
@@ -436,9 +433,10 @@ function populate_proxys($defaultOption = "Select Proxy",$elementName = "", $css
  * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
  *
  */
-function populate_password_types($elementName = "", $cssClass = "form", $mode = "") {
+function populate_password_types($elementName = "", $cssClass = "form", $mode = "")
+{
 
-	echo "<select $mode
+        echo "<select $mode
 			name='$elementName' class='$cssClass' tabindex=105 />
 			<option value='Cleartext-Password'>Cleartext-Password</option>
 			<option value='User-Password'>User-Password</option>
@@ -459,9 +457,10 @@ function populate_password_types($elementName = "", $cssClass = "form", $mode = 
  *
  * an aid function to return the possible options for tables (check or reply)
  */
-function drawTables() {
+function drawTables()
+{
 
-	echo "
+        echo "
 		<option value='check'>check</option>
 		<option value='reply'>reply</option>
 	";
@@ -478,9 +477,10 @@ function drawTables() {
  * an aid function to return the possible options for op (operator) values
  * for attributes
  */
-function drawOptions() {
+function drawOptions()
+{
 
-	echo "
+        echo "
                 <option value='='>=</option>
                 <option value=':='>:=</option>
                 <option value='=='>==</option>
@@ -508,9 +508,10 @@ function drawOptions() {
  * an aid function to return the possible attribute types for
  * a given attribute
  */
-function drawTypes() {
+function drawTypes()
+{
 
-	echo "
+        echo "
                 <option value='string'>string</option>
                 <option value='integer'>integer</option>
                 <option value='ipaddr'>ipaddr</option>
@@ -529,9 +530,10 @@ function drawTypes() {
  * an aid function to return the possible helper functions for
  * different attributes
  */
-function drawRecommendedHelper() {
+function drawRecommendedHelper()
+{
 
-	echo "
+        echo "
                 <option value='date'>date</option>
                 <option value='datetime'>datetime</option>
                 <option value='authtype'>authtype</option>
@@ -545,7 +547,42 @@ function drawRecommendedHelper() {
 }
 
 
+/*
+ * populate_username_full_names
+ * creates a select box and populates it with full names
+ * 
+ * $defaultOption - title for the first/default option in select box
+ * $elementName   - the string used for the select element's name='' value
+ * $cssClass	  - the css/xhtml class name, default is form for displaying on content divs (not sidebar)
+ *
+ */
+function populate_username_full_names($elementName = "contact", $cssClass = "form")
+{
 
+        echo "<select onChange=\"javascript:setStringText(this.id,'contact')\" id='contact' 
+                style= ' width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                box-sizing: border-box;
+                border: none;
+                border-radius: 10px;'
+			name='$elementName' class='$cssClass' />
+                        <option value='all_users'>All Users</option>
+		        <option value='active_users'>Active Users</option>
+		        <option value='inactive_users'>Inactive Users</option>";
 
+        include 'library/opendb.php';
 
-?>
+        $sql = "(SELECT id,username,firstname, lastname FROM " . $configValues['CONFIG_DB_TBL_DALOUSERINFO'] . ")";
+        $res = $dbSocket->query($sql);
+
+        while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+                echo "  
+                        <option value='" . $row['username'] . "'>" . $row['firstname'] . " " . $row['lastname'] . ' ( ' .  $row['username'] . ' )' . "</option>
+                        ";
+        }
+
+        include 'library/closedb.php';
+
+        echo "</select>";
+}

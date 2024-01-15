@@ -178,7 +178,6 @@ if (isset($_POST["submit"])) {
 
 			// add user to radcheck  and radreply tables via addAttribute function (library/functions.php)
 			addAttribute($dbSocket, $username, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
-			addAttribute($dbSocket, $username, "User-Profile", ":=", $planName, "check"); // add user profile to radcheck table for 
 			// add account expiration date
 			addAttribute($dbSocket, $username, "Expiration", ":=", date("d M Y H:i:s", time()), "check");
 

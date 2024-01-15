@@ -963,7 +963,7 @@ $l['title']['mngGroupCheckNew']  = "New Group Check";
 $l['title']['mngGroupCheckEdit']  = "Edit Group Check";
 $l['title']['mngGroupCheckDel']  = "Delete Group Check";
 
-
+$l['title']['SMS']  = "SMS";
 
 /* ********************************************************************************** */
 
@@ -1951,6 +1951,18 @@ daloRADIUS application on your server. Once you have obtained that code from Goo
 Registration box and click the 'Register code' button to write it.
 Then you may be able to use Google Maps services. <br/><br/>";
 
+
+$l['helpPage']['smsMain'] = "
+<b> Sent SMS To Customer(s) </b>
+<ul>
+<li>All Users --- This will sent Message to all users In the system </li>
+<li>Active Users --- </li>
+<li>Inactive Users ---- </li>
+<li>Select specific User</li>
+</ul>
+
+";
+
 /* ********************************************************************************** */
 
 
@@ -1996,4 +2008,5 @@ $l['menu']['Gis'] = "<em>G</em>IS</a>";
 $l['menu']['Graphs'] = "<em>G</em>raphs</a>";
 $l['menu']['Config'] = "<em>C</em>onfig</a>";
 $l['menu']['Help'] = "<em>H</em>elp</a>";
+$l['menu']['Sms'] = "<em>S</em>ms</a>";
 ?>
