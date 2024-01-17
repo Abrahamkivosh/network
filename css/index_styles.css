@@ -1,61 +1,68 @@
 /* Navigation Bar Styles */
 .navbar {
-    background-color: #007BFF; /* Change the background color of the navbar */
-    padding: 5px 10px; /* Add some padding to the top and bottom of the navbar */
-    border-bottom: 3px solid #0056b3; /* Add a subtle border at the bottom */
+    background-color: #007BFF; 
+    padding: 5px 10px; 
+    border-bottom: 3px solid #0056b3; 
 }
 
 .navbar-brand {
-    color: #fff; /* Set the color of the brand text */
-    font-weight: bold; /* Make the brand text bold */
-    font-size: 2.0rem; /* Increase the font size of the header title */
+    color: #fff; 
+    font-weight: bold; 
+    font-size: 2.0rem; 
+}
+
+.navbar-brand:hover{ 
+    border-radius: 1px solid #0056b3;
+    border-radius: 5px; 
+    color: #fff; 
+    
 
 }
 
 .navbar-toggler-icon {
-    background-color: #fff; /* Set the color of the navbar toggle icon */
+    background-color: #fff; 
 }
 
 .navbar-nav .nav-link {
-    color: #fff; /* Set the color of the navigation links */
-    font-weight: bold; /* Make the navigation links bold */
+    color: #fff; 
+    font-weight: bold; 
 }
 
 .navbar-nav .nav-link:hover {
-    background-color: #0056b3; /* Change the background color of the links on hover */
-    color: #fff; /* Change the color of the links on hover */
-    border: none; /* Remove the border */
-    border-radius: 5px; /* Add a subtle border radius on hover */
+    background-color: #0056b3; 
+    color: #fff;
+    border: none; 
+    border-radius: 5px; 
 }
 .navbar-nav .nav-link:hover a {
-    color: #fff; /* Change the color of the links on hover */
-    font-weight: bold; /* Make the navigation links bold */
+    color: #fff;
+    font-weight: bold; 
 }
 
 /* Header Styles */
 header {
-    text-align: center; /* Center-align the text */
-    padding: 0px; /* Add padding to the top and bottom of the header */
+    text-align: center; 
+    padding: 0px; 
     
 }
 
 header h1 {
-    font-size: 2.5rem; /* Increase the font size of the header title */
-    margin-bottom: 20px; /* Add space below the header title */
+    font-size: 2.5rem; 
+    margin-bottom: 20px; 
     color: green;
     font-weight: bold;
    
 }
 
 header h2 {
-    font-size: 1.5rem; /* Increase the font size of the header description */
+    font-size: 1.5rem; 
     color: black;
 }
 
 /* "Why Choose ChristaNetworks?" Section Styles */
 #why-choose {
-    background-color: #f5f5f5; /* Set the background color of the section */
-    padding:  0; /* Add padding to the top and bottom of the section */
+    background-color: #f5f5f5; 
+    padding:  0; 
 }
 
 #why-choose .container {
@@ -67,6 +74,15 @@ header h2 {
 #why-choose .getConnected{
     padding: 20px 0px;
     background-color: antiquewhite;
+    box-shadow: 0px 2px 10px 2px rgb(0 0 0 / 20%);
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+#why-choose .getConnected button {
+    border-radius: 10px;
+    font-size: large;
 }
 
 #why-choose h2 {
@@ -83,11 +99,11 @@ header h2 {
 }
 
 /* "Our Services" Section Styles */
-#our-services {
+.our_services{
     padding: 50px 0; /* Add padding to the top and bottom of the section */
 }
 
-#our-services h2 {
+.our_services h2 {
     color: #007BFF; /* Set the section title color */
 }
 
@@ -97,39 +113,38 @@ header h2 {
 }
 
 .card-title {
-    font-weight: bold; /* Make card titles bold */
+    font-weight: bold; 
 }
 
-/* "Join the ChristaNetworks Family Today!" Section Styles */
 #cta {
-    background-color: #007BFF; /* Set the background color of the section */
-    color: #fff; /* Set text color to white */
-    padding: 50px 0; /* Add padding to the top and bottom of the section */
-    text-align: center; /* Center-align the text */
+    background-color: #007BFF; 
+    color: #fff; 
+    padding: 50px 0; 
+    text-align: center;
 }
 
 #cta h2 {
-    font-weight: bold; /* Make the section title bold */
+    font-weight: bold; 
 }
 
 #cta p {
-    font-size: 1.2rem; /* Increase the font size of the text */
-    margin-bottom: 20px; /* Add space below the text */
+    font-size: 1.2rem; 
+    margin-bottom: 20px; 
 }
 
-.btn-primary {
-    background-color: #fff; /* Set button background color */
-    color: #007BFF; /* Set button text color */
-    border: none; /* Remove button border */
-    padding: 10px 20px; /* Add padding to the button */
-    font-weight: bold; /* Make the button text bold */
-    text-transform: uppercase; /* Convert button text to uppercase */
-    transition: background-color 0.3s, color 0.3s; /* Add a smooth transition effect */
+button {
+    background-color: #fff; 
+    color: #007BFF;
+    border: none; 
+    padding: 10px 20px;
+    font-weight: bold; 
+    text-transform: uppercase; 
+    transition: background-color 0.3s, color 0.3s; 
 }
 
-.btn-primary:hover {
-    background-color: #0056b3; /* Change button background color on hover */
-    color: #fff; /* Change button text color on hover */
+button:hover {
+    background-color: #0056b3; 
+    color: #fff; 
 }
 
 /* Footer Styles */
@@ -178,3 +193,25 @@ button.close{
     color: white;
     font-weight: bold;
 }
+
+
+.card-img-top{
+    max-height: 200px;
+}
+
+.service-card{
+    box-shadow: 0px 2px 10px 2px rgb(0 0 0 / 20%);
+}
+.phoneNumber{
+    font-weight: 600;
+    font-size: x-large;
+}
+@media screen and (max-width: 700px) {
+    .service-card{
+        margin-top: 20px ;
+        padding: 20px;
+    }
+    
+}
+
+
