@@ -86,13 +86,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-
 // Return the JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
 if ($response['status']) {
-    # code...
-    header('Location: admin.php?message=' . $response['message']);
+    if (array_key_exists('login_error', $_SESSION)) {
+        unset($_SESSION['login_error']);
+    }
+    $_SESSION['logged_in'] = true;
+    $_SESSION['message_danger'] = "";    
+    header('Location: admin.php' );
 } else {
-    header('Location: login.php?message=' . $response['message']);
+    $_SESSION['logged_in'] = false;
+    $_SESSION['login_error'] = true;
+    $_SESSION['message_danger'] = $response['message'];
+    header('Location: login.php');
+    
 }

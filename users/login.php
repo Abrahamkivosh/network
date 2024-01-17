@@ -20,7 +20,7 @@ include("lang/main.php");
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css" />
 
-    <title>Login</title>
+    <title>User Login</title>
     <style>
         /* 
         increase select option size
@@ -47,7 +47,9 @@ include("lang/main.php");
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-body p-5 text-center">
 
-            <h3 class="mb-4">Sign in</h3>
+            <h3 class="mb-4">
+              <a href="../index.php" class="title_login">User Login</a>
+            </h3>
             <form action="dologin.php" method="post">
               <?php
                include_once "includes/messages.php";
@@ -72,11 +74,6 @@ include("lang/main.php");
                 <button class="btn btn-primary btn-lg " type="submit">Login</button>
             </div>
             </form>
-
-              <!-- forgoten password -->
-              <div class="text-center">
-              <p>Forgot <a href="forgot-password.php" class="font-weight-bold">Password?</a></p>
-            </div>
 
           </div>
         </div>
