@@ -1,6 +1,7 @@
 <?php
 
 include_once "./authCheck.php";
+$accNum = $user->getUserAccountNumber() ;
 
 // sql query to fetch all count all invoices and group by status name
 $sql = "SELECT
@@ -10,12 +11,13 @@ FROM
 invoice
 INNER JOIN
 invoice_status ON invoice.status_id = invoice_status.id
+WHERE invoice.user_id =  $accNum
 GROUP BY
 invoice_status.value;";
 $result = $dbSocket->query($sql);
 $invoiceStatus = [];
 if ($result->numRows() > 0) {
-    while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)){
+    while ($row = $result->fetchRow(PDO::FETCH_ASSOC)){
         $invoiceStatus[] = $row;
     }
     // flatten the array
