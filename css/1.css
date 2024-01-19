@@ -567,16 +567,24 @@ input:focus {
 }
 
 input.button {
-	height:19px;
-	width:auto;
 	background-color: #ffffff;
 	border:1px solid #777;
-	padding:0px;
 	font:90% sans-serif;
 	color:#000000;
-	margin-top: 5px;
+	padding: 4px 10px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+input.button:hover{
+	background-color: #8675e897;
+	color: white;
 }
 
+input.button[disabled] {
+	background-color: #ccc;
+	color: #666;
+	cursor: not-allowed;
+  }
 
 input.integer5len {
         width:54px;

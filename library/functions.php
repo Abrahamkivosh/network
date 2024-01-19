@@ -603,3 +603,25 @@ function calculateNextBillingDate($dbSocket, $configValues, $planName)
 
     return $nextBillDate;
 }
+
+function getInvoiceDetails($dbSocket,$configValues,$invoice_id)
+{
+    $sql = "SELECT a.id, a.date, a.status_id, a.type_id, a.user_id, a.notes, b.contactperson, b.username, ".
+				" b.city, b.state, f.value as type, ".
+				" c.value AS status, COALESCE(e2.totalpayed, 0) as totalpayed, COALESCE(d2.totalbilled, 0) as totalbilled ".
+				" FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." AS a".
+				" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." AS b ON (a.user_id = b.id) ".
+				" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS']." AS c ON (a.status_id = c.id) ".
+				" INNER JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE']." AS f ON (a.type_id = f.id) ".
+				" LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) ".
+					" as totalbilled, invoice_id, amount, tax_amount, notes, plan_id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS']." AS d ".
+					" GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) ".
+				" LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." AS bp2 ON (bp2.id = d2.plan_id) ".
+				" LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM ". 
+				$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) ".
+				" WHERE a.id = '".$dbSocket->escapeSimple($invoice_id)."'".
+				" GROUP BY a.id ";
+		$res = $dbSocket->query($sql);
+	
+		return $res->fetchRow(PDO::FETCH_ASSOC) ;
+}
