@@ -124,8 +124,6 @@
 		
 		// get invoice details
 		
-	
-		$edit_invoiceid = $invoice_id;
 		$invoiceDetails = getInvoiceDetails($dbSocket,$configValues,$invoice_id);
 		$balance = floatval($invoiceDetails['totalpayed'] - $invoiceDetails['totalbilled']) ;
 		
@@ -257,7 +255,9 @@ function removeTableRow(rowCounter) {
 		<br/>
 
 					<input class="button" type="button" value="New Payment" 
-					<?php ($balance >=0) ? 'disabled' : ''; ?>
+					<?php if($balance >=0){ ?>
+						 disabled
+						 <?php } ?>
 						onClick="javascript:window.location = 'bill-payments-new.php?payment_invoice_id=<?php echo $invoiceDetails['id'] ?>';" />
 						
 

@@ -8,6 +8,8 @@ include('library/check_operator_perm.php');
 include_once("./include/management/helper.php");
 include_once "./library/functions.php";
 include 'library/opendb.php';
+// include_once('library/config_read.php');
+
 
 isset($_GET['payment_invoice_id']) ? $invoice_id = $_GET['payment_invoice_id'] : $invoice_id = "";
 
@@ -24,19 +26,46 @@ $logDebugSQL = "";
 $creationdate = date('Y-m-d H:i:s');
 $creationby = $updateby = $_SESSION['operator_user'] ;
 
-$edit_invoiceid = $invoice_id;
+function validatePaymentData($data) {
+	$requiredFields = array(
+		'payment_invoice_id',
+		'payment_amount',
+		'payment_date',
+		'payment_type_id',
+		'payment_notes',
+		'payment_status_id'
+	);
 
+	foreach ($requiredFields as $field) {
+		if (!isset($data[$field]) || empty($data[$field])) {
+			return false; // One of the required fields is missing or empty
+		}
+	}
 
-
+	return true; // All required fields are set and not empty
+}
 
 if (isset($_POST["submit"])) {
 
-	$payment_invoice_id = $invoice_id = $_POST['payment_invoice_id'];
-	$payment_amount = $_POST['payment_amount'];
-	$payment_date = $_POST['payment_date'];
-	$payment_type_id = $_POST['payment_type_id'];
-	$payment_notes = $_POST['payment_notes'];
-	$payment_status_id = $_POST['payment_status_id'];
+	// Example usage:
+	if (validatePaymentData($_POST)) {
+		// Proceed with processing the payment data
+		$payment_invoice_id = $_POST['payment_invoice_id'];
+		$payment_amount = $_POST['payment_amount'];
+		$payment_date = $_POST['payment_date'];
+		$payment_type_id = $_POST['payment_type_id'];
+		$payment_notes = $_POST['payment_notes'];
+		$payment_status_id = $_POST['payment_status_id'];
+	
+		// Additional processing...
+	} else {
+		// Handle the case where not all required fields are provided
+		$failureMsg = "Error: All payment data fields are required.";
+		print_r($failureMsg ) ;
+		header("Location:  bill-invoice-edit.php?invoice_id=$invoice_id&&failureMsg=$failureMsg");
+		exit;
+	}
+	
 
 	
 
@@ -80,15 +109,23 @@ if (isset($_POST["submit"])) {
 		$logAction .= "Failed adding new payment already in database for invoice [$payment_invoice_id] on page: ";
 	}
 
-	include 'library/closedb.php';
+	$invoice_id = $payment_invoice_id ;
+
 }
 
+$invoiceDetails = getInvoiceDetails($dbSocket,$configValues,$invoice_id);
 
-$invoiceDetails = getInvoiceDetails($dbSocket,$configValues,$edit_invoiceid);
+
 
 $balance = floatval($invoiceDetails['totalpayed'] - $invoiceDetails['totalbilled']) ;
 if ($balance >=0) {
 	$failureMsg = "The Invoice is fully paid";
+	// update invoice status to paid
+	$invoice_status_id = 5 ; // paid
+	$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." SET ".
+	" status_id='".$dbSocket->escapeSimple($invoice_status_id)."', ".
+	" WHERE id='".$invoice_id."'";
+	$res = $dbSocket->query($sql);
 	header("Location:  bill-invoice-edit.php?invoice_id=$invoice_id&&failureMsg=$failureMsg");
 	exit;
 }
@@ -102,8 +139,7 @@ if ($invoice_id == "") {
 }
 
 
-
-include_once('library/config_read.php');
+include 'library/closedb.php';
 $log = "visited page: ";
 
 ?>

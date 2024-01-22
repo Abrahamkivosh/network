@@ -8,6 +8,15 @@
 * removing data and such.
 *
 *********************************************************************/
+if (isset($_GET['failureMsg'])) {
+	# code...
+	$failureMsg = $_GET['failureMsg'] ;
+}
+
+if ( isset($_GET['successMsg'])) {
+	# code...
+	$successMsg = $_GET['successMsg'] ;
+}
 
 
 if ((isset($failureMsg)) && ($failureMsg != "")) {

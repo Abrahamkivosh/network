@@ -86,6 +86,8 @@ if ( ! empty($configValues['PEAR_PATH'])  ) {
 }
 	
 	include_once ('DB.php');
+	require_once "Mail.php";
+	require_once "Mail/mime.php";
 
 	$dbSocket = DB::connect($dbConnectString);
 
