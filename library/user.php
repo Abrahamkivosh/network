@@ -612,41 +612,7 @@ class User
     }
 
 
-    /**
-     * Get user balance from invoices payments
-     * Deduct invoice items amount to get balance
-     */
-    public function getUserBalance()
-    {
-        $configValues = $this->configValues;
-        $user_id = $this->getUserBillInfo()['id'];
-
-       $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
-            " c.value AS status, COALESCE(SUM(e2.total_paid), 0) as total_paid, COALESCE(SUM(d2.total_billed), 0) as total_billed, " .
-            " SUM(a.status_id = 1) as openInvoices " .
-            " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
-            " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " AS b ON (a.user_id = b.id) " .
-            " INNER JOIN " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'] . " AS c ON (a.status_id = c.id) " .
-            " LEFT JOIN (SELECT SUM(d.amount + d.tax_amount) " .
-            " as total_billed, invoice_id FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'] . " AS d " .
-            " GROUP BY d.invoice_id) AS d2 ON (d2.invoice_id = a.id) " .
-            " LEFT JOIN (SELECT SUM(e.amount) as total_paid, invoice_id FROM " .
-            $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
-            " WHERE (a.user_id = $user_id)" .
-            " GROUP BY b.id ";
-
-        $result = $this->dbSocket->query($sql);
-
-        if ($result->numRows() > 0) {
-            $row = $result->fetchRow(PDO::FETCH_ASSOC);
-            
-            $balance = $row['total_paid'] - $row['total_billed'];
-
-            return $balance;
-        } else {
-            return 0;
-        }
-    }
+   
 
     /**
      * Create user invoice if no invoice  with status  open exists
@@ -762,9 +728,9 @@ class User
 // $user = new User($dbSocket, $configValues);
 // $user->setConfigValues($configValues);
 // $user->setUserName('ian');
-// $balance = $user->getUserBalance();
+// $getUserBillInfo = $user->getUserBillInfo();
 // echo '<pre>';
-// print_r($balance);
+// print_r($getUserBillInfo);
 // echo '</pre>';
 
 

@@ -149,13 +149,7 @@ if (isset($_POST["submit"])) {
 			addUserInfo($dbSocket, $username);
 			addUserBillInfo($dbSocket, $username);
 
-			// create any invoices if required (meaning, if a plan was chosen)
-			if ($planName) {
-				# code...
-				createUserInvoicePlan($planName, $username);
-			}
-
-
+		
 			// add user to radcheck  and radreply tables via addAttribute function (library/functions.php)
 			addAttribute($dbSocket, $username, "Simultaneous-Use", ":=", '1', "check"); // allow only one user to login at a time
 			addAttribute($dbSocket, $username, "User-Profile", ":=", $planName, "check"); // add user profile to radcheck table for 

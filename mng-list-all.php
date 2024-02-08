@@ -1,87 +1,89 @@
 <?php
 
-    include ("library/checklogin.php");
-    $operator = $_SESSION['operator_user'];
+include("library/checklogin.php");
+$operator = $_SESSION['operator_user'];
 
-	include('library/check_operator_perm.php');
-	include_once('lang/main.php');
+include('library/check_operator_perm.php');
+include_once('lang/main.php');
 
-	// set session's page variable
-	$_SESSION['PREV_LIST_PAGE'] = $_SERVER['REQUEST_URI'];
-	
+// set session's page variable
+$_SESSION['PREV_LIST_PAGE'] = $_SERVER['REQUEST_URI'];
 
-	//setting values for the order by and order type variables
-	isset($_REQUEST['orderBy']) ? $orderBy = $_REQUEST['orderBy'] : $orderBy = "id";
-	isset($_REQUEST['orderType']) ? $orderType = $_REQUEST['orderType'] : $orderType = "asc";
-	
-	include_once('library/config_read.php');
-    $log = "visited page: ";
-    $logQuery = "performed query for listing of records on page: ";
+
+//setting values for the order by and order type variables
+isset($_REQUEST['orderBy']) ? $orderBy = $_REQUEST['orderBy'] : $orderBy = "id";
+isset($_REQUEST['orderType']) ? $orderType = $_REQUEST['orderType'] : $orderType = "asc";
+
+include_once('library/config_read.php');
+$log = "visited page: ";
+$logQuery = "performed query for listing of records on page: ";
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
 <head>
-<script src="library/javascript/pages_common.js" type="text/javascript"></script>
-<script src="library/javascript/rounded-corners.js" type="text/javascript"></script>
-<script src="library/javascript/form-field-tooltip.js" type="text/javascript"></script>
+	<script src="library/javascript/pages_common.js" type="text/javascript"></script>
+	<script src="library/javascript/rounded-corners.js" type="text/javascript"></script>
+	<script src="library/javascript/form-field-tooltip.js" type="text/javascript"></script>
 
-<script type="text/javascript" src="library/javascript/ajax.js"></script>
-<script type="text/javascript" src="library/javascript/ajaxGeneric.js"></script>
+	<script type="text/javascript" src="library/javascript/ajax.js"></script>
+	<script type="text/javascript" src="library/javascript/ajaxGeneric.js"></script>
 
-<title>
-<?php
-		echo t('title','Management');
+	<title>
+		<?php
+		echo t('title', 'Management');
 		?>
-</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="css/form-field-tooltip.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" type="text/css" href="library/js_date/datechooser.css">
-<!--[if lte IE 6.5]>
+	</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
+	<link rel="stylesheet" href="css/form-field-tooltip.css" type="text/css" media="screen,projection" />
+	<link rel="stylesheet" type="text/css" href="library/js_date/datechooser.css">
+	<!--[if lte IE 6.5]>
 <link rel="stylesheet" type="text/css" href="library/js_date/select-free.css"/>
 <![endif]-->
 </head>
 
 <?php
 
-    include ("menu-mng-users.php");
+include("menu-mng-users.php");
 
 ?>
 
-		<div id="contentnorightbar">
-		
-				<h2 id="Intro"><a href="#" onclick="javascript:toggleShowDiv('helpPage')"><?php echo t('Intro','mnglistall.php') ?>
-				<h144>&#x2754;</h144></a></h2>
-				
-                <div id="helpPage" style="display:none;visibility:visible" >
-					<?php echo t('helpPage','mnglistall') ?>
-					<br/>
-				</div>
-					<div id="returnMessages">
-					</div>
-				<br/>
+<div id="contentnorightbar">
 
-<?php
+	<h2 id="Intro"><a href="#" onclick="javascript:toggleShowDiv('helpPage')"><?php echo t('Intro', 'mnglistall.php') ?>
+			<h144>&#x2754;</h144>
+		</a></h2>
+
+	<div id="helpPage" style="display:none;visibility:visible">
+		<?php echo t('helpPage', 'mnglistall') ?>
+		<br />
+	</div>
+	<div id="returnMessages">
+	</div>
+	<br />
+
+	<?php
 
 	include 'include/management/pages_common.php';
 	include 'library/opendb.php';
 	include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 
 
-        // setup php session variables for exporting
-        $_SESSION['reportTable'] = $configValues['CONFIG_DB_TBL_RADCHECK'];
-        $_SESSION['reportQuery'] = " WHERE UserName LIKE '%'";
-        $_SESSION['reportType'] = "usernameListGeneric";
+	// setup php session variables for exporting
+	$_SESSION['reportTable'] = $configValues['CONFIG_DB_TBL_RADCHECK'];
+	$_SESSION['reportQuery'] = " WHERE UserName LIKE '%'";
+	$_SESSION['reportType'] = "usernameListGeneric";
 
 	$orderBy = $dbSocket->escapeSimple($orderBy);
 	$orderType = $dbSocket->escapeSimple($orderType);
-        
+
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
-	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADCHECK'].".username),".$configValues['CONFIG_DB_TBL_RADCHECK'].".value,
-		".$configValues['CONFIG_DB_TBL_RADCHECK'].".id,".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".groupname as groupname, attribute FROM 
-		".$configValues['CONFIG_DB_TBL_RADCHECK']." LEFT JOIN ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." ON 
-		".$configValues['CONFIG_DB_TBL_RADCHECK'].".username=".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".username 
+	$sql = "SELECT distinct(" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username)," . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".value,
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".id," . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . ".groupname as groupname, attribute FROM 
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . " LEFT JOIN " . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . " ON 
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username=" . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . ".username 
 		WHERE (Attribute='Auth-Type') or (Attribute LIKE '%-Password') GROUP BY UserName";
 	$res = $dbSocket->query($sql);
 	$numrows = $res->numRows();
@@ -91,26 +93,26 @@
 	   common one and the other which is Password, this is also done for considerations of backwards
 	   compatibility with version 0.7        */
 
-	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADCHECK'].".username),".$configValues['CONFIG_DB_TBL_RADCHECK'].".value,
-		".$configValues['CONFIG_DB_TBL_RADCHECK'].".id,".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".groupname as groupname, attribute, ".
-		$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".firstname, ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".lastname
+	$sql = "SELECT distinct(" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username)," . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".value,
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".id," . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . ".groupname as groupname, attribute, " .
+		$configValues['CONFIG_DB_TBL_DALOUSERINFO'] . ".firstname, " . $configValues['CONFIG_DB_TBL_DALOUSERINFO'] . ".lastname
 		, IFNULL(disabled.username,0) as disabled
 		 FROM  
-		".$configValues['CONFIG_DB_TBL_RADCHECK']." LEFT JOIN ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." ON 
-		".$configValues['CONFIG_DB_TBL_RADCHECK'].".username=".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".username
- 		LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']."
-		 ON ".$configValues['CONFIG_DB_TBL_RADCHECK'].".username=".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username
-		LEFT JOIN ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." disabled
-		 ON disabled.username=".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username AND disabled.groupname = 'daloRADIUS-Disabled-Users' 
- 		WHERE (".$configValues['CONFIG_DB_TBL_RADCHECK'].".username=userinfo.username) AND Attribute IN ('Cleartext-Password', 'Auth-Type','User-Password', 
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . " LEFT JOIN " . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . " ON 
+		" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username=" . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . ".username
+ 		LEFT JOIN " . $configValues['CONFIG_DB_TBL_DALOUSERINFO'] . "
+		 ON " . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username=" . $configValues['CONFIG_DB_TBL_DALOUSERINFO'] . ".username
+		LEFT JOIN " . $configValues['CONFIG_DB_TBL_RADUSERGROUP'] . " disabled
+		 ON disabled.username=" . $configValues['CONFIG_DB_TBL_DALOUSERINFO'] . ".username AND disabled.groupname = 'daloRADIUS-Disabled-Users' 
+ 		WHERE (" . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".username=userinfo.username) AND Attribute IN ('Cleartext-Password', 'Auth-Type','User-Password', 
  			'Crypt-Password', 'MD5-Password', 'SMD5-Password', 'SHA-Password', 'SSHA-Password', 'NT-Password', 'LM-Password', 'SHA1-Password', 'CHAP-Password', 
- 			'NS-MTA-MD5-Password') GROUP by ".$configValues['CONFIG_DB_TBL_RADCHECK'].".Username ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage";
+ 			'NS-MTA-MD5-Password') GROUP by " . $configValues['CONFIG_DB_TBL_RADCHECK'] . ".Username ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
 	/* START - Related to pages_numbering.php */
-	$maxPage = ceil($numrows/$rowsPerPage);
+	$maxPage = ceil($numrows / $rowsPerPage);
 	/* END */
 
 	echo "<form name='listallusers' method='get' action='mng-del.php' >";
@@ -142,51 +144,55 @@
 			</tr>
 			</thead>
 			";
-	  $curOrderType = $orderType;
-        if ($orderType == "asc") {
-                $orderType = "desc";
-        } else  if ($orderType == "desc") {
-                $orderType = "asc";
-        }
-	
-	echo "<thread> <tr>
+	$curOrderType = $orderType;
+	if ($orderType == "asc") {
+		$orderType = "desc";
+	} else  if ($orderType == "desc") {
+		$orderType = "asc";
+	}
+
+	echo "<thread>
+	<tr>
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=id&orderType=$orderType\">
-		".t('title','accountNumber')."</a>
+		" . t('title', 'accountNumber') . "</a>
 		</th>
 
 		<th scope='col'> 
-		".t('all','Name')."</a>
+		" . t('all', 'Name') . "</a>
 		</th>
 		
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Username&orderType=$orderType\">
-		".t('all','Username')."</a>
+		" . t('all', 'Username') . "</a>
 		</th>
 
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Value&orderType=$orderType\">
-		".t('all','Password')."</a>
+		" . t('all', 'Password') . "</a>
 		</th>
 
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Groupname&orderType=$orderType\">
-		".t('title','Groups')."</a>
+		" . t('title', 'Groups') . "</a>
 		</th>
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=Groupname&orderType=$orderType\">
-		".t('title','Expire')."</a>
+		" . t('title', 'Expire') . "</a>
 		</th>
 		<th scope='col'>
 		Days Left
 		</th>
+		<th scope='col'>
+		 Balance(KSH)
+		</th>
+		</tr> 
+		</thread>";
 
-		</tr> </thread>";
-
-	while($row = $res->fetchRow()) {
+	while ($row = $res->fetchRow()) {
 		$userName = $row[0];
 		// SQL query to get the  Expiration date of the user from the radcheck table 
-		$sql = "SELECT value FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE username='$userName' AND attribute='Expiration'";
+		$sql = "SELECT value FROM " . $configValues['CONFIG_DB_TBL_RADCHECK'] . " WHERE username='$userName' AND attribute='Expiration'";
 		$res1 = $dbSocket->query($sql);
 		$row1 = $res1->fetchRow();
 		$expireDate = $row1[0];
@@ -206,10 +212,12 @@
 		$dayLeft = number_format($dayLeft, 0, '.', ',');
 
 
-		$sql3 =  "SELECT id as account_number FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE username='$userName'";
+		$sql3 =  "SELECT id as account_number, balance FROM " . $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] . " WHERE username='$userName'";
 		$res3 = $dbSocket->query($sql3);
-		$row3 = $res3->fetchRow();
-		$accNo = $row3[0];
+		$row3 = $res3->fetchRow(PDO::FETCH_ASSOC);
+	
+		$accNo = $row3['account_number'] ;
+		$acc_balance = number_format($row3['balance']) ;
 
 
 
@@ -226,18 +234,18 @@
 			echo "<img title='user is enabled' src='images/icons/userStatusActive.gif' alt='[enabled]'>";
 
 
-		$js = "javascript:ajaxGeneric('include/management/retUserInfo.php','retBandwidthInfo','divContainerUserInfo','username=".urlencode($row[0])."');";
-		$content =  '<a class="toolTip" href="mng-edit.php?username='.urlencode($row[0]).'">'.t('Tooltip','UserEdit').'</a>';
+		$js = "javascript:ajaxGeneric('include/management/retUserInfo.php','retBandwidthInfo','divContainerUserInfo','username=" . urlencode($row[0]) . "');";
+		$content =  '<a class="toolTip" href="mng-edit.php?username=' . urlencode($row[0]) . '">' . t('Tooltip', 'UserEdit') . '</a>';
 		$str = addToolTipBalloon(array(
-									'content' => $content,
-									'onClick' => $js,
-									'value' => $row[0],
-									'divId' => 'divContainerUserInfo',
-		
-							));
-							
+			'content' => $content,
+			'onClick' => $js,
+			'value' => $row[0],
+			'divId' => 'divContainerUserInfo',
+
+		));
+
 		echo "$str </td>";
-		
+
 		if ($configValues['CONFIG_IFACE_PASSWORD_HIDDEN'] == "yes") {
 			echo "<td>[Password is hidden]</td>";
 		} else {
@@ -247,9 +255,10 @@
 			<td>$row[3]</td>
 			<td>$expireDate</td>
 			<td>$dayLeft</td>
+			<td>$acc_balance</td>
 		</tr>";
 	}
-	
+
 	echo "
 					<tfoot>
 							<tr>
@@ -265,26 +274,26 @@
 	echo "</form>";
 
 	include 'library/closedb.php';
-	
-?>
+
+	?>
 
 
 
-<?php
+	<?php
 	include('include/config/logging.php');
-?>
-				
-		</div>
-		
-		<div id="footer">
-		
-<?php
-        include 'page-footer.php';
-?>
+	?>
 
-		
-		</div>
-		
+</div>
+
+<div id="footer">
+
+	<?php
+	include 'page-footer.php';
+	?>
+
+
+</div>
+
 </div>
 </div>
 
@@ -298,5 +307,5 @@
 </script>
 
 </body>
+
 </html>
- 

@@ -46,7 +46,6 @@ if (!function_exists('getNewDate')) {
 if (!class_exists('SMSTemplates')) {
     include_once "../../library/templates/SMSTemplates.php";
     define('SMSTEMPLATES_INCLUDED', true);
-
 }
 
 // create an instance of the MpesaService class
@@ -110,28 +109,18 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
     $userBalance = isset($userBillInfo['balance']) ? $userBillInfo['balance'] : 0;
 
     // Get user planCost from userBillingPlan array
-    $userPlanCost = isset($userBillingPlan['planCost']) ? $userBillingPlan['planCost'] : 0;
+    $userPlanCost = isset($userBillingPlan['planCost']) ? intval($userBillingPlan['planCost']) : 0;
 
     // Get user plan planTimeBank from userBillingPlan array this is in seconds
     $userPlanTimeBank = isset($userBillingPlan['planTimeBank']) ? $userBillingPlan['planTimeBank'] : 0;
-
-    //Get new date after adding planTimeBank to userAccountExpirationDate
-    $newDate = getNewDate($userAccountExpirationDate['timestamp'], $userPlanTimeBank);
-
 
     $current_time = time();
 
     $smsTemplates->setPhone($userPhoneNumber);
 
     // Get user balance before adding transacted amount
-    $current_balance = $user->getUserBalance();
-    
+    $current_balance = $userBillInfo['balance'] ;
 
-    // check if invoice not paid
-    $open_invoice = $user->getUserLatestInvoiceByStatus(['paid'], false);
-    $invoice_exists = $open_invoice ? true : false;
-
-    
     $payment_payload = [
         'amount' => $transactedAmount,
         'notes' => 'Payment for invoice',
@@ -144,14 +133,19 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
         'status_message' => 'Paid Via Mpesa',
         'sender_number' => $callbackData['MSISDN'],
     ];
-    $newBalance = null ;
+
+    // update  balance 
+    $newBalance = intval($current_balance + $transactedAmount) ;
+    
+    // check if invoice not paid
+    $open_invoice = $user->getUserLatestInvoiceByStatus(['paid'], false);
+    $invoice_exists = $open_invoice ? true : false;
 
     if ($invoice_exists) {
         // create new payment for invoice
-      
+
         $user->createUserInvoicePayments($open_invoice['id'], $payment_payload);
 
-        $newBalance = $current_balance + $transactedAmount;
         // check if invoice balance is not negative
         if ($newBalance >= 0) {
             $invoice_status = 'paid';
@@ -160,7 +154,6 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
         }
 
         $user->updateUserInvoiceStatus($open_invoice['id'], $invoice_status);
-
     } else {
         // create invoice
         $invoice_payload = [
@@ -175,39 +168,34 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
         $invoice_id = $user->createUserInvoice($invoice_payload);
         // create new payment for invoice
 
-    
+
         $user->createUserInvoicePayments($invoice_id, $payment_payload);
 
-        $newBalance = $current_balance + $transactedAmount;
-        // check if invoice balance is not negative
-        $invoice_status = $newBalance >= 0 ? 'paid' : 'partial';
-
-        $user->updateUserInvoiceStatus($invoice_id, $invoice_status);
+        $user->updateUserInvoiceStatus($invoice_id, 'paid');
     }
-    // get
 
-    // Update user balance getUserBalance()
-    
-    $user->updateUserBalance($newBalance);
+ 
 
-    $smsTemplates->setUserInfo([
-        'username' => $userInfo['username'],
-        'accountExpirationDate' => $newDate,
-        'balance' => $newBalance,
-    ]);
+    if ($newBalance >= $userPlanCost) {
+        // check how many time the new balance can renew the plan
+        $times = intval($newBalance / $userPlanCost);
 
-    // if balance is positive, update user expiry date
-    if ($newBalance >= 0) {
-        if ( $userAccountExpirationDate['timestamp'] < $current_time ) {
-            $user->updateUserAccountExpirationDate($newDate);
-            // Send SMS to user
-            $smsTemplates->sendAccountPlanRenewalSMS();
-        }else {
-            // check id
-        }
-        
+        $newBalance = $newBalance % $userPlanCost; //amount that will be aded as remaining balance
+
+        $userPlanTimeBank *= $times;
+
+        $smsTemplates->setUserInfo([
+            'username' => $userInfo['username'],
+            'plan' => $userBillingPlan['planName'],
+            'planCost' => $userBillingPlan['planCost'],
+        ]);
+
+        //Get new date after adding planTimeBank to userAccountExpirationDate
+        $newDate = getNewDate($userAccountExpirationDate['timestamp'], $userPlanTimeBank);
+        $user->updateUserAccountExpirationDate($newDate);
+        $smsTemplates->sendAccountPlanRenewalSMS();
     } else {
-        // Check if account is expired
+        // Check if account has expired
         $currentTimestamp = time();
         $accountExpirationTimestamp = $userAccountExpirationDate['timestamp'];
         if ($currentTimestamp > $accountExpirationTimestamp) { // Account is expired and payment is not enough to renew
@@ -215,41 +203,27 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
             $remainingAmount = $userPlanCost - $newBalance;
             $smsTemplates->setUserInfo([
                 'username' => $userInfo['username'], 'plan' => $userBillingPlan['planName'],
-                'planCost' => $userBillingPlan['planCost'],'remainingAmount' => $remainingAmount,
+                'planCost' => $userBillingPlan['planCost'], 'remainingAmount' => $remainingAmount,
             ]);
             // Send SMS to user
             $smsTemplates->sendAccountSuspensionSMS($remainingAmount);
-            echo json_encode(['error' => 'Account is expired and payment is not enough to renew. ']);
-
         } else { // Account is not expired and payment is not enough to renew
             // Send SMS to user
-
             $remainingAmount = $userPlanCost - $newBalance;
             $smsTemplates->setUserInfo([
                 'username' => $userInfo['username'],
                 'plan' => $userBillingPlan['planName'],
                 'planCost' => $userBillingPlan['planCost'],
                 'remainingAmount' => $remainingAmount,
-            
             ]);
             $smsTemplates->sendAccountPlanRenewalAmountNotEnoughToExtendExpiryDateSMS();
-
         }
     }
 
-    // userinfo
-    $userInfo = [
-        'username' => $userInfo['username'],
-        'phone' => $userBillInfo['phone'],
-        'accountExpirationDate' => $newDate,
-        'balance' => $newBalance,
-        'planCost' => $userPlanCost
-    ];
-
+    $user->updateUserBalance($newBalance);
 
     // echo json_encode($userInfo);
     $mpesaService->validateTransaction(true);
-
 } else {
     // Reject the transaction
     $mpesaService->validateTransaction(false);

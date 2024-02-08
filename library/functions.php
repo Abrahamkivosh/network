@@ -243,7 +243,7 @@ function createUserInvoicePlan($planName, $userName = null)
     $sql = "SELECT id, planCost, planSetupCost, planTax FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'] .
         " WHERE planName='" . $dbSocket->escapeSimple($planName) . "' LIMIT 1";
     $res = $dbSocket->query($sql);
-    $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+    $row = $res->fetchRow(PDO::FETCH_ASSOC);
 
     // calculate tax (planTax is the numerical percentage amount) 
     if (isset($row['planTax']) && ($row['planTax'] != '')) {
@@ -268,7 +268,7 @@ function createUserInvoicePlan($planName, $userName = null)
     $table_userBillingInfo = $configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'] ;
     $query = "SELECT id FROM $table_userBillingInfo WHERE username = '$userName'";
     $res = $dbSocket->query($query);
-    $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+    $row = $res->fetchRow(PDO::FETCH_ASSOC);
     userInvoiceAdd($row['id'], array(), $invoiceItems);
 }
 
@@ -585,7 +585,7 @@ function calculateNextBillingDate($dbSocket, $configValues, $planName)
     $sql = "SELECT * FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'] .
         " WHERE planName='" . $dbSocket->escapeSimple($planName) . "' LIMIT 1";
     $res = $dbSocket->query($sql);
-    $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+    $row = $res->fetchRow(PDO::FETCH_ASSOC);
 
     $planRecurring = $row['planRecurring'];
     $planRecurringPeriod = $row['planRecurringPeriod'];
