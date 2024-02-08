@@ -229,7 +229,7 @@ class User
         $result = $this->dbSocket->query($query);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -253,7 +253,7 @@ class User
         if ($result->numRows() > 0) {
             // get all rows
             $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
             return $rows;
@@ -277,7 +277,7 @@ class User
         $result = $this->dbSocket->query($query);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             $expire_date = $row['value'];
 
             // Convert to DateTime
@@ -317,7 +317,7 @@ class User
         $result = $this->dbSocket->query($sql);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -400,7 +400,7 @@ class User
             " ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
         $result = $this->dbSocket->query($query);
         $rows = [];
-        while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
             $rows[] = $row;
         }
         return $rows;
@@ -442,7 +442,7 @@ class User
         if ($result->numRows() > 0) {
             // get all rows
             $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
             // get first row
@@ -495,7 +495,7 @@ class User
 
         if ($result->numRows() > 0) {
             // get first row
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -531,7 +531,7 @@ class User
         if ($result->numRows() > 0) {
             // get all rows
             $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
             return $rows;
@@ -618,13 +618,10 @@ class User
      */
     public function getUserBalance()
     {
-        $userName = $this->userName;
         $configValues = $this->configValues;
         $user_id = $this->getUserBillInfo()['id'];
 
-        $sql_WHERE = " WHERE b.username = '$userName' ";
-
-        $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
+       $sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, " .
             " c.value AS status, COALESCE(SUM(e2.total_paid), 0) as total_paid, COALESCE(SUM(d2.total_billed), 0) as total_billed, " .
             " SUM(a.status_id = 1) as openInvoices " .
             " FROM " . $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'] . " AS a" .
@@ -637,16 +634,17 @@ class User
             $configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) " .
             " WHERE (a.user_id = $user_id)" .
             " GROUP BY b.id ";
+
         $result = $this->dbSocket->query($sql);
 
         if ($result->numRows() > 0) {
-            // get all rows
-            $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
+            
             $balance = $row['total_paid'] - $row['total_billed'];
 
             return $balance;
         } else {
-            return false;
+            return 0;
         }
     }
 
@@ -672,19 +670,13 @@ class User
         $sql = "INSERT INTO $table_invoice (user_id, date, status_id, type_id, notes, creationby ) VALUES " .
             "('$userId', '$invoice_date', '$invoice_status', '$invoice_type', '$invoice_notes', '$creationby')";
         $result = $this->dbSocket->query($sql);
-        if ($result) {
             //    Get last inserted id where user_id = $userId
             $query = "SELECT id FROM $table_invoice WHERE user_id = '$userId' ORDER BY id DESC LIMIT 1";
             $result = $this->dbSocket->query($query);
             if ($result->numRows() > 0) {
-                $row = $result->fetchRow(DB_FETCHMODE_ASSOC);
+                $row = $result->fetchRow(PDO::FETCH_ASSOC);
                 return $row['id'];
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+            } 
     }
 
     /**
@@ -770,9 +762,9 @@ class User
 // $user = new User($dbSocket, $configValues);
 // $user->setConfigValues($configValues);
 // $user->setUserName('ian');
-// $payments = $user->getUserPayments();
+// $balance = $user->getUserBalance();
 // echo '<pre>';
-// print_r($payments);
+// print_r($balance);
 // echo '</pre>';
 
 

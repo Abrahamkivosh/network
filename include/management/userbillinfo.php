@@ -25,7 +25,7 @@ echo "
         <input value='"; if (isset($bi_contactperson)) echo $bi_contactperson; echo "' name='bi_contactperson' id='bi_contactperson' tabindex=400 />
 	<br/>
 
-	<label for='company' class='form'>".t('ContactInfo','Company')."</label>
+	<label for='company' class='form'>".t('ContactInfo','Apartment')."</label>
 	<input value='"; if (isset($bi_company)) echo $bi_company; echo "' name='bi_company' id='bi_company' tabindex=401 />
         <br/>
 	

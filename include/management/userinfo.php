@@ -42,11 +42,11 @@ echo "
 	<h301> Business </h301>
 	<br/>
 
-	<label for='department' class='form'>".t('ContactInfo','Department')."</label>
+	<label for='department' class='form'>".t('ContactInfo','House')."</label>
         <input value='"; if (isset($ui_department)) echo $ui_department; echo "' name='department' tabindex=303 />
         <br/>
 
-	<label for='company' class='form'>".t('ContactInfo','Company')."</label>
+	<label for='company' class='form'>".t('ContactInfo','Apartment')."</label>
 	<input value='"; if (isset($ui_company)) echo $ui_company; echo "' name='company' id='company' tabindex=304 />
         <br/>
 

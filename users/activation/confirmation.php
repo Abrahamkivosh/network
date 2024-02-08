@@ -202,6 +202,8 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
             $user->updateUserAccountExpirationDate($newDate);
             // Send SMS to user
             $smsTemplates->sendAccountPlanRenewalSMS();
+        }else {
+            // check id
         }
         
     } else {
