@@ -116,6 +116,7 @@
 	
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADCHECK'].".username), ".$configValues['CONFIG_DB_TBL_RADCHECK'].".id, ".
 		$configValues['CONFIG_DB_TBL_RADCHECK'].".value, ".$configValues['CONFIG_DB_TBL_RADCHECK'].".attribute, ".
+		$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".id as accountNumber, ".
 		$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".contactperson, ".
 		$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".billstatus, ".
 		$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".planname, ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".company, ".
@@ -186,7 +187,7 @@
 
 		<th scope='col'> 
 		<a title='Sort' class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?orderBy=id&orderType=$orderTypeNextPage\">
-		".t('all','ID')."</a>
+		".t('title','accountNumber')."</a>
 		</th>
 
 		<th scope='col'> 
@@ -219,7 +220,7 @@
 		
 		echo "
 			<tr>
-			<td> <input type='checkbox' name='username[]' value='".$row['username']."'>".$row['id']."</td>
+			<td style='text-align:right; display:flex; justify-content:space-around; color:black; font-weight: bold;'> <input type='checkbox' name='username[]' value='".$row['username']."'>".$row['accountNumber']."</td>
 			<td>".$row['contactperson']."</td>
 			<td>".$row['company']."</td>
 		";

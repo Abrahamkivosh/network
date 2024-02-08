@@ -1,28 +1,5 @@
 <?php
-/*
- *********************************************************************************************************
- * daloRADIUS - RADIUS Web Platform
- * Copyright (C) 2007 - Liran Tal <liran@enginx.com> All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *********************************************************************************************************
- * Description:
- *		this graph extension procduces a query of the overall logins 
- *		made by a particular user on a daily, monthly and yearly basis.
- *
- * Authors:	Liran Tal <liran@enginx.com>
- *
- *********************************************************************************************************
- */
- 
+
 include('checklogin.php');
 
 $type = $_REQUEST['type'];
@@ -31,10 +8,12 @@ $username = $_REQUEST['user'];
 
 if ($type == "daily") {
 	daily($username);
-} elseif ($type == "monthly") {
+} else if ($type == "monthly") {
 	monthly($username);
-} elseif ($type == "yearly") {
+} else if ($type == "yearly") {
 	yearly($username);
+}else {
+
 }
 
 
@@ -47,30 +26,23 @@ function daily($username) {
 
 	$username = $dbSocket->escapeSimple($username);
 	
-	header("Content-type: image/png");
 
-	$chart = new VerticalChart(680,500);
-
-	$sql = "SELECT UserName, count(AcctStartTime), DAY(AcctStartTime) AS Day FROM ".
+	$sql = "SELECT  count(AcctStartTime) AS count, DAY(AcctStartTime) AS Day FROM ".
 		$configValues['CONFIG_DB_TBL_RADACCT']." WHERE username='$username' AND acctstoptime>0 GROUP BY Day;";
-	$res = $dbSocket->query($sql);
+	$result = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
-		$chart->addPoint(new Point("$row[2]", "$row[1]"));
+	$rows = array();
+	while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
+		 
+		  $rows[] = [(int)$row['count'], (int)$row['Day'] ] ;
 	}
 
-	$chart->setTitle("Total Users");
-	$chart->render();
+	echo json_encode($rows);
+	
 
 	include 'closedb.php';
 
-
 }
-
-
-
-
-
 
 function monthly($username) {
 
@@ -100,12 +72,6 @@ function monthly($username) {
 }
 
 
-
-
-
-
-
-
 function yearly($username) {
 
 
@@ -132,10 +98,5 @@ function yearly($username) {
 	include 'closedb.php';
 
 }
-
-
-
-
-
 
 ?>
