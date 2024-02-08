@@ -1,5 +1,5 @@
 <?php
-include_once ('DB.php');
+include_once('DB.php');
 // Check if opendb.php has already been included
 if (!defined('OPENDB_INCLUDED')) {
     require_once "./opendb.php";
@@ -74,7 +74,7 @@ class User
 
             $result = $this->dbSocket->query($query);
             if ($result->numRows() > 0) {
-                $row = $result->fetchRow(PDO::FETCH_ASSOC) ;
+                $row = $result->fetchRow(PDO::FETCH_ASSOC);
                 $this->setUserName(trim($row['username']));
                 return true;
             } else {
@@ -118,7 +118,7 @@ class User
         $result = $this->dbSocket->query($query);
 
         if ($result->numRows() > 0) {
-            $row = $result->fetchRow( PDO::FETCH_ASSOC);
+            $row = $result->fetchRow(PDO::FETCH_ASSOC);
             return $row;
         } else {
             return false;
@@ -399,17 +399,11 @@ class User
             " GROUP BY a.date " .
             " ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
         $result = $this->dbSocket->query($query);
-
-        if ($result->numRows() > 0) {
-            // get all rows
-            $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
-                $rows[] = $row;
-            }
-            return $rows;
-        } else {
-            return false;
+        $rows = [];
+        while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            $rows[] = $row;
         }
+        return $rows;
     }
 
     /**
@@ -575,7 +569,7 @@ class User
         if ($result->numRows() > 0) {
             // get all rows
             $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
             return $rows;
@@ -590,32 +584,31 @@ class User
      */
     public function getUserPayments()
     {
+        $rows = [];
         $invoices = $this->getUserInvoices();
-        $invoice_ids = array_column($invoices, 'id');
-        $invoice_ids = implode(',', $invoice_ids);
-        // sql to get all payments with invoice id in $invoice_ids
-        $sql = "SELECT a.id, a.invoice_id, a.amount, a.type_id, 
+        if (count($invoices)) {
+           
+            $invoice_ids = implode(',', array_column($invoices, 'id'));
+            // sql to get all payments with invoice id in $invoice_ids
+            $sql = "SELECT a.id, a.invoice_id, a.amount, a.type_id, 
         a.reference_no, a.transaction_id, a.status,
         a.status_message, a.sender_number, a.sender_name,
         a.date, a.notes," .
-            "b.value as type" .
-            " FROM " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS a" .
-            " LEFT JOIN " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'] . " AS b ON (a.type_id = b.id) " .
-            " WHERE a.invoice_id IN ($invoice_ids) " .
-            " ORDER BY a.id DESC";
+                "b.value as type" .
+                " FROM " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTS'] . " AS a" .
+                " LEFT JOIN " . $this->configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'] . " AS b ON (a.type_id = b.id) " .
+                " WHERE a.invoice_id IN ($invoice_ids) " .
+                " ORDER BY a.id DESC";
 
-        $result = $this->dbSocket->query($sql);
+            $result = $this->dbSocket->query($sql);
 
-        if ($result->numRows() > 0) {
-            // get all rows
-            $rows = [];
-            while ($row = $result->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while ($row = $result->fetchRow(PDO::FETCH_ASSOC)) {
                 $rows[] = $row;
             }
-            return $rows;
-        } else {
-            return false;
+           
         }
+
+        return $rows;
     }
 
 
@@ -776,10 +769,10 @@ class User
 // // test the class
 // $user = new User($dbSocket, $configValues);
 // $user->setConfigValues($configValues);
-// $user->setUserName('kivosh');
-// $accN = $user->setUserNameFromAccountNumber(2);
+// $user->setUserName('ian');
+// $payments = $user->getUserPayments();
 // echo '<pre>';
-// print_r($accN);
+// print_r($payments);
 // echo '</pre>';
 
 

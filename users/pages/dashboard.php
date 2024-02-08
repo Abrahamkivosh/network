@@ -34,11 +34,12 @@
     </div>
     <div class="col-md-3 mb-3">
     <div class="card bg-secondary text-white h-100">
-    <div class="card-body pt-2">Account No:</div>
-        <div class="card-body pt-2">
+    <div class="card-body ">Account No:
+        <div class=" font-weight-bold h2">
         <?php
-        echo $user->getUserName() ;
+        echo $user->getUserAccountNumber() ;
         ?>
+        </div>
         </div>
 
     </div>
