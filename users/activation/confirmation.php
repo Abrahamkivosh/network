@@ -192,7 +192,8 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
 
         $smsTemplates->setUserInfo([
             'username' => $userInfo['username'],
-            'accountExpirationDate' => $newDate
+            'accountExpirationDate' => $newDate,
+            'balance' => $user->getUserBillInfo()['balance']
         ]);
         $smsTemplates->sendAccountPlanRenewalSMS();
     } else {
