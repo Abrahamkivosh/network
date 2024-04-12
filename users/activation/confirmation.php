@@ -184,15 +184,16 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
 
         $userPlanTimeBank *= $times;
 
-        $smsTemplates->setUserInfo([
-            'username' => $userInfo['username'],
-            'plan' => $userBillingPlan['planName'],
-            'planCost' => $userBillingPlan['planCost'],
-        ]);
+        
 
         //Get new date after adding planTimeBank to userAccountExpirationDate
         $newDate = getNewDate($userAccountExpirationDate['timestamp'], $userPlanTimeBank);
         $user->updateUserAccountExpirationDate($newDate);
+
+        $smsTemplates->setUserInfo([
+            'username' => $userInfo['username'],
+            'accountExpirationDate' => $newDate
+        ]);
         $smsTemplates->sendAccountPlanRenewalSMS();
     } else {
         // Check if account has expired
@@ -202,11 +203,13 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
             // Get Remaining Amount to renew account
             $remainingAmount = $userPlanCost - $newBalance;
             $smsTemplates->setUserInfo([
-                'username' => $userInfo['username'], 'plan' => $userBillingPlan['planName'],
-                'planCost' => $userBillingPlan['planCost'], 'remainingAmount' => $remainingAmount,
+                'username' => $userInfo['username'], 
+                'plan' => $userBillingPlan['planName'],
+                'planCost' => $userBillingPlan['planCost'], 
+                'remainingAmount' => $remainingAmount,
             ]);
             // Send SMS to user
-            $smsTemplates->sendAccountSuspensionSMS($remainingAmount);
+            $smsTemplates->renewalAmountNotEnoughSMS();
         } else { // Account is not expired and payment is not enough to renew
             // Send SMS to user
             $remainingAmount = $userPlanCost - $newBalance;
@@ -216,7 +219,7 @@ if ($user->setUserNameFromAccountNumber($billRefNumber)) {
                 'planCost' => $userBillingPlan['planCost'],
                 'remainingAmount' => $remainingAmount,
             ]);
-            $smsTemplates->sendAccountPlanRenewalAmountNotEnoughToExtendExpiryDateSMS();
+            $smsTemplates->renewalAmountNotEnoughToExtendExpiryDateSMS();
         }
     }
 
