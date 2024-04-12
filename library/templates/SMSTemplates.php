@@ -108,12 +108,10 @@ class SMSTemplates {
     /**
      * Send user paid amount is not enough to renew account plan
      */
-    public function sendAccountPlanRenewalAmountNotEnoughSMS()
+    public function renewalAmountNotEnoughSMS()
     {
         $userName = $this->userInfo['username'] ;
         $systemName = $this->configValues['SYSTEM_NAME'] ;
-        $plan = $this->userInfo['plan'] ;
-        $planCost = $this->userInfo['planCost'] ;
         $paybillNumber = $this->configValues['PAYBILL_NUMBER'] ;
         $account_number = $userName ;
         $remainingAmount = $this->userInfo['remainingAmount'] ;
@@ -124,7 +122,7 @@ class SMSTemplates {
     /**
      * Send user account is not expired and payment is not enough  extend account plan expiry date
      */
-    public function sendAccountPlanRenewalAmountNotEnoughToExtendExpiryDateSMS()
+    public function renewalAmountNotEnoughToExtendExpiryDateSMS()
     {
         $userName = $this->userInfo['username'] ;
         $systemName = $this->configValues['SYSTEM_NAME'] ;
